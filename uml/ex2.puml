@@ -1,0 +1,78 @@
+@startuml
+
+'///////////////////////////////
+'//     Classes Definitions
+'///////////////////////////////
+
+class GameFlow {
+    + GameFlow(Player* defaultPlayer, Board *board)
+    + play() : void
+    + checkInput(string input) : bool
+
+    - Player* player
+    - Board* board
+}
+
+class Board {
+    - int size
+    - Cell** cells
+
+    + Board(int width, int height)
+    + ~Board()
+    + getSize() const : int
+    + getCells() const : Cell**
+    + setCell(int i, int j, char c) : void
+    + create() const : void
+    + show() const : void
+}
+
+class Cell {
+    - char value
+    - int x
+    - int y
+
+    + Cell();
+    + Cell(int x, int y)
+    + getVal() const : char
+    + getX() const : int
+    + getY() const : int
+    + setVal(char c) : void
+    + setX(int x) : void
+    + setY(int y) : void
+    + operator < (const Cell &cell) const : bool
+    + operator == (const Cell &cell) const : bool
+}
+
+class Player {
+
+    - char type
+    - Board* board
+    - VectorOfCells moves
+    - vector <VectorOfCells> changeableCells
+    - Cell lastMove
+
+    + Player(char type, Board *board)
+    + getType() const : char
+    + getMoves() const : VectorOfCells
+    + getPossibleMoves() : bool
+    + getEmptyCell(int k, int n, int i, int j) : void
+    + getLastMove() const : Cell
+    + setLastMove(int i, int j) : void
+    + printMoves() : void
+    + switchCells(int i, int j) : void
+    + switchPlayer(char player) : void
+}
+
+class VectorOfCells << (T,orchid) typedef >>
+
+'///////////////////////////////
+'//     Classes Relations
+'///////////////////////////////
+
+GameFlow o-- Player
+GameFlow o-- Board
+Board *-- Cell
+Player o-- Board
+Player ==> VectorOfCells
+
+@enduml
