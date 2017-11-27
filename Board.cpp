@@ -27,9 +27,10 @@ int Board::getSize() const {
     return size;
 }
 
-Cell** Board::getCells() const {
-    return cells;
+char Board :: getValueAtIndexes(int x, int y) {
+    return this->cells[x][y].getVal();
 }
+
 
 void Board::setCell(int i, int j, char c) {
     cells[i][j].setVal(c);
@@ -53,18 +54,21 @@ void Board::create() const {
     }
 
 void Board::show() const {
-        string line = "----------------------------------";
-        cout << "\nCurrent Board:\n" << endl;
-        cout << " |";
-        for (int k = 1; k < size+1; k++) {
-            cout << ' ' << k << " |";
-        }
-        cout << endl << line << endl;
-        for (int i = 0; i < size; i++) {
-            cout << i + 1 << "|";
-            for (int j = 0; j < size; j++) {
-                cout << ' ' << cells[i][j].getVal() << " |";
-            }
-            cout << endl << line << endl;
-        }
+
+    // first line..
+    cout << " |";
+    for (int i = 1; i <= this->size; i++) {
+        cout << " " << i << " |";
     }
+
+    cout << endl << string((unsigned long)(4 * size + 2), '-') << endl;
+
+    // rest of the board..
+    for (int i = 0; i < this->size; i++) {
+        cout << i + 1 << "|";
+        for (int j = 0; j  < this->size; j++) {
+            cout << " " << this->cells[i][j].getVal() << " |";
+        }
+        cout << endl << string((unsigned long)(4 * size + 2), '-') << endl;
+    }
+}

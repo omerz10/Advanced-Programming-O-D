@@ -11,6 +11,7 @@
 
 #include "Board.h"
 #include "Player.h"
+#include "Game.h"
 
 /*
  * Class GameFlow managed an end to end flow of the game
@@ -18,33 +19,49 @@
 class GameFlow {
 
 private:
-    /*
-     * reference to player.
-     * the player could be chnged by the user or thr computer.
-     */
-    Player* player;
-    /*
-     * reference the a board which is created once
-     */
-    Board* board;
+
+    Game *game;
+
+    Player *lastPlayer;
+
 
 public:
+
     /*
      * constructor
      * construct GameFlow by the first player and the board
      */
-    GameFlow(Player* defaultPlayer, Board *board);
+    GameFlow(Game* g);
+
+
     /*
      * the function responsible for running the game from A to Z, including printing gui's notifications and
      * inputs requests from the user.
      * the function update the gameFlow by boards status and player switches
      */
     void play();
+
+
     /*
-     * returns of the input is correct.
-     * if so, it calls function for switching cells values (flipping to the other player)
+     * prints the last player's move if it exists.
+     * @param Player    lastPlayer
+     * */
+    void lastPlayerMoveMsg(Player *lastPlayer, bool playerMoves);
+
+    /*
+     * Resets the players' data for the next turn
+     * */
+    void resetPlayers();
+
+    /*
+     * Will be called when we need to update the scores..
      */
-    bool checkInput(string input);
+    void updateScores();
+
+    /*
+     * Shows the endgame score to the terminal
+     */
+    void showScores();
 };
 
 

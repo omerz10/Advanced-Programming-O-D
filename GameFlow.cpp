@@ -5,79 +5,84 @@
  *  Created by omerz on 30/10/17.
  *      Author: zuckero
  */
-
 #include "GameFlow.h"
 
 
 // checking for git   !!!
 
 
-GameFlow::GameFlow(Player *defaultPlayer, Board *board): player(defaultPlayer), board(board) {}
+GameFlow::GameFlow (Game *g): game(g) {}
+
+// readability function - less clutter in playOneTurn() function..
+void GameFlow::lastPlayerMoveMsg(Player *lastPlayer, bool playerMoves) {
+    if (playerMoves) {
+        // print "last player played..." msg here
+        cout << lastPlayer->getType() << " played (" << lastPlayer->getLastMove().getX() + 1 << "," <<
+             lastPlayer->getLastMove().getY() + 1 << ")" << endl << endl;
+    }
+}
+
 
 void GameFlow::play() {
-    string userInput;
-    bool moves = false, endMovesForX = false, endMovesForO = false;
-    board->create();
-    // stop when end moves for both X & O
-    while(!endMovesForX and !endMovesForO) {
-        board->show();
-        if (moves) {
-            if (player->getType() == 'X') {
-                cout << "O played (" << player->getLastMove().getX() + 1 << "," <<
-                 player->getLastMove().getY() + 1 << ")" << endl;
-            }
-            if (player->getType() == 'O') {
-                cout << "X played (" << player->getLastMove().getX() + 1 << "," <<
-                 player->getLastMove().getY() + 1 << ")" << endl;
-            }
-        }
-        moves = player->getPossibleMoves();
-        cout << player->getType() << ": It's your move." << endl;
-        // There are possible moves
-        if (moves) {
-            cout << "Your possible moves: ";
-            player->printMoves();
-            cout << "\nPlease enter your move row,col: ";
-            // run loop until gets correct input for possible move
-            while (true) {
-                getline(cin, userInput);
-                //wrong input
-                if (!checkInput(userInput)) {
-                    cout << "\nWrong input! Please enter your move row, col: ";
-                }
-                // true input
-                else { break; }
-            }
-        }
-        // No possible for X or O
-        else {
-            if (player->getType() == 'X') {
-                endMovesForX = true;
-            }
-            if (player->getType() == 'O') {
-                endMovesForO = true;
-            }
-            cout << "No possible moves. Play passes back to the other player. Press any key to continue." << endl;
-            cin.get();
-        }
-        player->switchPlayer(player->getType());
+    string userInput; // stores user input
+
+    bool endMovesForP1 = true, endMovesForP2 = true; // flags/trackers for game flow..
+    //Player *lastPlayer; // keep a ptr for the last player that played..
+
+    // show board for the first time...
+    this->game->showBoard();
+
+    // stop when end moves for both P1 & P2
+    while(endMovesForP1 and endMovesForP2) {
+
+        // play move for P1
+        endMovesForP1 = this->game->playOneMove(this->game->getP1(), &this->lastPlayer);
+
+        // print out the board
+        this->game->showBoard();
+
+        // print "last played msg.." if needed
+        lastPlayerMoveMsg(this->lastPlayer, endMovesForP1);
+
+        // play move for P2
+        endMovesForP2 = this->game->playOneMove(this->game->getP2(), &this->lastPlayer);
+
+        // print out the board
+        this->game->showBoard();
+
+        // print "last played msg.." if needed
+        lastPlayerMoveMsg(this->lastPlayer, endMovesForP2);
+
+        // end of turn, clear both of the players' members for the next turn
+        resetPlayers();
+
     } // end of game
+
     cout << "Game over!" << endl;
+    updateScores();
+    showScores();
+
+}
+
+void GameFlow::resetPlayers() {
+    this->game->resetPlayerData();
+}
+
+void GameFlow::updateScores() {
+    this->game->updatePlayerScores();
+}
+
+void GameFlow::showScores() {
+    cout << "FINAL SCORE" << endl << this->game->getP1()->getType()
+         << ": " << this->game->getP1Score() << endl << this->game->getP2()->getType()
+            << ": " << this->game->getP2Score() << endl;
 }
 
 
-bool GameFlow::checkInput(string input) {
-    if (input.length() == 3 and isdigit(input.at(0)) and input.at(1) == ' ' and isdigit(input.at(2))) {
-        player->setLastMove(input[0] - '0' - 1, input[2] - '0' - 1);
-    }
-    for (int i = 0; i < (int)player->getMoves().size(); i++) {
-        if (player->getLastMove().getX() == player->getMoves()[i].getX()
-            and player->getLastMove().getY() == player->getMoves()[i].getY()) {
-            player->switchCells(player->getLastMove().getX(), player->getLastMove().getY());
-            return true;
-        }
-    }
-    return false;
-}
+
+
+
+
+
 
 

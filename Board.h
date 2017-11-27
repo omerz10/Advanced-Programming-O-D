@@ -44,12 +44,13 @@ public:
      */
     int getSize() const;
     /*
-     * returns pointer of pointers of all cells
+     * returns the value of the Cell at indexes (x,y)
      */
-    Cell** getCells() const;
+    char getValueAtIndexes(int x, int y);
     /*
      * set a cell by its index and content (value)
      */
+
     void setCell(int i, int j, char c);
     /*
      * creates pointers of the board's cells including

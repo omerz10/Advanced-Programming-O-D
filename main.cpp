@@ -6,18 +6,22 @@
  *      Author: zuckero
  */
 
-#include <iostream>
 #include "GameFlow.h"
 
 int main()
 {
-
-    char defaultPlayer = 'X';
     int size = 8;
+
     Board board = Board(size);
-    Player player = Player(defaultPlayer, &board);
-    GameFlow g = GameFlow(&player, &board);
-    g.play();
+
+    Player P1 = Player('X', &board);
+    Player P2 = Player('O', &board);
+
+    Game game = Game(&P1, &P2, &board);
+
+    GameFlow gameFlow = GameFlow(&game);
+
+    gameFlow.play();
 
     return 0;
 }

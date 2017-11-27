@@ -91,10 +91,20 @@ public:
      * by pushing new content to these cells.
      */
     void switchCells(int i, int j);
+
+    /*
+     * Resets the player's data for future turns..
+     * */
+    void resetPlayerData();
+
+
     /*
      * change type of player from 'X' to 'O' and vice versa
      */
+    /*
     void switchPlayer(char player);
+    */
+
 };
 
 

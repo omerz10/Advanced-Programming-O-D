@@ -1,7 +1,18 @@
 cmake_minimum_required(VERSION 3.8)
-project(ex2)
+project(Project_updated)
 
-set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp Board.cpp Board.h Player.cpp Player.h Cell.cpp Cell.h GameFlow.cpp GameFlow.h)
-add_executable(ex2 ${SOURCE_FILES} Board.cpp Board.h)
+set(SOURCE_FILES
+        Board.cpp
+        Board.h
+        Cell.cpp
+        Cell.h
+        GameFlow.cpp
+        GameFlow.h
+        main.cpp
+        Player.cpp
+        Player.h Game.cpp Game.h)
+
+
+add_executable(Project_updated ${SOURCE_FILES})
