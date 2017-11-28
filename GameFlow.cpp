@@ -11,7 +11,7 @@
 // checking for git   !!!
 
 
-GameFlow::GameFlow (Game *g): game(g) {}
+GameFlow::GameFlow (Game *g): game(g){}
 
 // readability function - less clutter in playOneTurn() function..
 void GameFlow::lastPlayerMoveMsg(Player *lastPlayer, bool playerMoves) {
@@ -54,7 +54,7 @@ void GameFlow::play() {
         lastPlayerMoveMsg(this->lastPlayer, endMovesForP2);
 
         // end of turn, clear both of the players' members for the next turn
-        resetPlayers();
+        //resetPlayers();
 
     } // end of game
 
@@ -64,9 +64,6 @@ void GameFlow::play() {
 
 }
 
-void GameFlow::resetPlayers() {
-    this->game->resetPlayerData();
-}
 
 void GameFlow::updateScores() {
     this->game->updatePlayerScores();

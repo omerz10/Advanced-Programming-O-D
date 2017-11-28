@@ -24,7 +24,6 @@ private:
 
     Player *lastPlayer;
 
-
 public:
 
     /*
@@ -48,10 +47,6 @@ public:
      * */
     void lastPlayerMoveMsg(Player *lastPlayer, bool playerMoves);
 
-    /*
-     * Resets the players' data for the next turn
-     * */
-    void resetPlayers();
 
     /*
      * Will be called when we need to update the scores..

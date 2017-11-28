@@ -26,6 +26,7 @@ private:
      */
     Board* board;
 
+
     /*
      * keeps players' scores
      */
@@ -43,7 +44,7 @@ public:
      * returns of the input is correct.
      * if so, it calls function for switching cells values (flipping to the other player)
      */
-    bool checkInput(string input, Player *currPlayer);
+    //bool checkInput(string input, Player *currPlayer);
 
     bool playOneMove(Player *p, Player **lastPlayer);
 
@@ -52,8 +53,6 @@ public:
     Player *getP2();
 
     void showBoard();
-
-    void resetPlayerData();
 
     void updatePlayerScores();
 

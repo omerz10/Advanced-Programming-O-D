@@ -21,7 +21,12 @@ bool Game ::playOneMove(Player *p, Player **lastPlayer) {
     bool pMoves;
 
     // get possible moves for Player..
-    pMoves = p->getPossibleMoves();
+    p->getPlayerMoves();
+
+    // check if there are any moves at all ?
+    pMoves = p->getPossibleMoveStatus();
+
+    // print msg to terminal..
     cout << p->getType() << ": It's your move." << endl;
 
     // Are there are possible moves for Player?
@@ -33,7 +38,7 @@ bool Game ::playOneMove(Player *p, Player **lastPlayer) {
         while (true) {
             getline(cin, userInput);
             //wrong input
-            if (!checkInput(userInput, p)) {
+            if (!p->checkInputAndPlayTurn(userInput)) {
                 cout << "\nWrong input! Please enter your move row, col: ";
             }
                 // true input
@@ -54,20 +59,8 @@ bool Game ::playOneMove(Player *p, Player **lastPlayer) {
     }
 }
 
-// checks input AND plays the turn
-bool Game :: checkInput(string input, Player *currPlayer) {
-    if (input.length() == 3 and isdigit(input.at(0)) and input.at(1) == ' ' and isdigit(input.at(2))) {
-        currPlayer->setLastMove(input[0] - '0' - 1, input[2] - '0' - 1);
-    }
-    for (int i = 0; i < (int)currPlayer->getMoves().size(); i++) {
-        if (currPlayer->getLastMove().getX() == currPlayer->getMoves()[i].getX()
-            and currPlayer->getLastMove().getY() == currPlayer->getMoves()[i].getY()) {
-            currPlayer->switchCells(currPlayer->getLastMove().getX(), currPlayer->getLastMove().getY());
-            return true;
-        }
-    }
-    return false;
-}
+
+
 
 
 Player* Game :: getP1() {
@@ -80,11 +73,6 @@ Player* Game :: getP2() {
 
 void Game::showBoard() {
     this->board->show();
-}
-
-void Game::resetPlayerData() {
-    this->P1->resetPlayerData();
-    this->P2->resetPlayerData();
 }
 
 void Game::updatePlayerScores() {

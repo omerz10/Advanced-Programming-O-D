@@ -12,7 +12,7 @@ set(SOURCE_FILES
         GameFlow.h
         main.cpp
         Player.cpp
-        Player.h Game.cpp Game.h)
+        Player.h Game.cpp Game.h Logic.cpp Logic.h GenericLogic.cpp GenericLogic.h Structs.h)
 
 
 add_executable(Project_updated ${SOURCE_FILES})
