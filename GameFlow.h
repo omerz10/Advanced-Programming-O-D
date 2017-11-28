@@ -10,8 +10,9 @@
 #define EX2_GAMEFLOW_H
 
 #include "Board.h"
-#include "Player.h"
+#include "HumanPlayer.h"
 #include "Game.h"
+#include "GenericLogic.h"
 
 /*
  * Class GameFlow managed an end to end flow of the game

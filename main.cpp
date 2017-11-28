@@ -16,8 +16,8 @@ int main()
 
     GenericLogic gameLogic = GenericLogic(&board);
 
-    Player P1 = Player('X', &board, &gameLogic);
-    Player P2 = Player('O', &board, &gameLogic);
+    HumanPlayer P1 = HumanPlayer('X', &board, &gameLogic);
+    HumanPlayer P2 = HumanPlayer('O', &board, &gameLogic);
 
     Game game = Game(&P1, &P2, &board);
 

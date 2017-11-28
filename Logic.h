@@ -9,7 +9,7 @@
 class Player;
 
 #include "Board.h"
-#include "Player.h"
+#include "HumanPlayer.h"
 
 #include "Structs.h"
 
@@ -27,12 +27,6 @@ private:
     Board* board;
 
 public:
-    /*
-     * constructor.
-     * construct Player with his type and reference of board
-     */
-    //Logic(Board *board);
-
 
     /*
      * returns true if the player has actual possible cells and keep the in 'moves' member

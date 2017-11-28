@@ -6,7 +6,7 @@
 #define EX2_GAME_H
 
 #include "Board.h"
-#include "Player.h"
+#include "HumanPlayer.h"
 
 // last player should be member of gameFlow - its important to know who played last..
 // endMovesForP1/P2 should also be members of gameFlow to mark "game over"/"tie"/etc..

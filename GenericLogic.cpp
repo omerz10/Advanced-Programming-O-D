@@ -8,7 +8,6 @@ GenericLogic :: GenericLogic (Board *board): board(board) {
 
 }
 
-
 PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
 
     int k, n; // indexes
@@ -242,4 +241,3 @@ void GenericLogic::switchCells(int i, int j, PossibleMove *pMove, Player *currPl
     w = pMove->changeableCells[z][0].getY();
     board->setCell(u, w, currPlayer->getType());
 }
-

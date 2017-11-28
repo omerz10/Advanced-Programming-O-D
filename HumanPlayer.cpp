@@ -8,28 +8,26 @@
 
 
 #include <algorithm>
-#include "Player.h"
+#include "HumanPlayer.h"
 
-Player::Player(char type, Board *board, Logic *gLogic): type(type), board(board), gameLogic(gLogic) {
+HumanPlayer::HumanPlayer(char type, Board *board, Logic *gLogic): type(type), board(board), gameLogic(gLogic) {
     lastMove = Cell();
 }
 
-char Player::getType() const {
-    return type;
+char HumanPlayer::getType() const {
+    return this->type;
 }
 
-
-
-Cell Player::getLastMove() const {
+Cell HumanPlayer::getLastMove() const {
     return lastMove;
 }
 
-void Player::setLastMove(int i, int j) {
+void HumanPlayer::setLastMove(int i, int j) {
     lastMove.setX(i);
     lastMove.setY(j);
 }
 
-void Player::printMoves() {
+void HumanPlayer::printMoves() {
     sort(this->possibleMove.moves.begin(), this->possibleMove.moves.end());
     this->possibleMove.moves.erase(unique(this->possibleMove.moves.begin(), this->possibleMove.moves.end())
             , this->possibleMove.moves.end());
@@ -40,9 +38,8 @@ void Player::printMoves() {
     cout <<"\n";
 }
 
-
 // checks input AND plays the turn
-bool Player :: checkInputAndPlayTurn(string input) {
+bool HumanPlayer :: checkInputAndPlayTurn(string input) {
 
     if (input.length() == 3 and isdigit(input.at(0)) and input.at(1) == ' ' and isdigit(input.at(2))) {
         //currPlayer->setLastMove(input[0] - '0' - 1, input[2] - '0' - 1);
@@ -62,12 +59,11 @@ bool Player :: checkInputAndPlayTurn(string input) {
     return false;
 }
 
-
-void Player::getPlayerMoves() {
+void HumanPlayer::getPlayerMoves() {
     this->possibleMove = this->gameLogic->getPossibleMoves(this);
 }
 
-bool Player::getPossibleMoveStatus() {
+bool HumanPlayer::getPossibleMoveStatus() {
     return this->possibleMove.possible;
 }
 

@@ -2,17 +2,13 @@
 // Created by David Nakash on 28/11/2017.
 //
 
-#ifndef PROJECT_UPDATED_PLAYER_H
-#define PROJECT_UPDATED_PLAYER_H
+#ifndef PROJECT_UPDATED_AIPLAYER_H
+#define PROJECT_UPDATED_AIPLAYER_H
 
-#include <iostream>
-#include "Board.h"
-#include "Logic.h"
-#include "Structs.h"
+#include "Player.h"
 
 
-class Player {
-
+class AIPlayer : public Player {
 private:
     /*
      * type of player- 'X' or 'Y'
@@ -32,44 +28,57 @@ private:
      */
     Cell lastMove;
 
-
 public:
 
     /*
+     * constructor.
+     * construct Player with his type and reference of board
+     */
+    AIPlayer(char type, Board *board, Logic *gLogic);
+    /*
      * returns player's type
      */
-    virtual char getType() const = 0;
+    char getType() const;
 
     /*
      * returns the cell of the last move of last player
      */
-    virtual Cell getLastMove() const = 0;
+    Cell getLastMove() const;
     /*
      * set cell of last move by receiving it's index
      * initialize it with an empty cell
      */
-    virtual void setLastMove(int i, int j) = 0;
+    void setLastMove(int i, int j);
     /*
      * sort the possible moves of the player according to their size and prints it on gui
      */
-    virtual void printMoves() = 0;
+    void printMoves();
 
     /*
      *
      *
      */
-    virtual bool checkInputAndPlayTurn(string input) = 0;
+    bool checkInputAndPlayTurn(string input);
 
     /*
      *
      */
-    virtual void getPlayerMoves() = 0;
+    void getPlayerMoves();
+
 
     /*
      *
      */
-    virtual bool getPossibleMoveStatus() = 0;
+    bool getPossibleMoveStatus();
+
+
+    void playSelection(PossibleMove pMove);
+
+    /*
+     *
+     */
+    void CalculatePossibleMoves();
 };
 
 
-#endif //PROJECT_UPDATED_PLAYER_H
+#endif //PROJECT_UPDATED_AIPLAYER_H

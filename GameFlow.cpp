@@ -22,7 +22,6 @@ void GameFlow::lastPlayerMoveMsg(Player *lastPlayer, bool playerMoves) {
     }
 }
 
-
 void GameFlow::play() {
     string userInput; // stores user input
 
@@ -63,7 +62,6 @@ void GameFlow::play() {
     showScores();
 
 }
-
 
 void GameFlow::updateScores() {
     this->game->updatePlayerScores();
