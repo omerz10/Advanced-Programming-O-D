@@ -9,11 +9,6 @@
 #ifndef EX2_PLAYER_H
 #define EX2_PLAYER_H
 
-
-
-
-class Logic;
-
 using namespace std;
 
 #include "Player.h"

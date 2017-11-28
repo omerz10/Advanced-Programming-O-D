@@ -9,8 +9,8 @@
 class Player;
 
 #include "Board.h"
-#include "HumanPlayer.h"
-
+//#include "HumanPlayer.h"
+#include "Player.h"
 #include "Structs.h"
 
 /*

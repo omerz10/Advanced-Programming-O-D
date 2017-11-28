@@ -5,6 +5,8 @@
 #ifndef PROJECT_UPDATED_AIPLAYER_H
 #define PROJECT_UPDATED_AIPLAYER_H
 
+class Logic;
+
 #include "Player.h"
 
 

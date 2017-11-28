@@ -10,6 +10,7 @@
 #include "Logic.h"
 #include "Structs.h"
 
+class Logic;
 
 class Player {
 
@@ -55,7 +56,6 @@ public:
     virtual void printMoves() = 0;
 
     /*
-     *
      *
      */
     virtual bool checkInputAndPlayTurn(string input) = 0;
