@@ -32,49 +32,75 @@ private:
 
 public:
 
-    /*
-     * constructor.
-     * construct Player with his type and reference of board
-     */
+    
+    
     AIPlayer(char type, Board *board, Logic *gLogic);
-    /*
-     * returns player's type
+    
+    
+    /**
+     returns player's type
+
+     @return <#return value description#>
      */
     char getType() const;
 
-    /*
-     * returns the cell of the last move of last player
+    /**
+     returns the cell of the last move of last player.
+     
+     @return Cell   cell
      */
     Cell getLastMove() const;
-    /*
-     * set cell of last move by receiving it's index
-     * initialize it with an empty cell
+    
+    /**
+     set cell of last move by receiving it's index,
+    initialize it with an empty cell.
+
+     @param i x location
+     @param j y location
      */
     void setLastMove(int i, int j);
-    /*
-     * sort the possible moves of the player according to their size and prints it on gui
+    
+    
+    /**
+     sort the possible moves of the player according to their size and prints it on gui.
      */
     void printMoves();
 
 
+    /**
+     Plays one turn of the player, runs the CalculateBestPossibleMove function and flips the corresponding cells.
+     */
     void playTurn();
-    /*
-     *
+    
+    /**
+     Gets the player's possible moves, and inserts them to the member PossibleMove...
      */
     void getPlayerMoves();
 
 
-    /*
-     *
+    
+    /**
+     Gets the possible move status (the boolean value inside of PossibleMove struct members)...
+
+     @return bool   true/false
      */
     bool getPossibleMoveStatus();
 
-    /*
-     *
+    
+    /**
+     Calculates the possible moves of the player, takes the best possible outcome (using maxmin) scenario and returns
+     a cell of that location...
+
+     @return Cell   best move to play
      */
     Cell calculateBestPossibleMove();
 
+    
+    /**
+     Gets the enemy's player ID - if curr player is 'X' returns 'O' and vice versa..
 
+     @return char   type
+     */
     char getEnemyPlayerID();
 };
 

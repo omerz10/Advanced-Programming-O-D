@@ -45,43 +45,61 @@ public:
      * construct Player with his type and reference of board
      */
     HumanPlayer(char type, Board *board, Logic *gLogic);
-    /*
-     * returns player's type
+    
+    
+    /**
+     returns player's type.
+     
+     @return type
      */
     char getType() const;
 
-    /*
-     * returns the cell of the last move of last player
+    /**
+     returns the cell of the last move of last player.
+     
+     @return Cell lastmove
      */
     Cell getLastMove() const;
-    /*
-     * set cell of last move by receiving it's index
-     * initialize it with an empty cell
+    
+    
+    /**
+     * set cell of last move by receiving it's index,
+     * initialize it with an empty cell.
+     
+     @param i y location
+     @param j x location
      */
     void setLastMove(int i, int j);
-    /*
-     * sort the possible moves of the player according to their size and prints it on gui
+    
+    /**
+     sort the possible moves of the player according to their size and prints it on gui.
      */
     void printMoves();
+    
+    /**
+     Checks the user's input and returns true/false if correct/not..
 
-    /*
-     *
-     *
+     @param input string
+     @return bool   true/false
      */
     bool checkInput(string input);
-
+    
+    /**
+     Plays one turn of the player, runs the CalculateBestPossibleMove function and flips the corresponding cells.
+     */
     void playTurn();
-    /*
-     *
+    
+    /**
+     Gets the player's possible moves, and inserts them to the member PossibleMove...
      */
     void getPlayerMoves();
 
-    /*
-     *
+    /**
+     Gets the possible move status (the boolean value inside of PossibleMove struct members)...
+     
+     @return bool   true/false
      */
     bool getPossibleMoveStatus();
-
-
 };
 
 
