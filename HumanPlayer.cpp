@@ -38,7 +38,7 @@ void HumanPlayer::printMoves() {
 }
 
 // checks input AND plays the turn
-bool HumanPlayer :: checkInput(string input) {
+bool HumanPlayer::checkInput(string input) {
 
     if (input.length() == 3 and isdigit(input.at(0)) and input.at(1) == ' ' and isdigit(input.at(2))) {
         for (int i = 0; i < this->possibleMove.moves.size(); i++) {

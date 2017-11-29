@@ -1,6 +1,3 @@
-//
-// Created by omerz on 29/11/17.
-//
 
 /**
  * Board test
@@ -10,8 +7,6 @@
 #include "../Board.h"
 
 using namespace std;
-
-
 
 
 // Test correct size of board
