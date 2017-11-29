@@ -20,6 +20,13 @@ using namespace std;
 //    EXPECT_THROW(board.setCell(2, 5, 'O'), invalid_argument);
 //}
 
+
+// Test correct size of board
+TEST(boradTest, HandalesBoardSize) {
+    Board board(4);
+    EXPECT_EQ(board.getSize(), 4);
+}
+
 // Tests getting value from correct index
 TEST(boardTest, HandlesGettingCell) {
     Board board(8);
