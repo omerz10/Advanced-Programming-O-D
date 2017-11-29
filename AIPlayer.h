@@ -72,7 +72,7 @@ public:
     /*
      *
      */
-    void calculateBestPossibleMove();
+    Cell calculateBestPossibleMove();
 
 
     char getEnemyPlayerID();
