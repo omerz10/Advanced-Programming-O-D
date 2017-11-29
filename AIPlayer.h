@@ -56,12 +56,8 @@ public:
      */
     void printMoves();
 
-    /*
-     *
-     *
-     */
-    bool checkInputAndPlayTurn(string input);
 
+    void playTurn();
     /*
      *
      */
@@ -73,13 +69,13 @@ public:
      */
     bool getPossibleMoveStatus();
 
-
-    void playSelection(PossibleMove pMove);
-
     /*
      *
      */
-    void CalculatePossibleMoves();
+    void calculateBestPossibleMove();
+
+
+    char getEnemyPlayerID();
 };
 
 

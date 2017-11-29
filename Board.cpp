@@ -11,7 +11,11 @@
 
 Board::Board(int size): size(size) {
     cells = new Cell *[size];
+    for (int i = 0; i < size; i++) {
+        cells[i] = new Cell[size];
+    }
 }
+
 
 Board::~Board()
 {
@@ -37,9 +41,7 @@ void Board::setCell(int i, int j, char c) {
 }
 
 void Board::create() const {
-    for (int i = 0; i < size; i++) {
-        cells[i] = new Cell[size];
-    }
+
         for (int j = 0; j < size; j++) {
             for (int k = 0; k < size; k++) {
                 if ((j == size / 2 - 1 and k == size / 2 - 1) or (j == size / 2 and k == size / 2)) {
@@ -70,5 +72,13 @@ void Board::show() const {
             cout << " " << this->cells[i][j].getVal() << " |";
         }
         cout << endl << string((unsigned long)(4 * size + 2), '-') << endl;
+    }
+}
+
+void Board::copyBoard(Board *dest) {
+    for (int i = 0; i < this->getSize(); i++) {
+        for (int j = 0; j < this->getSize(); j++) {
+            dest->setCell(i, j, this->getValueAtIndexes(i, j));
+        }
     }
 }

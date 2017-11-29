@@ -11,6 +11,7 @@
 
 #include "Board.h"
 #include "HumanPlayer.h"
+#include "AIPlayer.h"
 #include "Game.h"
 #include "GenericLogic.h"
 

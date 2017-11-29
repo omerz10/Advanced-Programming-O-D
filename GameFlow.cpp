@@ -37,6 +37,7 @@ void GameFlow::play() {
         // play move for P1
         endMovesForP1 = this->game->playOneMove(this->game->getP1(), &this->lastPlayer);
 
+
         // print out the board
         this->game->showBoard();
 

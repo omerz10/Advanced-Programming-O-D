@@ -35,19 +35,19 @@ public:
      * returns true if the player has actual possible cells and keep the in 'moves' member
      * returns false if player does not have any possible moves
      */
-    PossibleMove getPossibleMoves(Player *currPlayer);
+    PossibleMove getPossibleMoves(Board *board, char playerID);
     /*
      * according to the player's type the function inserts the right possible moves to 'moves' member
      * while get index of cells on input
      */
-    void getEmptyCell(int i, int j, int k, int n, Player *currPlayer, PossibleMove *pMove);
+    void getEmptyCell(Board *board, int i, int j, int k, int n, char playerID, PossibleMove *pMove);
 
 
     /*
      * gets player's index of last move and change the relevant cells according to player's type
      * by pushing new content to these cells.
      */
-    void switchCells(int i, int j, PossibleMove *pMove, Player *currPlayer);
+    int switchCells(Board *board, int i, int j, PossibleMove *pMove, char playerID);
 
 
 };

@@ -8,7 +8,7 @@ GenericLogic :: GenericLogic (Board *board): board(board) {
 
 }
 
-PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
+PossibleMove GenericLogic :: getPossibleMoves(Board *board, char playerID) {
 
     int k, n; // indexes
     vector<Cell> pCells; // temp vector
@@ -24,15 +24,15 @@ PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
                 Cell thisCell(k, n);
                 pCells.push_back(thisCell);
 
-                while (this->board->getValueAtIndexes(i, j) == ' '
-                       and this->board->getValueAtIndexes(k - 1, n - 1) != currPlayer->getType()
-                       and this->board->getValueAtIndexes(k - 1, n - 1) != ' ' and k > 1 and n > 1) {
+                while (board->getValueAtIndexes(i, j) == ' '
+                       and board->getValueAtIndexes(k - 1, n - 1) != playerID
+                       and board->getValueAtIndexes(k - 1, n - 1) != ' ' and k > 1 and n > 1) {
                     Cell newCell(k - 1,n - 1);
                     pCells.push_back(newCell);
                     k--, n--;
-                    if (this->board->getValueAtIndexes(k - 1, n - 1) == currPlayer->getType()) {
+                    if (board->getValueAtIndexes(k - 1, n - 1) == playerID) {
                         //if (c[k-1][n-1].isValue(type)) {
-                        getEmptyCell(i, j, k - 1, n - 1, currPlayer, &pMove);
+                        getEmptyCell(board, i, j, k - 1, n - 1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
                 }
@@ -43,16 +43,16 @@ PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
             if (i > 1) {
                 Cell thisCell(k, n);
                 pCells.push_back(thisCell);
-                while (this->board->getValueAtIndexes(i, j) == ' '
-                       and this->board->getValueAtIndexes(k - 1, n) != currPlayer->getType()
-                       and this->board->getValueAtIndexes(k - 1, n) != ' ' and k > 1) {
+                while (board->getValueAtIndexes(i, j) == ' '
+                       and board->getValueAtIndexes(k - 1, n) != playerID
+                       and board->getValueAtIndexes(k - 1, n) != ' ' and k > 1) {
 
                     Cell newCell(k-1,n);
                     pCells.push_back(newCell);
                     k--;
-                    if (this->board->getValueAtIndexes(k - 1, n) == currPlayer->getType()) {
+                    if (board->getValueAtIndexes(k - 1, n) == playerID) {
                         //if (c[k-1][n].isValue(type)) {
-                        getEmptyCell(i, j, k - 1, n, currPlayer, &pMove);
+                        getEmptyCell(board, i, j, k - 1, n, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
                 }
@@ -63,16 +63,16 @@ PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
             if (i > 1 and j < board->getSize() - 2 ) {
                 Cell thisCell(k, n);
                 pCells.push_back(thisCell);
-                while (this->board->getValueAtIndexes(i, j) == ' '
-                       and this->board->getValueAtIndexes(k - 1, n + 1) != currPlayer->getType()
-                       and this->board->getValueAtIndexes(k - 1, n + 1) != ' ' and k > 1
-                       and n < (this->board->getSize() - 2)) {
+                while (board->getValueAtIndexes(i, j) == ' '
+                       and board->getValueAtIndexes(k - 1, n + 1) != playerID
+                       and board->getValueAtIndexes(k - 1, n + 1) != ' ' and k > 1
+                       and n < (board->getSize() - 2)) {
                     Cell newCell(k-1,n+1);
                     pCells.push_back(newCell);
                     k--, n++;
-                    if (this->board->getValueAtIndexes(k - 1, n + 1) == currPlayer->getType()) {
+                    if (board->getValueAtIndexes(k - 1, n + 1) == playerID) {
                         //if (c[k-1][n+1].isValue(type)) {
-                        getEmptyCell(i, j, k-1, n+1, currPlayer, &pMove);
+                        getEmptyCell(board, i, j, k-1, n+1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
                 }
@@ -83,16 +83,16 @@ PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
             if (j > 1) {
                 Cell thisCell(k, n);
                 pCells.push_back(thisCell);
-                while (this->board->getValueAtIndexes(i, j) == ' '
-                       and this->board->getValueAtIndexes(k, n - 1) != currPlayer->getType()
-                       and this->board->getValueAtIndexes(k, n - 1) != ' ' and n > 1) {
+                while (board->getValueAtIndexes(i, j) == ' '
+                       and board->getValueAtIndexes(k, n - 1) != playerID
+                       and board->getValueAtIndexes(k, n - 1) != ' ' and n > 1) {
 
                     Cell newCell(k,n-1);
                     pCells.push_back(newCell);
                     n--;
-                    if (this->board->getValueAtIndexes(k, n - 1) == currPlayer->getType()) {
+                    if (board->getValueAtIndexes(k, n - 1) == playerID) {
                         //if (c[k][n-1].isValue(type)) {
-                        getEmptyCell(i, j, k, n-1, currPlayer, &pMove);
+                        getEmptyCell(board, i, j, k, n-1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
                 }
@@ -103,16 +103,16 @@ PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
             if (j < board->getSize() - 2) {
                 Cell thisCell(k, n);
                 pCells.push_back(thisCell);
-                while (this->board->getValueAtIndexes(i, j) == ' '
-                       and this->board->getValueAtIndexes(k, n + 1) != currPlayer->getType()
-                       and this->board->getValueAtIndexes(k, n + 1) != ' ' and n < (board->getSize() - 2)) {
+                while (board->getValueAtIndexes(i, j) == ' '
+                       and board->getValueAtIndexes(k, n + 1) != playerID
+                       and board->getValueAtIndexes(k, n + 1) != ' ' and n < (board->getSize() - 2)) {
 
                     Cell newCell(k,n+1);
                     pCells.push_back(newCell);
                     n++;
-                    if (this->board->getValueAtIndexes(k, n + 1) == currPlayer->getType()) {
+                    if (board->getValueAtIndexes(k, n + 1) == playerID) {
                         //if (c[k][n+1].isValue(type)) {
-                        getEmptyCell(i, j, k, n+1, currPlayer, &pMove);
+                        getEmptyCell(board, i, j, k, n+1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
                 }
@@ -124,15 +124,15 @@ PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
                 Cell thisCell(k, n);
                 pCells.push_back(thisCell);
 
-                while (this->board->getValueAtIndexes(i, j) == ' '
-                       and this->board->getValueAtIndexes(k + 1, n - 1) != currPlayer->getType()
-                       and this->board->getValueAtIndexes(k + 1, n - 1) != ' '
-                       and k < (this->board->getSize() -2) and n > 1) {
+                while (board->getValueAtIndexes(i, j) == ' '
+                       and board->getValueAtIndexes(k + 1, n - 1) != playerID
+                       and board->getValueAtIndexes(k + 1, n - 1) != ' '
+                       and k < (board->getSize() -2) and n > 1) {
                     Cell newCell(k+1,n-1);
                     pCells.push_back(newCell);
                     k++, n--;
-                    if (this->board->getValueAtIndexes(k + 1, n - 1) == currPlayer->getType()) {
-                        getEmptyCell(i, j, k+1, n-1, currPlayer, &pMove);
+                    if (board->getValueAtIndexes(k + 1, n - 1) == playerID) {
+                        getEmptyCell(board, i, j, k+1, n-1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
                 }
@@ -143,16 +143,16 @@ PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
             if (i < board->getSize() - 2) {
                 Cell thisCell(k, n);
                 pCells.push_back(thisCell);
-                while (this->board->getValueAtIndexes(i, j) == ' '
-                       and this->board->getValueAtIndexes(k + 1, n) != currPlayer->getType()
-                       and this->board->getValueAtIndexes(k + 1, n) != ' '
-                       and k < (this->board->getSize() - 2)) {
+                while (board->getValueAtIndexes(i, j) == ' '
+                       and board->getValueAtIndexes(k + 1, n) != playerID
+                       and board->getValueAtIndexes(k + 1, n) != ' '
+                       and k < (board->getSize() - 2)) {
                     Cell newCell(k+1,n);
                     pCells.push_back(newCell);
                     k++;
-                    if (this->board->getValueAtIndexes(k + 1, n) == currPlayer->getType()) {
+                    if (board->getValueAtIndexes(k + 1, n) == playerID) {
                         //if (c[k+1][n].isValue(type)) {
-                        getEmptyCell(i, j, k+1, n, currPlayer, &pMove);
+                        getEmptyCell(board, i, j, k+1, n, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
                 }
@@ -163,18 +163,16 @@ PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
             if (i < board->getSize() - 2 and j < board->getSize() - 2) {
                 Cell thisCell(k, n);
                 pCells.push_back(thisCell);
-                while (this->board->getValueAtIndexes(i, j) == ' '
-                       and this->board->getValueAtIndexes(k + 1, n + 1) != currPlayer->getType()
-                       and this->board->getValueAtIndexes(k + 1, n + 1) != ' '
-                       and k < (this->board->getSize() - 2) and n < (this->board->getSize() - 2)) {
-                    //while (c[i][j].isValue(' ') and !c[k+1][n+1].isValue(type) and !c[k+1][n+1].isValue(' ')
-                    //       and k < board->getSize() - 2 and n < board->getSize() - 2) {
+                while (board->getValueAtIndexes(i, j) == ' '
+                       and board->getValueAtIndexes(k + 1, n + 1) != playerID
+                       and board->getValueAtIndexes(k + 1, n + 1) != ' '
+                       and k < (board->getSize() - 2) and n < (board->getSize() - 2)) {
                     Cell newCell(k + 1,n + 1);
                     pCells.push_back(newCell);
                     k++, n++;
-                    if (this->board->getValueAtIndexes(k + 1, n + 1) == currPlayer->getType()) {
+                    if (board->getValueAtIndexes(k + 1, n + 1) == playerID) {
                         //if (c[k+1][n+1].isValue(type)) {
-                        getEmptyCell(i, j, k + 1, n + 1, currPlayer, &pMove);
+                        getEmptyCell(board, i, j, k + 1, n + 1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
                 }
@@ -193,15 +191,15 @@ PossibleMove GenericLogic::getPossibleMoves(Player *currPlayer) {
     return (pMove);
 }
 
-void GenericLogic::getEmptyCell(int i, int j, int k, int n, Player *currPlayer, PossibleMove *pMove) {
+void GenericLogic::getEmptyCell(Board *board, int i, int j, int k, int n, char playerID, PossibleMove *pMove) {
     // possible move for 'X'
-    if (currPlayer->getType() == 'X' and this->board->getValueAtIndexes(k, n) == 'X') {
+    if (playerID == 'X' and board->getValueAtIndexes(k, n) == 'X') {
         //if (type == 'X' and board->getCells()[k][n].isValue('X')) {
         Cell cell(i,j);
         pMove->moves.push_back(cell);
     }
     // possible move for 'O'
-    if (currPlayer->getType() == 'O' and this->board->getValueAtIndexes(k, n) == 'O') {
+    if (playerID == 'O' and board->getValueAtIndexes(k, n) == 'O') {
         //if (type == 'O' and board->getCells()[k][n].isValue('O')) {
         Cell cell(i,j);
         pMove->moves.push_back(cell);
@@ -209,29 +207,31 @@ void GenericLogic::getEmptyCell(int i, int j, int k, int n, Player *currPlayer, 
 
 }
 
-void GenericLogic::switchCells(int i, int j, PossibleMove *pMove, Player *currPlayer) {
+int GenericLogic :: switchCells(Board *board, int i, int j, PossibleMove *pMove, char playerID) {
 
     int x, y, u, w, z = 0;
     Cell cell(i, j);
+    int count = 0;
 
     // run through all vectors of changeable cells
     for (int s = 0; s < (int) pMove->changeableCells.size(); s++) {
         if (!pMove->changeableCells[s].empty() and cell == pMove->changeableCells[s][0]) {
 
-            //Cell firstCell = board->getCells()[changeableCells[s][0].getX()][changeableCells[s][0].getY()];
-            char firstCell = this->board->getValueAtIndexes(pMove->changeableCells[s][0].getX()
+            char firstCell = board->getValueAtIndexes(pMove->changeableCells[s][0].getX()
                     , pMove->changeableCells[s][0].getY());
-            //Cell secondCell = board->getCells()[changeableCells[s][1].getX()][changeableCells[s][1].getY()];
-            char secondCell = this->board->getValueAtIndexes(pMove->changeableCells[s][1].getX()
+
+            char secondCell = board->getValueAtIndexes(pMove->changeableCells[s][1].getX()
                     , pMove->changeableCells[s][1].getY());
+
             // if chosen move by user is in a specific vector
-            if (firstCell == ' ' and secondCell != currPlayer->getType()) {
+            if (firstCell == ' ' and secondCell != playerID) {
+                count += pMove->changeableCells[s].size() - 1;
                 // change all cells in the a specific vector
                 for (int n = 1; n < (int) pMove->changeableCells[s].size(); n++) {
                     z = s;
                     x = pMove->changeableCells[s][n].getX();
                     y = pMove->changeableCells[s][n].getY();
-                    board->setCell(x, y, currPlayer->getType());
+                    board->setCell(x, y, playerID);
                 }
             }
         }
@@ -239,5 +239,6 @@ void GenericLogic::switchCells(int i, int j, PossibleMove *pMove, Player *currPl
 
     u = pMove->changeableCells[z][0].getX();
     w = pMove->changeableCells[z][0].getY();
-    board->setCell(u, w, currPlayer->getType());
+    board->setCell(u, w, playerID);
+    return count + 1;
 }

@@ -58,8 +58,11 @@ public:
     /*
      *
      */
-    virtual bool checkInputAndPlayTurn(string input) = 0;
 
+    virtual void playTurn() = 0;
+
+
+    //virtual bool checkInput(string input) = 0;
     /*
      *
      */
@@ -69,6 +72,7 @@ public:
      *
      */
     virtual bool getPossibleMoveStatus() = 0;
+
 };
 
 
