@@ -2,8 +2,8 @@
 // Created by David Nakash on 28/11/2017.
 //
 
+#include <algorithm>
 #include "AIPlayer.h"
-#include "HumanPlayer.h"
 
 AIPlayer::AIPlayer(char type, Board *board, Logic *gLogic) {
     this->type = type;
