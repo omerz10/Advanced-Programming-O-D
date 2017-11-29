@@ -8,9 +8,6 @@
 #include "GameFlow.h"
 
 
-// checking for git   !!!
-
-
 GameFlow::GameFlow (Game *g): game(g){}
 
 // readability function - less clutter in playOneTurn() function..

@@ -12,7 +12,6 @@ AIPlayer::AIPlayer(char type, Board *board, Logic *gLogic) {
     this->gameLogic = gLogic;
 }
 
-
 void AIPlayer::playTurn() {
     // decisions : AI's logic here...
 
@@ -23,9 +22,6 @@ void AIPlayer::playTurn() {
     this->lastMove = res;
 
 }
-
-
-
 
 Cell AIPlayer::calculateBestPossibleMove() {
 
@@ -114,6 +110,13 @@ void AIPlayer::printMoves() {
 }
 
 void AIPlayer::setLastMove(int i, int j) {
+
+    if (i > this->board->getSize() or j > this->board->getSize()) {
+        throw invalid_argument("Out of range");
+    }
+    if (i < 0 or j < 0) {
+        throw invalid_argument("Negative numbers");
+    }
     lastMove.setX(i);
     lastMove.setY(j);
 }

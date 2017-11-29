@@ -12,6 +12,8 @@
 #include <iostream>
 #include <string>
 
+using namespace std;
+
 /*
  * Class Cell which build the Board class
  */
@@ -64,10 +66,6 @@ public:
      * set column index
      */
     void setY(int y);
-    /*
-     * returns bool if cell's identical to input
-     */
-    bool isValue(char c);
 
     /*
      * overloading of the operator '<'.

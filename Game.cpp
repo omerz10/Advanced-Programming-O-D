@@ -5,8 +5,7 @@
 #include "Game.h"
 
 
-Game :: Game(Player* P1, Player *P2, Board *board) {
-
+Game::Game(Player* P1, Player *P2, Board *board) {
     // initialize values
     this->P1 = P1;
     this->P2 = P2;
@@ -14,11 +13,10 @@ Game :: Game(Player* P1, Player *P2, Board *board) {
 
     // create the board "fresh" as the game is instantiated..
     this->board->create();
-
 }
 
 
-bool Game ::playOneMove(Player *p, Player **lastPlayer) {
+bool Game::playOneMove(Player *p, Player **lastPlayer) {
     string userInput; // stores user input
     bool pMoves;
 

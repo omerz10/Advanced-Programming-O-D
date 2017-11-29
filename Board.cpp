@@ -6,8 +6,8 @@
  *      Author: zuckero
  */
 
-#include "Board.h"
 
+#include "Board.h"
 
 Board::Board(int size): size(size) {
     cells = new Cell *[size];
@@ -31,11 +31,27 @@ int Board::getSize() const {
 }
 
 char Board :: getValueAtIndexes(int x, int y) {
+
+    if (x > this->size or y > this->size) {
+       throw invalid_argument("Out of range");
+    }
+    if (x < 0 or y < 0) {
+        throw invalid_argument("Negative numbers");
+    }
+
     return this->cells[x][y].getVal();
 }
 
 
 void Board::setCell(int i, int j, char c) {
+
+    if (i > this->size or j > this->size) {
+        throw invalid_argument("Out of range");
+    }
+    if (i < 0 or j < 0) {
+        throw invalid_argument("Negative numbers");
+    }
+
     cells[i][j].setVal(c);
 }
 
