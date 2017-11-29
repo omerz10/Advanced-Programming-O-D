@@ -67,7 +67,7 @@ public:
      */
     void show() const;
 
-    void copyBoard(Board* dest);
+    void copyBoardTo(Board* dest);
 };
 
 
