@@ -67,7 +67,6 @@ public:
      */
     void setY(int y);
 
-
     /*
      * overloading of the operator '<'.
      * comparing row index & column index of different cells

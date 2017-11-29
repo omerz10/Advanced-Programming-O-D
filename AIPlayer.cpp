@@ -12,7 +12,6 @@ AIPlayer::AIPlayer(char type, Board *board, Logic *gLogic) {
     this->gameLogic = gLogic;
 }
 
-
 void AIPlayer::playTurn() {
     // decisions : AI's logic here...
 
@@ -23,9 +22,6 @@ void AIPlayer::playTurn() {
     this->lastMove = res;
 
 }
-
-
-
 
 Cell AIPlayer::calculateBestPossibleMove() {
 

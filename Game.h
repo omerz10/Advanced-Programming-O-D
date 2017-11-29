@@ -8,11 +8,6 @@
 #include "Board.h"
 #include "HumanPlayer.h"
 
-// last player should be member of gameFlow - its important to know who played last..
-// endMovesForP1/P2 should also be members of gameFlow to mark "game over"/"tie"/etc..
-// Game function - bool(endMoveForPlayer) playOneMove(Player *p, Player **lastPlayer-UPDATE)
-
-
 class Game {
 private:
     /*
