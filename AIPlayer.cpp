@@ -78,38 +78,13 @@ void AIPlayer::calculateBestPossibleMove() {
                 saveSecondIndex = j;
             }
 
+
+            int c;
             // now revert board to original board and continue iterating..
             // copy first board to tempBoard
             this->board->copyBoard(&tempBoard);
-
         }
-
-
     }
-
-    /*
-    // create the enemy possible moves array
-    PossibleMove enemyPossibleMoves[this->possibleMove.moves.size()];
-
-    for (int i = 0; i < this->possibleMove.moves.size(); i++) {
-        // run AI player move simulation...
-        // flip the choice
-        for (int i = 0; i < (int)this->possibleMove.moves.size(); i++) {
-            if (this->lastMove.getX() == this->possibleMove.moves[i].getX()
-                and this->lastMove.getY() == this->possibleMove.moves[i].getY()) {
-                this->gameLogic->switchCells(boards[i], this->lastMove.getX(), this->lastMove.getY()
-                        , &this->possibleMove, this->getType());
-            }
-        }
-
-
-        //get enemy moves on board
-        enemyPossibleMoves[i] = this->gameLogic->getPossibleMoves(boards[i], getEnemyPlayerID());
-
-
-    }
-    */
-
 }
 
 bool AIPlayer::getPossibleMoveStatus() {
@@ -149,7 +124,7 @@ char AIPlayer::getType() const {
 char AIPlayer::getEnemyPlayerID() {
     if (this->type == 'X') {
         return 'O';
-    } else if (this->type == 'O') {
+    } else {
         return 'X';
     }
 }
