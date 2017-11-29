@@ -16,7 +16,6 @@ Board::Board(int size): size(size) {
     }
 }
 
-
 Board::~Board()
 {
     for (int i = 0; i < size; i++)
