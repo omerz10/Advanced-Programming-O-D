@@ -4,11 +4,11 @@
 
 #include "GenericLogic.h"
 
-GenericLogic :: GenericLogic (Board *board): board(board) {
+GenericLogic::GenericLogic (Board *board): board(board) {
 
 }
 
-PossibleMove GenericLogic :: getPossibleMoves(Board *board, char playerID) {
+PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
 
     int k, n; // indexes
     vector<Cell> pCells; // temp vector

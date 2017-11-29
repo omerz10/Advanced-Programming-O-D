@@ -24,9 +24,9 @@ set(SOURCE_FILES
         HumanPlayer.h
         Logic.h
         Player.h
-        Structs.h )
+        Structs.h)
 
-set(TEST_FILES Tests/test_main.cpp Tests/test_board.cpp Tests/test_cell.cpp)
+set(TEST_FILES Tests/test_main.cpp Tests/test_board.cpp Tests/test_cell.cpp Tests/test_game.cpp Tests/test_genericLogic.cpp Tests/test_AIPlayer.cpp)
 
 add_executable(Advanced_Programming_O_D ${SOURCE_FILES} main.cpp)
 add_executable(RunTests ${TEST_FILES} ${SOURCE_FILES} Tests/test_main.cpp)
