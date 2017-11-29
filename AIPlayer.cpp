@@ -39,6 +39,7 @@ void AIPlayer::calculateBestPossibleMove() {
 
     // get possible moves..
     this->getPlayerMoves();
+
     // create lastMove cells...
     Cell lastMoves[this->possibleMove.moves.size()];
     // hold possible moves
@@ -50,8 +51,10 @@ void AIPlayer::calculateBestPossibleMove() {
 
     // make tempBoard to work on..
     Board tempBoard = Board(this->board->getSize());
+
+    Board tempBoardIndexI = Board(this->board->getSize());
     // copy first board to tempBoard
-    this->board->copyBoard(&tempBoard);
+    this->board->copyBoardTo(&tempBoard);
 
     // run on each possibleMove of the AI..
     for (int i = 0; i < this->possibleMove.moves.size(); i++) {
@@ -61,6 +64,10 @@ void AIPlayer::calculateBestPossibleMove() {
         // switch the cells of the tempBoard according to the i-th move..
         int scoreFirst = this->gameLogic->switchCells(&tempBoard, this->possibleMove.moves[i].getX()
                 , this->possibleMove.moves[i].getY(), &this->possibleMove, this->getType());
+
+        // copy tempBoard to tempBoardIndexI
+        tempBoard.copyBoardTo(&tempBoardIndexI);
+
 
         // get possible moves of other player after AI's imaginary move..
         possibleMoves[i] = this->gameLogic->getPossibleMoves(&tempBoard, getEnemyPlayerID());
@@ -78,13 +85,15 @@ void AIPlayer::calculateBestPossibleMove() {
                 saveSecondIndex = j;
             }
 
-
-            int c;
-            // now revert board to original board and continue iterating..
+            // now revert board to "I-th iteration board" and continue iterating..
             // copy first board to tempBoard
-            this->board->copyBoard(&tempBoard);
+            tempBoardIndexI.copyBoardTo(&tempBoard);
+
+
         }
     }
+
+
 }
 
 bool AIPlayer::getPossibleMoveStatus() {

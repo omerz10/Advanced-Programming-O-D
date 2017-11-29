@@ -75,7 +75,7 @@ void Board::show() const {
     }
 }
 
-void Board::copyBoard(Board *dest) {
+void Board::copyBoardTo(Board *dest) {
     for (int i = 0; i < this->getSize(); i++) {
         for (int j = 0; j < this->getSize(); j++) {
             dest->setCell(i, j, this->getValueAtIndexes(i, j));
