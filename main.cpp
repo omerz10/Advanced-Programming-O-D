@@ -19,6 +19,9 @@ int main()
 
     HumanPlayer P1 = HumanPlayer('X', &board, &gameLogic);
 
+
+    string userInput;
+
     //HumanPlayer P2 = HumanPlayer('O', &board, &gameLogic);
 
     // test..

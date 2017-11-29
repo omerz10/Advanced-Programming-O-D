@@ -31,6 +31,8 @@ bool Game::playOneMove(Player *p, Player **lastPlayer) {
 
     // Are there are possible moves for Player?
     if (pMoves) {
+
+        //
         p->playTurn();
         // now assign p to lastPlayer ptr for future reference..
         *lastPlayer = p;
