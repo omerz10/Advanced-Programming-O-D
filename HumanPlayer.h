@@ -68,8 +68,9 @@ public:
      *
      *
      */
-    bool checkInputAndPlayTurn(string input);
+    bool checkInput(string input);
 
+    void playTurn();
     /*
      *
      */

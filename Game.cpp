@@ -6,6 +6,7 @@
 
 
 Game :: Game(Player* P1, Player *P2, Board *board) {
+
     // initialize values
     this->P1 = P1;
     this->P2 = P2;
@@ -13,6 +14,7 @@ Game :: Game(Player* P1, Player *P2, Board *board) {
 
     // create the board "fresh" as the game is instantiated..
     this->board->create();
+
 }
 
 
@@ -31,19 +33,7 @@ bool Game ::playOneMove(Player *p, Player **lastPlayer) {
 
     // Are there are possible moves for Player?
     if (pMoves) {
-        cout << "Your possible moves: ";
-        p->printMoves();
-        cout << "\nPlease enter your move row, col: ";
-        // run loop until gets correct input for possible move
-        while (true) {
-            getline(cin, userInput);
-            //wrong input
-            if (!p->checkInputAndPlayTurn(userInput)) {
-                cout << "\nWrong input! Please enter your move row, col: ";
-            }
-                // true input
-            else { break; }
-        }
+        p->playTurn();
         // now assign p to lastPlayer ptr for future reference..
         *lastPlayer = p;
         // return
@@ -58,9 +48,6 @@ bool Game ::playOneMove(Player *p, Player **lastPlayer) {
         return false;
     }
 }
-
-
-
 
 
 Player* Game :: getP1() {

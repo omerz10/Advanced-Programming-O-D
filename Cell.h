@@ -68,6 +68,7 @@ public:
      * returns bool if cell's identical to input
      */
     bool isValue(char c);
+
     /*
      * overloading of the operator '<'.
      * comparing row index & column index of different cells
@@ -83,6 +84,7 @@ public:
         }
         return false;
     }
+
     /*
      * overloading of the operator '='.
      * comparing row index & column index of different cells

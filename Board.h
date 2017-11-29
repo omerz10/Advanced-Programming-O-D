@@ -35,6 +35,10 @@ public:
      * constructor
      */
     Board(int size);
+
+    // copy constructor
+    Board(Board *b);
+
     /*
      * deconstructor
      */
@@ -63,6 +67,7 @@ public:
      */
     void show() const;
 
+    void copyBoard(Board* dest);
 };
 
 
