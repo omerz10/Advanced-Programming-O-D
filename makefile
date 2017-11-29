@@ -1,4 +1,5 @@
-# Alon Vita 311233431
+# David Nakash 203752902
+# Omer Zucker 200876548
 
 CXX = g++
 #CXXFLAGS = -std=c++0x
