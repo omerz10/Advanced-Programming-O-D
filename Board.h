@@ -37,28 +37,48 @@ public:
     Board(int size);
 
     // copy constructor
+    
     Board(Board *b);
 
     /*
      * deconstructor
      */
     ~Board();
-    /*
-     * returns size of board
+    
+    
+    /**
+     returns size of board
+
+     @return size of board
      */
     int getSize() const;
     /*
      * returns the value of the Cell at indexes (x,y)
      */
+    
+    /**
+     Get value of board Cell in indexes x,y.
+
+     @param x location
+     @param y location
+     @return value
+     */
     char getValueAtIndexes(int x, int y);
     /*
-     * set a cell by its index and content (value)
+     *
      */
+    
+    /**
+     set a cell by its index and content (value)
 
+     @param i x location
+     @param j y location
+     @param c value
+     */
     void setCell(int i, int j, char c);
     /*
      * creates pointers of the board's cells including
-     * thier index and value and keep them in cells member
+     * thier index and value and keep them in cells member.
      */
     void create() const;
     /*
@@ -67,6 +87,11 @@ public:
      */
     void show() const;
 
+    /**
+     copy board from this to destination.
+
+     @param dest dest reference.
+     */
     void copyBoardTo(Board* dest);
 };
 

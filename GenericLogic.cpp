@@ -17,7 +17,7 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
 
     for (int i = 0; i < board->getSize(); i++) {
         for (int j = 0; j < board->getSize(); j++) {
-            k = i, n = j;
+            k = i; n = j;
 
             //upper left
             if (i > 1 and  j > 1) {
@@ -29,7 +29,7 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                        and board->getValueAtIndexes(k - 1, n - 1) != ' ' and k > 1 and n > 1) {
                     Cell newCell(k - 1,n - 1);
                     pCells.push_back(newCell);
-                    k--, n--;
+                    k--; n--;
                     if (board->getValueAtIndexes(k - 1, n - 1) == playerID) {
                         //if (c[k-1][n-1].isValue(type)) {
                         getEmptyCell(board, i, j, k - 1, n - 1, playerID, &pMove);
@@ -37,7 +37,7 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     }
                 }
                 pCells.clear();
-                k = i, n = j;
+                k = i; n = j;
             }
             // up
             if (i > 1) {
@@ -57,7 +57,7 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     }
                 }
                 pCells.clear();
-                k = i, n = j;
+                k = i; n = j;
             }
             // upper right
             if (i > 1 and j < board->getSize() - 2 ) {
@@ -69,7 +69,7 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                        and n < (board->getSize() - 2)) {
                     Cell newCell(k-1,n+1);
                     pCells.push_back(newCell);
-                    k--, n++;
+                    k--; n++;
                     if (board->getValueAtIndexes(k - 1, n + 1) == playerID) {
                         //if (c[k-1][n+1].isValue(type)) {
                         getEmptyCell(board, i, j, k-1, n+1, playerID, &pMove);
@@ -77,7 +77,7 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     }
                 }
                 pCells.clear();
-                k = i, n = j;
+                k = i; n = j;
             }
             // left
             if (j > 1) {
@@ -97,7 +97,7 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     }
                 }
                 pCells.clear();
-                k = i, n = j;
+                k = i; n = j;
             }
             // right
             if (j < board->getSize() - 2) {
@@ -117,7 +117,7 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     }
                 }
                 pCells.clear();
-                k = i, n = j;
+                k = i; n = j;
             }
             // lower left
             if (i < board->getSize() - 2 and j > 1) {
@@ -130,14 +130,14 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                        and k < (board->getSize() -2) and n > 1) {
                     Cell newCell(k+1,n-1);
                     pCells.push_back(newCell);
-                    k++, n--;
+                    k++; n--;
                     if (board->getValueAtIndexes(k + 1, n - 1) == playerID) {
                         getEmptyCell(board, i, j, k+1, n-1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
                 }
                 pCells.clear();
-                k = i, n = j;
+                k = i; n = j;
             }
             // down
             if (i < board->getSize() - 2) {
@@ -157,7 +157,7 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     }
                 }
                 pCells.clear();
-                k = i, n = j;
+                k = i; n = j;
             }
             // lower right
             if (i < board->getSize() - 2 and j < board->getSize() - 2) {
@@ -169,7 +169,7 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                        and k < (board->getSize() - 2) and n < (board->getSize() - 2)) {
                     Cell newCell(k + 1,n + 1);
                     pCells.push_back(newCell);
-                    k++, n++;
+                    k++; n++;
                     if (board->getValueAtIndexes(k + 1, n + 1) == playerID) {
                         //if (c[k+1][n+1].isValue(type)) {
                         getEmptyCell(board, i, j, k + 1, n + 1, playerID, &pMove);

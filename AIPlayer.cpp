@@ -26,6 +26,7 @@ void AIPlayer::playTurn() {
 Cell AIPlayer::calculateBestPossibleMove() {
 
     // create lastMove cells...
+    
     Cell lastMoves[this->possibleMove.moves.size()];
 
     // hold possible moves
@@ -34,7 +35,7 @@ Cell AIPlayer::calculateBestPossibleMove() {
 
     // save best score
     int bestScore = INT_MIN;
-    int saveFirstIndex, saveSecondIndex;
+    int saveFirstIndex=0, saveSecondIndex;
 
     // make tempBoard to work on..
     Board tempBoard = Board(this->board->getSize());

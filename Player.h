@@ -36,40 +36,53 @@ private:
 
 public:
 
-    /*
-     * returns player's type
+
+    
+    
+    /**
+     returns player's type.
+
+     @return type
      */
     virtual char getType() const = 0;
+    
+    /**
+     returns the cell of the last move of last player.
 
-    /*
-     * returns the cell of the last move of last player
+     @return Cell lastmove
      */
     virtual Cell getLastMove() const = 0;
-    /*
-     * set cell of last move by receiving it's index
-     * initialize it with an empty cell
+    
+    /**
+     * set cell of last move by receiving it's index,
+     * initialize it with an empty cell.
+
+     @param i y location
+     @param j x location
      */
     virtual void setLastMove(int i, int j) = 0;
-    /*
-     * sort the possible moves of the player according to their size and prints it on gui
+
+    
+    /**
+     sort the possible moves of the player according to their size and prints it on gui.
      */
     virtual void printMoves() = 0;
 
-    /*
-     *
+    /**
+     Plays one turn of the player, runs the CalculateBestPossibleMove function and flips the corresponding cells.
      */
-
     virtual void playTurn() = 0;
-
-
-    //virtual bool checkInput(string input) = 0;
-    /*
-     *
+    
+    /**
+     Gets the player's possible moves, and inserts them to the member PossibleMove...
      */
     virtual void getPlayerMoves() = 0;
 
-    /*
-     *
+    
+    /**
+     Gets the possible move status (the boolean value inside of PossibleMove struct members)...
+     
+     @return bool   true/false
      */
     virtual bool getPossibleMoveStatus() = 0;
 

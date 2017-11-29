@@ -41,35 +41,77 @@ public:
     /*
      * constructor initialized by external index
      */
+    
     Cell(int x, int y);
-    /*
-     * returns content of the cell
+    
+
+    /**
+     returns content of the cell.
+
+     @return value
      */
     char getVal() const;
     /*
-     * returns row index
+     *
+     */
+    
+    /**
+     returns row index
+
+     @return roindexw
      */
     int getX() const;
     /*
-     * returns column index
+     *
+     */
+    
+    /**
+     returns column index
+
+     @return col index
      */
     int getY() const;
     /*
-     * set the content of the cell by inserting a char
+     *
+     */
+    
+    /**
+     set the content of the cell by inserting a char.
+
+     @param c val
      */
     void setVal(char c);
     /*
-     * set row index
+     *
+     */
+    
+    /**
+     set row index
+
+     @param x set row index
      */
     void setX(int x);
     /*
-     * set column index
+     *
+     */
+    
+    /**
+     set column index
+
+     @param y column index
      */
     void setY(int y);
 
     /*
+     *
+     */
+    
+    /**
      * overloading of the operator '<'.
-     * comparing row index & column index of different cells
+     * comparing row index & column index of different cells.
+
+     @param cell Cell to compare
+     @return bool   true/false if smaller..
      */
     bool operator < (const Cell &cell) const {
         if (x < cell.getX()) {
@@ -84,8 +126,15 @@ public:
     }
 
     /*
-     * overloading of the operator '='.
-     * comparing row index & column index of different cells
+     *
+     */
+    
+    /**
+     overloading of the operator '='.
+     * comparing row index & column index of different cells.
+
+     @param cell Cell to compare
+     @return true if equals else false.
      */
     bool operator == (const Cell &cell) const {
         return x == cell.getX() and y == cell.getY();
