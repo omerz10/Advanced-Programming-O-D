@@ -23,9 +23,15 @@ set(SOURCE_FILES
         HumanPlayer.cpp
         HumanPlayer.h
         Logic.h
-        main.cpp
         Player.h
-        Structs.h)
+        Structs.h )
 
-add_executable(Advanced_Programming_O_D ${SOURCE_FILES} Tests/Testclass.h Tests/test.cpp)
-target_link_libraries(Advanced_Programming_O_D gtest gtest_main)
+set(TEST_FILES Tests/test_main.cpp Tests/test_board.cpp Tests/test_cell.cpp)
+
+add_executable(Advanced_Programming_O_D ${SOURCE_FILES} main.cpp)
+add_executable(RunTests ${TEST_FILES} ${SOURCE_FILES} Tests/test_main.cpp)
+
+
+target_link_libraries(RunTests gtest gtest_main pthread)
+
+add_test(Advanced_Programming_O_D Advanced_Programming_O_D)
