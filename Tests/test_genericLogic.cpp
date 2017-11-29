@@ -1,6 +1,3 @@
-//
-// Created by omerz on 29/11/17.
-//
 
 /**
  * GenericLogic test
@@ -23,7 +20,7 @@ TEST(logicTest1, HandlesPossibleMoves) {
 
 
 // Tests if cells were flliped
-TEST(logicTest2, HandlesPossibleMoves) {
+TEST(logicTest2, HandlesFlliping) {
     Board board(8);
     board.create();
     char c = 'X';

@@ -1,6 +1,3 @@
-//
-// Created by omerz on 29/11/17.
-//
 
 /**
  * Cell test
