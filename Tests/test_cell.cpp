@@ -3,7 +3,7 @@
  * Cell test
  */
 #include "gtest/gtest.h"
-#include "../Cell.h"
+#include "../src/Cell.h"
 
 using namespace std;
 

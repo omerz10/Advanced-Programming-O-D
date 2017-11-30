@@ -13,8 +13,11 @@
 int main()
 {
     int size = 8;
+
     string input;
+
     Board board = Board(size);
+
     GenericLogic gameLogic = GenericLogic(&board);
 
     printf("Hello!\n");

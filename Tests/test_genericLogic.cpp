@@ -3,7 +3,7 @@
  * GenericLogic test
  */
 #include "gtest/gtest.h"
-#include "../GenericLogic.h"
+#include "../src/GenericLogic.h"
 
 using namespace std;
 
