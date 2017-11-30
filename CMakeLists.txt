@@ -8,28 +8,28 @@ include_directories(lib/googletest-master/googletest/include)
 include_directories(lib/googletest-master/googlemock/include)
 
 set(SOURCE_FILES
-        AIPlayer.cpp
-        AIPlayer.h
-        Board.cpp
-        Board.h
-        Cell.cpp
-        Cell.h
-        Game.cpp
-        Game.h
-        GameFlow.cpp
-        GameFlow.h
-        GenericLogic.cpp
-        GenericLogic.h
-        HumanPlayer.cpp
-        HumanPlayer.h
-        Logic.h
-        Player.h
-        Structs.h)
+        src/AIPlayer.cpp
+        src/AIPlayer.h
+        src/Board.cpp
+        src/Board.h
+        src/Cell.cpp
+        src/Cell.h
+        src/Game.cpp
+        src/Game.h
+        src/GameFlow.cpp
+        src/GameFlow.h
+        src/GenericLogic.cpp
+        src/GenericLogic.h
+        src/HumanPlayer.cpp
+        src/HumanPlayer.h
+        src/Logic.h
+        src/Player.h
+        src/Structs.h)
 
 set(TEST_FILES Tests/test_main.cpp Tests/test_board.cpp Tests/test_cell.cpp Tests/test_game.cpp
         Tests/test_genericLogic.cpp Tests/test_AIPlayer.cpp Tests/test_humanPlayer.cpp)
 
-add_executable(Advanced_Programming_O_D ${SOURCE_FILES} main.cpp)
+add_executable(Advanced_Programming_O_D ${SOURCE_FILES} src/main.cpp)
 add_executable(RunTests ${TEST_FILES} ${SOURCE_FILES} Tests/test_main.cpp)
 
 

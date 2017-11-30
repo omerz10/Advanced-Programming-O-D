@@ -4,7 +4,7 @@
  */
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "../Board.h"
+#include "../src/Board.h"
 
 using namespace std;
 

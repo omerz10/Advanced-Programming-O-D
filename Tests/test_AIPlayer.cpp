@@ -3,8 +3,8 @@
  * AIPlayer test
  */
 #include "gtest/gtest.h"
-#include "../AIPlayer.h"
-#include "../GenericLogic.h"
+#include "../src/AIPlayer.h"
+#include "../src/GenericLogic.h"
 
 using namespace std;
 

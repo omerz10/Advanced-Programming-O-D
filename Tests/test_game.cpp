@@ -3,9 +3,9 @@
  * Game test
  */
 #include "gtest/gtest.h"
-#include "../Game.h"
-#include "../GenericLogic.h"
-#include "../AIPlayer.h"
+#include "../src/Game.h"
+#include "../src/GenericLogic.h"
+#include "../src/AIPlayer.h"
 
 using namespace std;
 
