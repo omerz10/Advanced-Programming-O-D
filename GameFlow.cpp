@@ -66,9 +66,18 @@ void GameFlow::updateScores() {
 }
 
 void GameFlow::showScores() {
-    cout << "FINAL SCORE" << endl << this->game->getP1()->getType()
+    cout << "Final Score:" << endl << this->game->getP1()->getType()
          << ": " << this->game->getP1Score() << endl << this->game->getP2()->getType()
-            << ": " << this->game->getP2Score() << endl;
+            << ": " << this->game->getP2Score() << endl << endl;
+    if (this->game->getP1Score() > this->game->getP2Score()) {
+        cout << this->game->getP1()->getType() << " Win!";
+    }
+    if (this->game->getP2Score() > this->game->getP1Score()) {
+        cout << this->game->getP2()->getType() << " Win!";
+    }
+    if (this->game->getP2Score() == this->game->getP1Score()) {
+        cout << "It's a tiy!";
+    }
 }
 
 

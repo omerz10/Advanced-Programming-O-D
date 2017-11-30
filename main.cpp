@@ -2,33 +2,34 @@
  * main.cpp
  *	Omer Zucker
  *	ID: 200876548
- *  Created by omerz on 30/10/17.
- *      Author: zuckero
+ *
+ *  David Nakash
+ *  ID: 203752902
  */
 
 #include <cstdio>
-#include <cstring>
 #include "GameFlow.h"
 
-int main()
-{
-    int size = 8;
-    string input;
+
+void menu() {
+    int size, input;
+    printf("Hello!\n");
+    printf("Please enter size of board:\n");
+    cin >> size;
     Board board = Board(size);
     GenericLogic gameLogic = GenericLogic(&board);
 
-    printf("Hello!\n");
-    printf("Press P - to play against PLAYER\n");
-    printf("Press C - to play against COMPUTER\n");
+    printf("Press 1 - to play against PLAYER\n");
+    printf("Press 2 - to play against COMPUTER\n");
     cin >> input;
 
-    while (!strcmp(input, "p") and !strcmp(input, "P") and !strcmp(input, "c") and !strcmp(input, "C")) {
+    while (input != 1 and input != 2) {
         printf("Wrong input! Please enter again");
         cin >> input;
     }
 
     // play against a player
-    if (strcmp(input, "p") or strcmp(input, "P")) {
+    if (input == 1) {
         HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
         HumanPlayer p2 = HumanPlayer('X', &board, &gameLogic);
         Game game = Game(&p1, &p2, &board);
@@ -37,13 +38,17 @@ int main()
     }
 
     // play against a player
-    if (strcmp(input, "c") or strcmp(input, 'C')) {
+    if (input == 2) {
         HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
         AIPlayer aiPlayer = AIPlayer('O', &board, &gameLogic);
         Game game = Game(&p1, &aiPlayer, &board);
         GameFlow gameFlow = GameFlow(&game);
         gameFlow.play();
     }
+}
 
+int main()
+{
+    menu();
     return 0;
 }
