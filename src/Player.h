@@ -86,6 +86,22 @@ public:
      */
     virtual bool getPossibleMoveStatus() = 0;
 
+
+    /**
+     Checks the user's input and returns true/false if correct/not..
+
+     @param input string
+     @return bool   true/false
+     */
+    virtual bool checkInput(string input) = 0;
+
+
+    /*
+     * this function determines whether the game should print a gui for the player or not (if AI then it won't..)
+     * @return bool     true/false
+     */
+    virtual bool printGUI() = 0;
+
 };
 
 

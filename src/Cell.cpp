@@ -7,7 +7,7 @@
  */
 
 #include "Cell.h"
-
+#include <stdexcept>
 
 Cell::Cell(): x(0), y(0), value(' ') { }
 

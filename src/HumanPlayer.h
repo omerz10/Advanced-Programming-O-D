@@ -100,6 +100,12 @@ public:
      @return bool   true/false
      */
     bool getPossibleMoveStatus();
+
+    /*
+     * this function determines whether the game should print a gui for the player or not (if AI then it won't..)
+     * @return bool     true/false
+     */
+    bool printGUI();
 };
 
 

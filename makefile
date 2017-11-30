@@ -1,24 +1,11 @@
-# David Nakash 203752902
-# Omer Zucker 200876548
+# name David Nakash, Omer Zucker
+# id 203752902, 200876548
 
-CXX = g++
-#CXXFLAGS = -std=c++0x
-RM = rm -f
-#LIBS = -pthread -lboost_serialization -I.
+a.out: compileAll
+	g++ *.o 
+	rm -f *.o
 
-
-a.out: core.o makeO
-	$(CXX) $(CXXFLAGS) @compile.txt
-
-core.o:
-	find src -name "*.cpp" > sources.txt
-	$(CXX) $(CXXFLAGS) -c @sources.txt
-
-makeO:
-	find -name "*.o" > compile.txt
-	sed -i '/cmake-build-debug/d' ./compile.txt
-
-clean:
-	$(RM) *.o
-	$(RM) sources.txt
-	$(RM) compile.txt
+compileAll: src/*.h src/*.cpp
+	g++ -IHeaders/ -c src/*.cpp
+run:
+	./a.out

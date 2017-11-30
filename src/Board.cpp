@@ -8,6 +8,8 @@
 
 
 #include "Board.h"
+#include <stdexcept>
+
 
 Board::Board(int size): size(size) {
     cells = new Cell *[size];
