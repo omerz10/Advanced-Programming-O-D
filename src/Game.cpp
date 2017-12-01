@@ -31,9 +31,35 @@ bool Game::playOneMove(Player *p, Player **lastPlayer) {
 
     // Are there are possible moves for Player?
     if (pMoves) {
+        // print GUI and take input here if needed... (HumanPlayer only)
+        if (p->printGUI()) {
 
-        //
-        p->playTurn();
+            string userInput;
+
+            cout << "Your possible moves: ";
+
+            p->printMoves();
+
+            cout << "\nPlease enter your move row, col: ";
+
+            // run loop until gets correct input for possible move
+            while (true) {
+
+                getline(cin, userInput);
+                //wrong input
+                if (!p->checkInput(userInput)) {
+                    cout << "\nWrong input! Please enter your move row, col: ";
+                }
+                    // true input
+                else {
+                    p->playTurn();
+                    break;
+                }
+            }
+        } else {
+            p->playTurn();
+        }
+
         // now assign p to lastPlayer ptr for future reference..
         *lastPlayer = p;
         // return
@@ -47,6 +73,7 @@ bool Game::playOneMove(Player *p, Player **lastPlayer) {
         // no moves for Player, return false..
         return false;
     }
+
 }
 
 

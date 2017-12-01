@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include "AIPlayer.h"
+#include <stdexcept>
 #include <limits.h>
 
 AIPlayer::AIPlayer(char type, Board *board, Logic *gLogic) {
@@ -136,6 +137,16 @@ char AIPlayer::getEnemyPlayerID() {
     } else {
         return 'X';
     }
+}
+
+// no implementation needed here...
+bool AIPlayer::printGUI() {
+    return false;
+}
+
+// no implementation needed here...
+bool AIPlayer::checkInput(string input) {
+    return true;
 }
 
 

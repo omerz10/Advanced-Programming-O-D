@@ -102,6 +102,21 @@ public:
      @return char   type
      */
     char getEnemyPlayerID();
+
+    /*
+     * this function determines whether the game should print a gui for the player or not (if AI then it won't..)
+     * @return bool     true/false
+     */
+    bool printGUI();
+
+
+    /**
+     Checks the user's input and returns true/false if correct/not..
+
+     @param input string
+     @return bool   true/false
+     */
+    bool checkInput(string input);
 };
 
 

@@ -2,6 +2,7 @@
 // Created by David Nakash on 28/11/2017.
 //
 
+
 #ifndef PROJECT_UPDATED_STRUCTS_H
 #define PROJECT_UPDATED_STRUCTS_H
 

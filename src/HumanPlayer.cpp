@@ -62,32 +62,16 @@ bool HumanPlayer::getPossibleMoveStatus() {
 }
 
 void HumanPlayer::playTurn() {
-
-    string userInput;
-
-    cout << "Your possible moves: ";
-
-    this->printMoves();
-
-    cout << "\nPlease enter your move row, col: ";
-
-    // run loop until gets correct input for possible move
-    while (true) {
-        getline(cin, userInput);
-        //wrong input
-        if (!this->checkInput(userInput)) {
-            cout << "\nWrong input! Please enter your move row, col: ";
-        }
-            // true input
-        else {
-            for (int i = 0; i < (int)this->possibleMove.moves.size(); i++) {
-                if (this->lastMove.getX() == this->possibleMove.moves[i].getX()
-                    and this->lastMove.getY() == this->possibleMove.moves[i].getY()) {
-                    this->gameLogic->switchCells(this->board, this->lastMove.getX(), this->lastMove.getY()
-                            , &this->possibleMove, this->getType());
-                }
-            }
-            break;
+    // flip the selection of the player...
+    for (int i = 0; i < (int)this->possibleMove.moves.size(); i++) {
+        if (this->lastMove.getX() == this->possibleMove.moves[i].getX()
+            and this->lastMove.getY() == this->possibleMove.moves[i].getY()) {
+            this->gameLogic->switchCells(this->board, this->lastMove.getX(), this->lastMove.getY()
+                    , &this->possibleMove, this->getType());
         }
     }
+}
+
+bool HumanPlayer::printGUI() {
+    return true;
 }
