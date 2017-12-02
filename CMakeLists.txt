@@ -24,7 +24,10 @@ set(SOURCE_FILES
         src/HumanPlayer.h
         src/Logic.h
         src/Player.h
-        src/Structs.h)
+        src/Structs.h
+        server/main.cpp
+        server/Server.cpp
+        server/Server.h)
 
 set(TEST_FILES Tests/test_main.cpp Tests/test_board.cpp Tests/test_cell.cpp Tests/test_game.cpp
         Tests/test_genericLogic.cpp Tests/test_AIPlayer.cpp Tests/test_humanPlayer.cpp)
