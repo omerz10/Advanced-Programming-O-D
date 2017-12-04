@@ -3,7 +3,6 @@
 //
 
 #include "Server.h"
-#include "../src/Cell.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -12,17 +11,15 @@
 #include <iostream>
 #include <stdio.h>
 #include <arpa/inet.h>
-#include <vector>
 #include <sstream>
 
 
 #define MAX_CLIENTS 2
 #define BLACK 0
 #define WHITE 1
+#define DATALEN 4096
 
 Server::Server(int port): port(port) {
-    this->connectToAllPlayers = false;
-    start();
 }
 
 
@@ -61,19 +58,20 @@ void Server::start() {
     if (listen(this->serverSock, MAX_CLIENTS) == -1) {
         throw "Error: listening to a socket";
     }
+    cout << "start listening" << endl;
     // wait for second player to connect
-    if (!this->connectToAllPlayers) {
-        while (i < MAX_CLIENTS) {
-            this->clientsSock[i] = accept(serverSock,(struct sockaddr *) &ipList[i],(socklen_t*)&sockLen);
-            if (this->clientsSock[i] == -1) {
-                throw "Error: accepting client";
-            }
-            printf("Server: got connection from %s port %d\n", inet_ntoa(ipList[i].sin_addr), ntohs(ipList[i].sin_port));
-            i++;
+
+    while (i < MAX_CLIENTS) {
+        this->clientsSock[i] = accept(serverSock,(struct sockaddr *) &ipList[i],(socklen_t*)&sockLen);
+        if (this->clientsSock[i] == -1) {
+            throw "Error: accepting client";
         }
-        this->connectToAllPlayers = true;
-        printf("Server complete connection with 2 players");
+        cout << "Server: got connection from %s port %d\n"<< inet_ntoa(ipList[i].sin_addr)<<
+                                                            ntohs(ipList[i].sin_port) << endl;
+        i++;
     }
+    cout << "Server complete connection with 2 players" << endl;
+
     char buff = '1', buff2 = '2';
     // send '1' (black) to first player
     if (send(this->clientsSock[BLACK], &buff, sizeof(buff), 0) == -1) {
@@ -83,18 +81,18 @@ void Server::start() {
     if (send(this->clientsSock[WHITE], &buff2, sizeof(buff), 0) == -1) {
         throw("Error: sending to player 2");
     }
+    this->handleClients();
 }
 
 
 
 int Server::handleClients() {
     // init buffer for getting msg from player
-    char buffer[4096];
+    char buffer[DATALEN];
     memset(&buffer, 0, sizeof(buffer));
     // messages from each player
     ssize_t blackMsg, whiteMsg;
     // future move from each player
-    Cell newCell;
 
     // send & receive from playyers until gets "isEnd" message
     while(true) {
@@ -114,11 +112,11 @@ int Server::handleClients() {
         }
         //
         else if (strstr(buffer, "End")) {
+            send(this->clientsSock[WHITE], "End", sizeof(buffer), 0);
             break;
         }
         // black played a move
         else {
-            newCell = this->parseToCell(buffer);
             send(this->clientsSock[WHITE], buffer, sizeof(buffer), 0);
         }
 
@@ -133,29 +131,27 @@ int Server::handleClients() {
         }
         // no move for white
         if (strstr(buffer, "NoMove")) {
-            send(this->clientsSock[WHITE], "NoMove", sizeof(buffer), 0);
+            send(this->clientsSock[BLACK], "NoMove", sizeof(buffer), 0);
         }
         else if (strstr(buffer, "End")) {
+            send(this->clientsSock[BLACK], "NoMove", sizeof(buffer), 0);
             break;
         }
         // white played a move
         else {
-            newCell = this->parseToCell(buffer);
             send(this->clientsSock[BLACK], buffer, sizeof(buffer), 0);
         }
-    }
-
-
-
+    } // end of while
 }
 
-Cell parseToCell(char *buffer) {
-    stringstream str;
-    int i, j;
-    str << strtok (buffer, ",");
-    str >> i;
-    str << strtok (buffer, "\n");
-    str >> j;
-    Cell cell(i, j);
-    return cell;
-}
+
+//Cell parseToCell(char *buffer) {
+//    stringstream str;
+//    int i, j;
+//    str << strtok (buffer, ",");
+//    str >> i;
+//    str << strtok (buffer, "\n");
+//    str >> j;
+//    Cell cell(i, j);
+//    return cell;
+//}

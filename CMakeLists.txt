@@ -24,15 +24,15 @@ set(SOURCE_FILES
         src/HumanPlayer.h
         src/Logic.h
         src/Player.h
-        src/Structs.h
-        server/main.cpp
-        server/Server.cpp
-        server/Server.h)
+        src/Structs.h)
+
+set(SERVER_FILES server/Server.cpp server/Server.h)
 
 set(TEST_FILES Tests/test_main.cpp Tests/test_board.cpp Tests/test_cell.cpp Tests/test_game.cpp
         Tests/test_genericLogic.cpp Tests/test_AIPlayer.cpp Tests/test_humanPlayer.cpp)
 
 add_executable(Advanced_Programming_O_D ${SOURCE_FILES} src/main.cpp)
+add_executable(SERVER ${SERVER_FILES} server/main.cpp)
 add_executable(RunTests ${TEST_FILES} ${SOURCE_FILES} Tests/test_main.cpp)
 
 

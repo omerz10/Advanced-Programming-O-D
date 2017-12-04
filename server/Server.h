@@ -11,7 +11,6 @@
 #include <string.h>
 #include <iostream>
 #include <stdio.h>
-#include "../src/Cell.h"
 
 
 using namespace std;
@@ -61,7 +60,7 @@ public:
      */
     int handleClients();
 
-    Cell parseToCell(char *buffer);
+    //Cell parseToCell(char *buffer);
 
 };
 
