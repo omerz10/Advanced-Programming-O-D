@@ -25,7 +25,6 @@ private:
     int clientsSock[];
     struct sockaddr_in ipList[];
     unsigned int sockLen;
-    bool connectToAllPlayers;
 
 
 public:
@@ -51,16 +50,14 @@ public:
     void start();
 
     /*
-     * receiving data from a client
-     */
-    string receiveFromClient();
-
-    /*
      * send data to a client
      */
     int handleClients();
 
-    //Cell parseToCell(char *buffer);
+    /*
+     * stop connection with all clients
+     */
+    void stop();
 
 };
 

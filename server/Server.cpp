@@ -74,11 +74,11 @@ void Server::start() {
 
     char buff = '1', buff2 = '2';
     // send '1' (black) to first player
-    if (send(this->clientsSock[BLACK], &buff, sizeof(buff), 0) == -1) {
+    if (write(this->clientsSock[BLACK], &buff, sizeof(buff)) == -1) {
         throw("Error: sending to player 1");
     }
     // send '2' (white) to second player
-    if (send(this->clientsSock[WHITE], &buff2, sizeof(buff), 0) == -1) {
+    if (write(this->clientsSock[WHITE], &buff2, sizeof(buff)) == -1) {
         throw("Error: sending to player 2");
     }
     this->handleClients();
@@ -98,7 +98,7 @@ int Server::handleClients() {
     while(true) {
 
         // send and receive from player 'black'
-        blackMsg = recv(this->clientsSock[BLACK], buffer, sizeof(buffer),0);
+        blackMsg = read(this->clientsSock[BLACK], buffer, sizeof(buffer));
         if (blackMsg == 0) {
             throw "Error: connection with black player is closed";
         }
@@ -108,20 +108,20 @@ int Server::handleClients() {
 
         // send to white player that black didn't play a move
         if (strstr(buffer, "NoMove")) {
-            send(this->clientsSock[WHITE], "NoMove", sizeof(buffer), 0);
+            write(this->clientsSock[WHITE], "NoMove", sizeof(buffer));
         }
         //
         else if (strstr(buffer, "End")) {
-            send(this->clientsSock[WHITE], "End", sizeof(buffer), 0);
+            write(this->clientsSock[WHITE], "End", sizeof(buffer));
             break;
         }
         // black played a move
         else {
-            send(this->clientsSock[WHITE], buffer, sizeof(buffer), 0);
+            write(this->clientsSock[WHITE], buffer, sizeof(buffer));
         }
 
         // send and receive from player 'white'
-        whiteMsg = recv(this->clientsSock[WHITE], buffer, sizeof(buffer), 0);
+        whiteMsg = read(this->clientsSock[WHITE], buffer, sizeof(buffer));
         // server get message from player 'black'
         if (whiteMsg == 0) {
             throw "Error: connection with white player is closed";
@@ -131,27 +131,23 @@ int Server::handleClients() {
         }
         // no move for white
         if (strstr(buffer, "NoMove")) {
-            send(this->clientsSock[BLACK], "NoMove", sizeof(buffer), 0);
+            write(this->clientsSock[BLACK], "NoMove", sizeof(buffer));
         }
         else if (strstr(buffer, "End")) {
-            send(this->clientsSock[BLACK], "NoMove", sizeof(buffer), 0);
+            write(this->clientsSock[BLACK], "End", sizeof(buffer));
             break;
         }
         // white played a move
         else {
-            send(this->clientsSock[BLACK], buffer, sizeof(buffer), 0);
+            write(this->clientsSock[BLACK], buffer, sizeof(buffer));
         }
     } // end of while
+    stop();
 }
 
-
-//Cell parseToCell(char *buffer) {
-//    stringstream str;
-//    int i, j;
-//    str << strtok (buffer, ",");
-//    str >> i;
-//    str << strtok (buffer, "\n");
-//    str >> j;
-//    Cell cell(i, j);
-//    return cell;
-//}
+void Server::stop() {
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        close(this->clientsSock[i]);
+    }
+    close(serverSock);
+}

@@ -106,6 +106,11 @@ void menu() {
         GameFlow gameFlow = GameFlow(&game);
         gameFlow.play();
     }
+
+    if(playerSelection == 3) {
+        HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
+        HumanPlayer p2 = HumanPlayer('0', &board, &gameLogic);
+    }
 }
 
 int main()
