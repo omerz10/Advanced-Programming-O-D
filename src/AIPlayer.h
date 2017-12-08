@@ -95,7 +95,13 @@ public:
      */
     Cell calculateBestPossibleMove();
 
-    
+    int getBoardSize();
+
+    char getBoardValueAtIndexes(int i, int j);
+
+    void showBoard();
+
+
     /**
      Gets the enemy's player ID - if curr player is 'X' returns 'O' and vice versa..
 

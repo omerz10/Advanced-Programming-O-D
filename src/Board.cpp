@@ -12,19 +12,23 @@
 
 
 Board::Board(int size): size(size) {
+    // allocate cells.
     cells = new Cell *[size];
     for (int i = 0; i < size; i++) {
         cells[i] = new Cell[size];
     }
+    // initialize board.
+    this->create();
 }
 
 Board::~Board()
 {
+    // destroy cells.
     for (int i = 0; i < size; i++)
     {
         delete [] cells[i];
     }
-
+    // destroy member.
     delete [] cells;
 }
 

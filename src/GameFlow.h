@@ -14,6 +14,7 @@
 #include "AIPlayer.h"
 #include "Game.h"
 #include "GenericLogic.h"
+#include "Client.h"
 
 /*
  * Class GameFlow managed an end to end flow of the game
@@ -24,7 +25,9 @@ private:
 
     Game *game;
 
-    Player *lastPlayer;
+    Client *client;
+
+    bool isOnline;
 
 public:
 
@@ -34,6 +37,11 @@ public:
      */
     GameFlow(Game* g);
 
+    /*
+     * constructor overloading
+     * construct GameFlow by the first player and the board, this time including a client for the online game.
+     */
+    GameFlow(Game *g, Client *client);
 
     /*
      * the function responsible for running the game from A to Z, including printing gui's notifications and
@@ -59,6 +67,7 @@ public:
      * Shows the endgame score to the terminal
      */
     void showScores();
+
 };
 
 

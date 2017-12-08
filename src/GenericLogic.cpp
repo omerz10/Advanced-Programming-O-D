@@ -31,7 +31,6 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     pCells.push_back(newCell);
                     k--; n--;
                     if (board->getValueAtIndexes(k - 1, n - 1) == playerID) {
-                        //if (c[k-1][n-1].isValue(type)) {
                         getEmptyCell(board, i, j, k - 1, n - 1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
@@ -51,7 +50,6 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     pCells.push_back(newCell);
                     k--;
                     if (board->getValueAtIndexes(k - 1, n) == playerID) {
-                        //if (c[k-1][n].isValue(type)) {
                         getEmptyCell(board, i, j, k - 1, n, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
@@ -71,7 +69,6 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     pCells.push_back(newCell);
                     k--; n++;
                     if (board->getValueAtIndexes(k - 1, n + 1) == playerID) {
-                        //if (c[k-1][n+1].isValue(type)) {
                         getEmptyCell(board, i, j, k-1, n+1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
@@ -91,7 +88,6 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     pCells.push_back(newCell);
                     n--;
                     if (board->getValueAtIndexes(k, n - 1) == playerID) {
-                        //if (c[k][n-1].isValue(type)) {
                         getEmptyCell(board, i, j, k, n-1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
@@ -111,7 +107,6 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     pCells.push_back(newCell);
                     n++;
                     if (board->getValueAtIndexes(k, n + 1) == playerID) {
-                        //if (c[k][n+1].isValue(type)) {
                         getEmptyCell(board, i, j, k, n+1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
@@ -151,7 +146,6 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     pCells.push_back(newCell);
                     k++;
                     if (board->getValueAtIndexes(k + 1, n) == playerID) {
-                        //if (c[k+1][n].isValue(type)) {
                         getEmptyCell(board, i, j, k+1, n, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }
@@ -171,7 +165,6 @@ PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
                     pCells.push_back(newCell);
                     k++; n++;
                     if (board->getValueAtIndexes(k + 1, n + 1) == playerID) {
-                        //if (c[k+1][n+1].isValue(type)) {
                         getEmptyCell(board, i, j, k + 1, n + 1, playerID, &pMove);
                         pMove.changeableCells.push_back(pCells);
                     }

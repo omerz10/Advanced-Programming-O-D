@@ -75,7 +75,17 @@ public:
      sort the possible moves of the player according to their size and prints it on gui.
      */
     void printMoves();
-    
+
+
+
+    int getBoardSize();
+
+
+    char getBoardValueAtIndexes(int i, int j);
+
+    void showBoard();
+
+
     /**
      Checks the user's input and returns true/false if correct/not..
 

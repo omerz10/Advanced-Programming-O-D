@@ -83,38 +83,50 @@ void menu() {
     int sizeOfBoard, playerSelection;
 
     menuSelection(&sizeOfBoard, &playerSelection);
-
-    Board board = Board(sizeOfBoard);
-    GenericLogic gameLogic = GenericLogic(&board);
-
-
     cin.get();
+
     // play against a player
     if (playerSelection == 1) {
+        Board board = Board(sizeOfBoard); // board is created and initialized
+        GenericLogic gameLogic = GenericLogic(&board);
         HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
-        HumanPlayer p2 = HumanPlayer('X', &board, &gameLogic);
-        Game game = Game(&p1, &p2, &board);
+        HumanPlayer p2 = HumanPlayer('O', &board, &gameLogic);
+        Game game = Game(&p1, &p2);
+
         GameFlow gameFlow = GameFlow(&game);
         gameFlow.play();
     }
 
-    // play against a player
+    // play against a AI player
     if (playerSelection == 2) {
+        Board board = Board(sizeOfBoard);
+        GenericLogic gameLogic = GenericLogic(&board);
         HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
         AIPlayer aiPlayer = AIPlayer('O', &board, &gameLogic);
-        Game game = Game(&p1, &aiPlayer, &board);
+        Game game = Game(&p1, &aiPlayer);
         GameFlow gameFlow = GameFlow(&game);
         gameFlow.play();
     }
 
     if(playerSelection == 3) {
-        HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
-        HumanPlayer p2 = HumanPlayer('0', &board, &gameLogic);
+        Board board1 = Board(sizeOfBoard);
+        Board board2 = Board(sizeOfBoard);
+        GenericLogic gameLogic1 = GenericLogic(&board1);
+        GenericLogic gameLogic2 = GenericLogic(&board2);
+
+        HumanPlayer p1 = HumanPlayer('X', &board1, &gameLogic1);
+        HumanPlayer p2 = HumanPlayer('0', &board2, &gameLogic2);
+        Game game = Game(&p1, &p2);
+        GameFlow gameFlow = GameFlow(&game);
+        gameFlow.play();
     }
 }
 
 int main()
 {
     menu();
+
+
+
     return 0;
 }

@@ -149,7 +149,17 @@ bool AIPlayer::checkInput(string input) {
     return true;
 }
 
+int AIPlayer::getBoardSize() {
+    return this->board->getSize();
+}
 
+char AIPlayer::getBoardValueAtIndexes(int i, int j) {
+    return this->board->getValueAtIndexes(i, j);
+}
+
+void AIPlayer::showBoard() {
+    this->board->show();
+}
 
 
 

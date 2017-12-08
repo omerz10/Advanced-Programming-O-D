@@ -5,18 +5,17 @@
 #include "Game.h"
 
 
-Game::Game(Player* P1, Player *P2, Board *board) {
+Game::Game(Player* P1, Player *P2) {
     // initialize values
     this->P1 = P1;
     this->P2 = P2;
-    this->board = board;
 
-    // create the board "fresh" as the game is instantiated..
-    this->board->create();
+
 }
 
+// change lastPlayer to member
+bool Game::playOneMove(Player *p) {
 
-bool Game::playOneMove(Player *p, Player **lastPlayer) {
     string userInput; // stores user input
     bool pMoves;
 
@@ -61,7 +60,7 @@ bool Game::playOneMove(Player *p, Player **lastPlayer) {
         }
 
         // now assign p to lastPlayer ptr for future reference..
-        *lastPlayer = p;
+        this->lastPlayer = p;
         // return
         return true;
     } else {
@@ -85,19 +84,17 @@ Player* Game :: getP2() {
     return this->P2;
 }
 
-void Game::showBoard() {
-    this->board->show();
-}
 
+//
 void Game::updatePlayerScores() {
 
     int countP1 = 0, countP2 = 0;
     // run through the board, and update players' scores..
-    for (int i = 0; i < this->board->getSize(); i++) {
-        for (int j = 0; j < this->board->getSize(); j++) {
-            if (this->board->getValueAtIndexes(i, j) == this->P1->getType()) {
+    for (int i = 0; i < this->lastPlayer->getBoardSize(); i++) {
+        for (int j = 0; j < this->lastPlayer->getBoardSize(); j++) {
+            if (this->lastPlayer->getBoardValueAtIndexes(i, j) == this->P1->getType()) {
                 countP1++;
-            } else if (this->board->getValueAtIndexes(i, j) == this->P2->getType()) {
+            } else if (this->lastPlayer->getBoardValueAtIndexes(i, j) == this->P2->getType()) {
                 countP2++;
             }
         }
@@ -113,5 +110,9 @@ int Game::getP1Score() {
 
 int Game::getP2Score() {
     return this->scoreP2;
+}
+
+Player *Game::getLastPlayer() {
+    return this->lastPlayer;
 }
 

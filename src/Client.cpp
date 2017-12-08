@@ -9,7 +9,10 @@
 
 using namespace std;
 
-Client::Client(const char *serverIP, int serverPort): serverIP(serverIP), serverPort(serverPort), socket(0) {}
+Client::Client(const char *serverIP, int serverPort): serverIP(serverIP), serverPort(serverPort), clientSocket(0) {
+
+
+}
 
 void Client::connectToServer() {
     // create a socket
@@ -17,9 +20,8 @@ void Client::connectToServer() {
     if (clientSocket == -1) {
         throw "Error: opening socket";
     }
-
-    // Convert the ip string to a network address
     struct in_addr address;
+    // Convert the ip string to a network address
     if (!inet_aton(serverIP, &address)) {
         throw "Can't parse IP address";
     }
@@ -47,5 +49,7 @@ void Client::connectToServer() {
 
 void playLocalTurn(char* buffer) {
     int a;
+
+    // send to server
 
 }
