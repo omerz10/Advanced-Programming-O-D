@@ -22,8 +22,10 @@ private:
     int port;
     int serverSock;
     struct sockaddr_in serverAddress;
-    int clientsSock[];
-    struct sockaddr_in ipList[];
+    int client1Sock;
+    int client2Sock;
+    struct sockaddr_in client1Address;
+    struct sockaddr_in client2Address;
     unsigned int sockLen;
 
 

@@ -30,10 +30,8 @@ void Server::initSocketsAndIPList() {
         throw "Error: opening socket";
     }
     // init clients sockets and ip's
-    for (int i = 0; i < MAX_CLIENTS; i++) {
-        this->clientsSock[i] = 0;
-        bzero((void *)&ipList, sizeof(ipList[i]));
-    }
+    this->client1Sock = 0;
+    this->client2Sock = 0;
 
     // init server ip address
     bzero((void *)&serverAddress, sizeof(serverAddress));
@@ -50,7 +48,7 @@ void Server::bindSocket() {
 }
 
 void Server::start() {
-    int i = 0;
+    char *buff = '\0';
     this->initSocketsAndIPList();
     this->bindSocket();
     bzero((void *)&sockLen, sizeof(sockLen));
@@ -58,29 +56,40 @@ void Server::start() {
     if (listen(this->serverSock, MAX_CLIENTS) == -1) {
         throw "Error: listening to a socket";
     }
-    cout << "start listening" << endl;
+    cout << "start listening to clients" << endl;
     // wait for second player to connect
 
-    while (i < MAX_CLIENTS) {
-        this->clientsSock[i] = accept(serverSock,(struct sockaddr *) &ipList[i],(socklen_t*)&sockLen);
-        if (this->clientsSock[i] == -1) {
-            throw "Error: accepting client";
-        }
-        cout << "Server: got connection from %s port %d\n"<< inet_ntoa(ipList[i].sin_addr)<<
-                                                            ntohs(ipList[i].sin_port) << endl;
-        i++;
+    // connect to first player
+    this->client1Sock = accept(serverSock,(struct sockaddr *) &client1Address,(socklen_t*)&sockLen);
+    if (this->client1Sock == -1) {
+        throw "Error: accepting client";
     }
+    cout << "Server: got connection from %s port %d\n"<< inet_ntoa(client1Address.sin_addr)<<
+                                                         ntohs(client1Address.sin_port) << endl;
+    // update first player he is connected
+    strcpy(buff, "wait for join");
+    if (write(this->client1Sock, buff , sizeof(buff)) == -1) {
+        throw("Error: sending to player 1");
+    }
+    // connect to second player
+    this->client2Sock = accept(serverSock,(struct sockaddr *) &client2Address,(socklen_t*)&sockLen);
+    if (this->client2Sock == -1) {
+        throw "Error: accepting client";
+    }
+    cout << "Server: got connection from %s port %d\n"<< inet_ntoa(client2Address.sin_addr)<<
+                                                         ntohs(client2Address.sin_port) << endl;
     cout << "Server complete connection with 2 players" << endl;
 
-    char buff = '1', buff2 = '2';
     // send '1' (black) to first player
-    if (write(this->clientsSock[BLACK], &buff, sizeof(buff)) == -1) {
+    if (write(this->client1Sock, "1", sizeof(buff)) == -1) {
         throw("Error: sending to player 1");
     }
     // send '2' (white) to second player
-    if (write(this->clientsSock[WHITE], &buff2, sizeof(buff)) == -1) {
-        throw("Error: sending to player 2");
+    if (write(this->client2Sock, "2", sizeof(buff)) == -1) {
+        throw("Error: sending to player 1");
     }
+
+    // start read and write actions with both player
     this->handleClients();
 }
 
@@ -98,7 +107,7 @@ int Server::handleClients() {
     while(true) {
 
         // send and receive from player 'black'
-        blackMsg = read(this->clientsSock[BLACK], buffer, sizeof(buffer));
+        blackMsg = read(this->client1Sock, buffer, sizeof(buffer));
         if (blackMsg == 0) {
             throw "Error: connection with black player is closed";
         }
@@ -108,20 +117,20 @@ int Server::handleClients() {
 
         // send to white player that black didn't play a move
         if (strstr(buffer, "NoMove")) {
-            write(this->clientsSock[WHITE], "NoMove", sizeof(buffer));
+            write(this->client2Sock, "NoMove", sizeof(buffer));
         }
         //
         else if (strstr(buffer, "End")) {
-            write(this->clientsSock[WHITE], "End", sizeof(buffer));
+            write(this->client2Sock, "End", sizeof(buffer));
             break;
         }
         // black played a move
         else {
-            write(this->clientsSock[WHITE], buffer, sizeof(buffer));
+            write(this->client2Sock, buffer, sizeof(buffer));
         }
 
         // send and receive from player 'white'
-        whiteMsg = read(this->clientsSock[WHITE], buffer, sizeof(buffer));
+        whiteMsg = read(this->client2Sock, buffer, sizeof(buffer));
         // server get message from player 'black'
         if (whiteMsg == 0) {
             throw "Error: connection with white player is closed";
@@ -131,23 +140,21 @@ int Server::handleClients() {
         }
         // no move for white
         if (strstr(buffer, "NoMove")) {
-            write(this->clientsSock[BLACK], "NoMove", sizeof(buffer));
+            write(this->client1Sock, "NoMove", sizeof(buffer));
         }
         else if (strstr(buffer, "End")) {
-            write(this->clientsSock[BLACK], "End", sizeof(buffer));
+            write(this->client1Sock, "End", sizeof(buffer));
             break;
         }
         // white played a move
         else {
-            write(this->clientsSock[BLACK], buffer, sizeof(buffer));
+            write(this->client1Sock, buffer, sizeof(buffer));
         }
     } // end of while
     stop();
 }
 
 void Server::stop() {
-    for (int i = 0; i < MAX_CLIENTS; i++) {
-        close(this->clientsSock[i]);
-    }
-    close(serverSock);
+    close(client1Sock);
+    close(client2Sock);
 }
