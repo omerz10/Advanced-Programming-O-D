@@ -20,6 +20,11 @@ struct PossibleMove {
     bool possible;
 };
 
+struct ServerDetails {
+    string serverIP;
+    int serverPort;
+};
+
 
 
 #endif //PROJECT_UPDATED_STRUCTS_H

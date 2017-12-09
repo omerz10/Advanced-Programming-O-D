@@ -8,10 +8,43 @@
  */
 
 #include <cstdio>
+#include <fstream>
+#include <sstream>
 #include "GameFlow.h"
+#include "struct.h"
+
 
 #define CLIENTSNUMBER 2
 #define DATALEN 4096
+
+ServerDetails getServerDetails(string fileName) {
+    ServerDetails serverDetails;
+    string buffer;
+    std::ifstream file;
+    file.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
+    try {
+        file.open (fileName);
+        while (!file.eof()){
+            getline (file,buffer);
+            cout << buffer;
+        }
+
+        file.close();
+    }
+    catch (std::ifstream::failure e) {
+        std::cerr << "Exception opening/reading/closing file\n";
+    }
+
+    // Insert the string into a stream
+    stringstream ss(buffer);
+    // extract ip and port
+    string temp;
+    ss >> serverDetails.serverIP;
+    ss >> temp;
+    serverDetails.serverPort = atoi(temp.c_str());
+    return serverDetails;
+
+}
 
 
 void menuSelection(int *sizeOfBoard, int *playerSelection) {
@@ -116,8 +149,9 @@ void menu() {
         Board board1 = Board(sizeOfBoard);
         Board board2 = Board(sizeOfBoard);
         GenericLogic gameLogic = GenericLogic(&board1);
+        ServerDetails serverDetails = getServerDetails("/exe/clientConfig.txt");
 
-        Client client("127.0.0.1", 5678);
+        Client client(serverDetails.serverIP.c_str(), serverDetails.serverPort);
         client.connectToServer();
         client.waitingForOtherPlayer();
 
