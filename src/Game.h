@@ -33,7 +33,7 @@ public:
      * constructor
      * construct Game by the first player and the board
      */
-    
+
     Game(Player* P1, Player *P2, Board *board);
 
     /**
@@ -46,7 +46,7 @@ public:
      */
     bool playOneMove(Player *p, Player **lastPlayer);
 
-    
+
     /**
      Gets the first player's reference, for use of functions inside of player - wasn't used much if at all...
 

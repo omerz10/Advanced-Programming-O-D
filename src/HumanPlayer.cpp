@@ -75,3 +75,16 @@ void HumanPlayer::playTurn() {
 bool HumanPlayer::printGUI() {
     return true;
 }
+
+int HumanPlayer::getBoardSize() {
+    return this->board->getSize();
+}
+
+char HumanPlayer::getBoardValueAtIndexes(int i, int j) {
+    return this->board->getValueAtIndexes(i, j);
+}
+
+void HumanPlayer::showBoard() {
+    this->board->show();
+}
+

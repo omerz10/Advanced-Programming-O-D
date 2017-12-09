@@ -8,16 +8,20 @@
 #include "GameFlow.h"
 
 
-GameFlow::GameFlow (Game *g): game(g){}
+GameFlow::GameFlow (Game *g): game(g), isOnline(false){}
+
+GameFlow::GameFlow(Game *g, Client *c): game(g), client(c), isOnline(true) {}
 
 // readability function - less clutter in playOneTurn() function..
 void GameFlow::lastPlayerMoveMsg(Player *lastPlayer, bool playerMoves) {
+
     if (playerMoves) {
         // print "last player played..." msg here
         cout << lastPlayer->getType() << " played (" << lastPlayer->getLastMove().getX() + 1 << "," <<
              lastPlayer->getLastMove().getY() + 1 << ")" << endl << endl;
     }
 }
+
 
 void GameFlow::play() {
     string userInput; // stores user input
@@ -26,29 +30,35 @@ void GameFlow::play() {
     //Player *lastPlayer; // keep a ptr for the last player that played..
 
     // show board for the first time...
-    this->game->showBoard();
+    this->game->getP1()->showBoard();
+
 
     // stop when end moves for both P1 & P2
     while(endMovesForP1 and endMovesForP2) {
 
         // play move for P1
-        endMovesForP1 = this->game->playOneMove(this->game->getP1(), &this->lastPlayer);
-
+        endMovesForP1 = this->game->playOneMove(this->game->getP1());
 
         // print out the board
-        this->game->showBoard();
+        this->game->getP1()->showBoard();
+
+        if (this->isOnline) {
+            //parser last move
+            //client.sendexcercise(buffer)
+        }
 
         // print "last played msg.." if needed
-        lastPlayerMoveMsg(this->lastPlayer, endMovesForP1);
+        lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForP1);
 
         // play move for P2
-        endMovesForP2 = this->game->playOneMove(this->game->getP2(), &this->lastPlayer);
+        endMovesForP2 = this->game->playOneMove(this->game->getP2());
 
         // print out the board
-        this->game->showBoard();
+        this->game->getP2()->showBoard();
+
 
         // print "last played msg.." if needed
-        lastPlayerMoveMsg(this->lastPlayer, endMovesForP2);
+        lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForP2);
 
         // end of turn, clear both of the players' members for the next turn
         //resetPlayers();
@@ -79,6 +89,10 @@ void GameFlow::showScores() {
         cout << "It's a tiy!";
     }
 }
+
+
+
+
 
 
 

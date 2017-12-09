@@ -95,7 +95,11 @@ public:
      */
     virtual bool checkInput(string input) = 0;
 
+    virtual int getBoardSize() = 0;
 
+    virtual char getBoardValueAtIndexes(int i, int j) = 0;
+
+    virtual void showBoard() = 0;
     /*
      * this function determines whether the game should print a gui for the player or not (if AI then it won't..)
      * @return bool     true/false
