@@ -9,7 +9,7 @@
 
 using namespace std;
 
-Client::Client(const char *serverIP, int serverPort): serverIP(serverIP), serverPort(serverPort), socket(0) {}
+Client::Client(const char *serverIP, int serverPort): serverIP(serverIP), serverPort(serverPort), clientSocket(0) {}
 
 void Client::connectToServer() {
     // create a socket
@@ -46,6 +46,6 @@ void Client::connectToServer() {
 
 
 void playLocalTurn(char* buffer) {
-    int a;
+
 
 }

@@ -69,7 +69,7 @@ public:
     virtual void printMoves() = 0;
 
     /**
-     Plays one turn of the player, runs the CalculateBestPossibleMove function and flips the corresponding cells.
+     Plays one turn of the player.
      */
     virtual void playTurn() = 0;
     

@@ -36,11 +36,6 @@ public:
     
     Game(Player* P1, Player *P2, Board *board);
 
-    /*
-     *
-     */
-    
-
     /**
      * returns of the input is correct.
      * if so, it calls function for switching cells values (flipping to the other player).
