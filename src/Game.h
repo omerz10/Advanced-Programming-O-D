@@ -27,6 +27,11 @@ private:
      */
     int scoreP1, scoreP2;
 
+    /**
+     * last player which was playing
+     */
+    Player* lastPlayer;
+
 public:
 
     /*
@@ -34,7 +39,7 @@ public:
      * construct Game by the first player and the board
      */
 
-    Game(Player* P1, Player *P2, Board *board);
+    Game(Player* P1, Player *P2);
 
     /**
      * returns of the input is correct.
@@ -44,7 +49,7 @@ public:
      @param lastPlayer last player pointer's reference
      @return true if moves exist
      */
-    bool playOneMove(Player *p, Player **lastPlayer);
+    bool playOneMove(Player *p);
 
 
     /**
@@ -61,10 +66,6 @@ public:
      */
     Player *getP2();
 
-    /**
-     Prints the board to the console.
-     */
-    void showBoard();
 
     /**
      Updates the player scores in the end of the game - for displaying reasons...
@@ -84,6 +85,12 @@ public:
      @return value
      */
     int getP2Score();
+
+    /**
+     * Get last player
+     * @return last Player which was played
+     */
+    Player* getLastPlayer();
 };
 
 

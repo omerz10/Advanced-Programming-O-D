@@ -27,6 +27,7 @@ private:
     struct sockaddr_in client1Address;
     struct sockaddr_in client2Address;
     unsigned int sockLen;
+    bool isFirstClient;
 
 
 public:

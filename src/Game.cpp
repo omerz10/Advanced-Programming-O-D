@@ -64,7 +64,6 @@ bool Game::playOneMove(Player *p) {
         // return
         return true;
     } else {
-
         // print msg to user to press any key and "eat" the next char..
         cout << "No possible moves. Play passes back to the other player. Press any key to continue." << endl;
         cin.get();
@@ -94,7 +93,7 @@ void Game::updatePlayerScores() {
         for (int j = 0; j < this->lastPlayer->getBoardSize(); j++) {
             if (this->lastPlayer->getBoardValueAtIndexes(i, j) == this->P1->getType()) {
                 countP1++;
-            } else if (this->lastPlayer->getBoardValueAtIndexes(i, j) == this->P2->getType()) {
+            } else if (this->getLastPlayer()->getBoardValueAtIndexes(i, j) == this->P2->getType()) {
                 countP2++;
             }
         }
@@ -112,7 +111,7 @@ int Game::getP2Score() {
     return this->scoreP2;
 }
 
-Player *Game::getLastPlayer() {
+Player* Game::getLastPlayer() {
     return this->lastPlayer;
 }
 

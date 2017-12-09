@@ -6,6 +6,7 @@
 #include <netdb.h>
 #include "Client.h"
 
+#define DATALEN 4096
 
 using namespace std;
 
@@ -45,7 +46,28 @@ void Client::connectToServer() {
 }
 
 
-void playLocalTurn(char* buffer) {
+void Client::waitingForOtherPlayer() {
+    char buff[DATALEN];
+    memset(&buff, 0, sizeof(buff));
 
+    if (read(clientSocket, &buff, sizeof(buff) == -1)) {
+        throw "Error reading result from socket";
+    }
+    if (!strcmp(buff, "join")) {
+        cout << "Waiting for other player to join..." << endl;
+    }
+    if (!strcmp(buff, "wait")){
+        cout << "Waiting for player's move..." << endl;
+    }
 
+}
+
+int* Client::getClientSock() {
+    return &this->clientSocket;
+}
+
+void Client::sendExercise(char* buffer) {
+    if (write(clientSocket, &buffer, sizeof(buffer) == -1)) {
+        throw "Erro: writing buffer";
+    }
 }

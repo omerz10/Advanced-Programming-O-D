@@ -15,11 +15,10 @@
 
 
 #define MAX_CLIENTS 2
-#define BLACK 0
-#define WHITE 1
 #define DATALEN 4096
 
 Server::Server(int port): port(port) {
+    this->isFirstClient = true;
 }
 
 
@@ -48,7 +47,6 @@ void Server::bindSocket() {
 }
 
 void Server::start() {
-    char *buff = '\0';
     this->initSocketsAndIPList();
     this->bindSocket();
     bzero((void *)&sockLen, sizeof(sockLen));
@@ -59,38 +57,45 @@ void Server::start() {
     cout << "start listening to clients" << endl;
     // wait for second player to connect
 
-    // connect to first player
-    this->client1Sock = accept(serverSock,(struct sockaddr *) &client1Address,(socklen_t*)&sockLen);
-    if (this->client1Sock == -1) {
-        throw "Error: accepting client";
-    }
-    cout << "Server: got connection from %s port %d\n"<< inet_ntoa(client1Address.sin_addr)<<
-                                                         ntohs(client1Address.sin_port) << endl;
-    // update first player he is connected
-    strcpy(buff, "wait for join");
-    if (write(this->client1Sock, buff , sizeof(buff)) == -1) {
-        throw("Error: sending to player 1");
+    if (isFirstClient) {
+        // connect to first player
+        this->client1Sock = accept(serverSock,(struct sockaddr *) &client1Address,(socklen_t*)&sockLen);
+        if (this->client1Sock == -1) {
+            throw "Error: accepting client";
+        }
+        cout << "Server: got connection from %s port %d\n"<< inet_ntoa(client1Address.sin_addr)<<
+             ntohs(client1Address.sin_port) << endl;
+        // update first player he is connected
+        string buff = "join";
+        if (write(this->client1Sock, &buff , sizeof(buff)) == -1) {
+            throw("Error: sending to player 1");
+        }
+        isFirstClient = false;
     }
     // connect to second player
-    this->client2Sock = accept(serverSock,(struct sockaddr *) &client2Address,(socklen_t*)&sockLen);
-    if (this->client2Sock == -1) {
-        throw "Error: accepting client";
-    }
-    cout << "Server: got connection from %s port %d\n"<< inet_ntoa(client2Address.sin_addr)<<
-                                                         ntohs(client2Address.sin_port) << endl;
-    cout << "Server complete connection with 2 players" << endl;
+    else {
+        this->client2Sock = accept(serverSock,(struct sockaddr *) &client2Address,(socklen_t*)&sockLen);
+        if (this->client2Sock == -1) {
+            throw "Error: accepting client";
+        }
+        cout << "Server: got connection from %s port %d\n"<< inet_ntoa(client2Address.sin_addr)<<
+             ntohs(client2Address.sin_port) << endl;
+        cout << "Server complete connection with 2 players" << endl;
+        char buff1 = '1';
+        // send '1' (black) to first player
+        if (write(this->client1Sock, &buff1, sizeof(buff1)) == -1) {
+            throw("Error: sending to player 1");
+        }
+        char buff2 = '2';
+        // send '2' (white) to second player
+        if (write(this->client2Sock, &buff2, sizeof(buff2)) == -1) {
+            throw("Error: sending to player 1");
+        }
 
-    // send '1' (black) to first player
-    if (write(this->client1Sock, "1", sizeof(buff)) == -1) {
-        throw("Error: sending to player 1");
+        // start read and write actions with both player
+        this->isFirstClient = true;
+        this->handleClients();
     }
-    // send '2' (white) to second player
-    if (write(this->client2Sock, "2", sizeof(buff)) == -1) {
-        throw("Error: sending to player 1");
-    }
-
-    // start read and write actions with both player
-    this->handleClients();
 }
 
 
@@ -106,6 +111,10 @@ int Server::handleClients() {
     // send & receive from playyers until gets "isEnd" message
     while(true) {
 
+        if (this->isFirstClient) {
+            write(this->client1Sock, "first", sizeof(buffer));
+            this->isFirstClient = false;
+        }
         // send and receive from player 'black'
         blackMsg = read(this->client1Sock, buffer, sizeof(buffer));
         if (blackMsg == 0) {
@@ -126,6 +135,7 @@ int Server::handleClients() {
         }
         // black played a move
         else {
+            write(this->client1Sock, "wait", sizeof(buffer));
             write(this->client2Sock, buffer, sizeof(buffer));
         }
 

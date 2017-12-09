@@ -7,6 +7,8 @@
  */
 #include "GameFlow.h"
 
+#define DATALEN 4096
+
 
 GameFlow::GameFlow (Game *g): game(g), isOnline(false){}
 
@@ -24,31 +26,37 @@ void GameFlow::lastPlayerMoveMsg(Player *lastPlayer, bool playerMoves) {
 
 
 void GameFlow::play() {
-    string userInput; // stores user input
-
-    bool endMovesForP1 = true, endMovesForP2 = true; // flags/trackers for game flow..
-    //Player *lastPlayer; // keep a ptr for the last player that played..
+    char buff[DATALEN];
+    memset(&buff, 0, sizeof(buff));
+    bool endMovesForP1 = true, endMovesForP2 = true;
 
     // show board for the first time...
     this->game->getP1()->showBoard();
-
 
     // stop when end moves for both P1 & P2
     while(endMovesForP1 and endMovesForP2) {
 
         // play move for P1
         endMovesForP1 = this->game->playOneMove(this->game->getP1());
+        if (isOnline) {
+
+            // *******create parsing function
+
+            strcpy(buff, parseToString(this->game->getLastPlayer()->getLastMove()));
+            this->client->sendExercise(buff);
+        }
 
         // print out the board
         this->game->getP1()->showBoard();
+        cout << "waiting for other player...";
 
-        if (this->isOnline) {
-            //parser last move
-            //client.sendexcercise(buffer)
-        }
 
-        // print "last played msg.." if needed
+        // print "last played msg.."
         lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForP1);
+
+        if (isOnline) {
+
+        }
 
         // play move for P2
         endMovesForP2 = this->game->playOneMove(this->game->getP2());
@@ -57,11 +65,10 @@ void GameFlow::play() {
         this->game->getP2()->showBoard();
 
 
-        // print "last played msg.." if needed
+        // print "last played msg.."
         lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForP2);
 
         // end of turn, clear both of the players' members for the next turn
-        //resetPlayers();
 
     } // end of game
 
@@ -88,6 +95,10 @@ void GameFlow::showScores() {
     if (this->game->getP2Score() == this->game->getP1Score()) {
         cout << "It's a tiy!";
     }
+}
+
+char * parseToString(Cell c) {
+
 }
 
 

@@ -10,16 +10,17 @@
 #include <cstdio>
 #include "GameFlow.h"
 
+#define CLIENTSNUMBER 2
+#define DATALEN 4096
+
 
 void menuSelection(int *sizeOfBoard, int *playerSelection) {
 
     //string userInput;
     int userInput;
-    int selection;
     cout << "Hello!" <<  endl << "Please enter size of board:";
 
     bool flag = false;
-
     while (!flag) {
         // get input from user..
         cin >> userInput;
@@ -46,9 +47,9 @@ void menuSelection(int *sizeOfBoard, int *playerSelection) {
     }
 
     *sizeOfBoard = userInput;
-
-    printf("Press 1 - to play against another PLAYER\n");
-    printf("Press 2 - to play against the COMPUTER\n");
+    cout << "Welcome to reversi!" << endl << endl;
+    cout << "Choose an oppenent type:" << endl;
+    cout << "1. a human local player" << endl << "2. an AI player" << endl << "3. a remote player" << endl;
 
     // reset flag
     flag = false;
@@ -79,7 +80,10 @@ void menuSelection(int *sizeOfBoard, int *playerSelection) {
     *playerSelection = userInput;
 }
 
+
 void menu() {
+    char buff[DATALEN];
+    memset(&buff, 0, sizeof(buff));
     int sizeOfBoard, playerSelection;
 
     menuSelection(&sizeOfBoard, &playerSelection);
@@ -108,25 +112,40 @@ void menu() {
         gameFlow.play();
     }
 
-    if(playerSelection == 3) {
+    if (playerSelection == 3) {
         Board board1 = Board(sizeOfBoard);
         Board board2 = Board(sizeOfBoard);
-        GenericLogic gameLogic1 = GenericLogic(&board1);
-        GenericLogic gameLogic2 = GenericLogic(&board2);
+        GenericLogic gameLogic = GenericLogic(&board1);
 
-        HumanPlayer p1 = HumanPlayer('X', &board1, &gameLogic1);
-        HumanPlayer p2 = HumanPlayer('0', &board2, &gameLogic2);
-        Game game = Game(&p1, &p2);
-        GameFlow gameFlow = GameFlow(&game);
-        gameFlow.play();
+        Client client("127.0.0.1", 5678);
+        client.connectToServer();
+        client.waitingForOtherPlayer();
+
+        if (read(*client.getClientSock(), &buff, sizeof(buff) == -1)) {
+            throw "Error: reading result from socket";
+        }
+        // the client get "1" from server
+        if (!strcmp(buff, "1")) {
+            HumanPlayer p1 = HumanPlayer('X', &board1, &gameLogic);
+            HumanPlayer p2 = HumanPlayer('O', &board2, &gameLogic);
+            Game game = Game(&p1, &p2);
+            GameFlow gameFlow = GameFlow(&game);
+            gameFlow.play();
+        }
+        // the client get "1" from server
+        if (!strcmp(buff, "2")) {
+            HumanPlayer p1 = HumanPlayer('O', &board2, &gameLogic);
+            HumanPlayer p2 = HumanPlayer('X', &board1, &gameLogic);
+            Game game = Game(&p1, &p2);
+            GameFlow gameFlow = GameFlow(&game);
+            gameFlow.play();
+        }
     }
 }
 
 int main()
 {
     menu();
-
-
 
     return 0;
 }

@@ -68,6 +68,8 @@ public:
      */
     void showScores();
 
+    char *parseToString(Cell c);
+
 };
 
 
