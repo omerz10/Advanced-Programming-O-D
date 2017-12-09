@@ -41,7 +41,6 @@ void GameFlow::play() {
         if (isOnline) {
 
             // *******create parsing function
-
             strcpy(buff, parseToString(this->game->getLastPlayer()->getLastMove()));
             this->client->sendExercise(buff);
         }

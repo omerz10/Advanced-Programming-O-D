@@ -35,10 +35,6 @@ private:
 
 
 public:
-
-
-    
-    
     /**
      returns player's type.
 
