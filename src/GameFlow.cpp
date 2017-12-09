@@ -97,7 +97,7 @@ void GameFlow::showScores() {
 }
 
 char * parseToString(Cell c) {
-
+    return nullptr;
 }
 
 
