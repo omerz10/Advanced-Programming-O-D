@@ -10,8 +10,9 @@
 #include <cstdio>
 #include <fstream>
 #include <sstream>
+#include <cstdlib>
 #include "GameFlow.h"
-#include "struct.h"
+#include "Structs.h"
 
 
 #define CLIENTSNUMBER 2
@@ -23,7 +24,7 @@ ServerDetails getServerDetails(string fileName) {
     std::ifstream file;
     file.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
     try {
-        file.open (fileName);
+        file.open (fileName.c_str());
         while (!file.eof()){
             getline (file,buffer);
             cout << buffer;
@@ -146,9 +147,8 @@ void menu() {
     }
 
     if (playerSelection == 3) {
-        Board board1 = Board(sizeOfBoard);
-        Board board2 = Board(sizeOfBoard);
-        GenericLogic gameLogic = GenericLogic(&board1);
+        Board board = Board(sizeOfBoard);
+        GenericLogic gameLogic = GenericLogic(&board);
         ServerDetails serverDetails = getServerDetails("/exe/clientConfig.txt");
 
         Client client(serverDetails.serverIP.c_str(), serverDetails.serverPort);
@@ -160,19 +160,19 @@ void menu() {
         }
         // the client get "1" from server
         if (!strcmp(buff, "1")) {
-            HumanPlayer p1 = HumanPlayer('X', &board1, &gameLogic);
-            HumanPlayer p2 = HumanPlayer('O', &board2, &gameLogic);
+            HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
+            HumanPlayer p2 = HumanPlayer('O', &board, &gameLogic);
             Game game = Game(&p1, &p2);
             GameFlow gameFlow = GameFlow(&game);
             gameFlow.play();
         }
         // the client get "1" from server
         if (!strcmp(buff, "2")) {
-            HumanPlayer p1 = HumanPlayer('O', &board2, &gameLogic);
-            HumanPlayer p2 = HumanPlayer('X', &board1, &gameLogic);
+            HumanPlayer p1 = HumanPlayer('O', &board, &gameLogic);
+            HumanPlayer p2 = HumanPlayer('X', &board, &gameLogic);
             Game game = Game(&p1, &p2);
             GameFlow gameFlow = GameFlow(&game);
-            gameFlow.play();
+            gameFlow.playOnline();
         }
     }
 }

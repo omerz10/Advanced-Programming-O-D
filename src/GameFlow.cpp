@@ -10,9 +10,9 @@
 #define DATALEN 4096
 
 
-GameFlow::GameFlow (Game *g): game(g), isOnline(false){}
+GameFlow::GameFlow (Game *g): game(g){}
 
-GameFlow::GameFlow(Game *g, Client *c): game(g), client(c), isOnline(true) {}
+GameFlow::GameFlow(Game *g, Client *c): game(g), client(c) {}
 
 // readability function - less clutter in playOneTurn() function..
 void GameFlow::lastPlayerMoveMsg(Player *lastPlayer, bool playerMoves) {
@@ -38,24 +38,12 @@ void GameFlow::play() {
 
         // play move for P1
         endMovesForP1 = this->game->playOneMove(this->game->getP1());
-        if (isOnline) {
-
-            // *******create parsing function
-            strcpy(buff, parseToString(this->game->getLastPlayer()->getLastMove()));
-            this->client->sendExercise(buff);
-        }
 
         // print out the board
         this->game->getP1()->showBoard();
-        cout << "waiting for other player...";
-
 
         // print "last played msg.."
         lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForP1);
-
-        if (isOnline) {
-
-        }
 
         // play move for P2
         endMovesForP2 = this->game->playOneMove(this->game->getP2());
@@ -99,6 +87,68 @@ void GameFlow::showScores() {
 char * parseToString(Cell c) {
     return nullptr;
 }
+
+void GameFlow::playOnline() {
+    char buff[DATALEN];
+    memset(&buff, 0, sizeof(buff));
+    bool endMovesForP1 = true, endMovesForP2 = true;
+
+    // show board for the first time...
+    this->game->getP1()->showBoard();
+
+    // stop when end moves for both P1 & P2
+    while(endMovesForP1 and endMovesForP2) {
+
+        if (firstMove) {
+
+            endMovesForP1 = this->game->playOneMove(this->game->getP1());
+
+            strcpy(buff, parseToString(this->game->getLastPlayer()->getLastMove()));
+            this->client->sendExercise(buff);
+        }
+
+        // get move from remote
+        // I played
+        // I will send to server
+        // I'm waiting
+        // David move
+
+        this->myTurn = true; // init to true in the constructor
+
+
+
+
+        // print out the board
+        this->game->getP1()->showBoard();
+        this->client->waitingForOtherPlayer();
+
+        // player played, waiting for answer
+        this->myTurn = false;
+
+        // print "last played msg.."
+        lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForP1);
+
+        // play move for P2
+        endMovesForP2 = this->game->playOneMove(this->game->getP2());
+
+        // print out the board
+        this->game->getP2()->showBoard();
+
+
+        // print "last played msg.."
+        lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForP2);
+
+        // end of turn, clear both of the players' members for the next turn
+
+    } // end of game
+
+    cout << "Game over!" << endl;
+    updateScores();
+    showScores();
+
+}
+
+
 
 
 

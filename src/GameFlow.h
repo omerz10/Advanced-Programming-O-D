@@ -24,10 +24,7 @@ class GameFlow {
 private:
 
     Game *game;
-
     Client *client;
-
-    bool isOnline;
 
 public:
 
@@ -69,6 +66,8 @@ public:
     void showScores();
 
     char *parseToString(Cell c);
+
+    void playOnline();
 
 };
 

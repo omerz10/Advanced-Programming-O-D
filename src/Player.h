@@ -82,7 +82,6 @@ public:
      */
     virtual bool getPossibleMoveStatus() = 0;
 
-
     /**
      Checks the user's input and returns true/false if correct/not..
 
