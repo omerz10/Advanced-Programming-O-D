@@ -51,11 +51,8 @@ void GameFlow::play() {
         // print out the board
         this->game->getP2()->showBoard();
 
-
         // print "last played msg.."
         lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForP2);
-
-        // end of turn, clear both of the players' members for the next turn
 
     } // end of game
 
@@ -124,6 +121,7 @@ void GameFlow::playOnline() {
     }
 
     while(1) {
+
         // gets message from server
         if (isFirst) {
             this->client->getMessage(buff);

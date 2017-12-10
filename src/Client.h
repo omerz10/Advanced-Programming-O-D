@@ -21,13 +21,16 @@ private:
     int clientSocket;
 
 public:
+
     Client(const char *serverIP, int serverPort);
+
     void connectToServer();
+
     void waitingForOtherPlayer();
 
-    int* getClientSock();
+    int getClientSock();
 
-    void sendExercise(const char* buffer);
+    void sendExercise(char* buffer);
 
     void getMessage(char *buffer);
 };

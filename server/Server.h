@@ -21,12 +21,6 @@ private:
 
     int port;
     int serverSock;
-    struct sockaddr_in serverAddress;
-    int client1Sock;
-    int client2Sock;
-    struct sockaddr_in client1Address;
-    struct sockaddr_in client2Address;
-    unsigned int sockLen;
     bool isFirstClient;
 
 
@@ -38,16 +32,6 @@ public:
     Server(int port);
 
     /*
-     * create a sockets and ip's of all clients
-     */
-    void initSocketsAndIPList();
-
-    /*
-     * operate bind with client
-     */
-    void bindSocket();
-
-    /*
      * initialize a server by its all functions
      */
     void start();
@@ -55,12 +39,8 @@ public:
     /*
      * send data to a client
      */
-    void handleClients();
+    void handleClients(int c1, int c2);
 
-    /*
-     * stop connection with all clients
-     */
-    void stop();
 
 };
 

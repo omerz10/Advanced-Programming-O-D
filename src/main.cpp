@@ -14,8 +14,8 @@
 #include "GameFlow.h"
 #include "Structs.h"
 
-
-#define DATALEN 4096
+#define BOARD_SIZE 8
+#define DATALEN 1024
 
 using namespace std;
 
@@ -23,11 +23,11 @@ ServerDetails getServerDetails(string fileName) {
     ServerDetails serverDetails;
     string buffer;
     ifstream file;
-    file.exceptions (ifstream::failbit | ifstream::badbit);
+    file.exceptions(ifstream::failbit | ifstream::badbit);
     try {
         file.open(fileName.c_str());
-        while (!file.eof()){
-            getline(file,buffer);
+        while (!file.eof()) {
+            getline(file, buffer);
         }
         file.close();
     }
@@ -41,15 +41,18 @@ ServerDetails getServerDetails(string fileName) {
     char *ptr;
     ss >> serverDetails.serverIP;
     ss >> temp;
-    serverDetails.serverPort = (int)strtol(temp.c_str(), &ptr, 10);
+    serverDetails.serverPort = (int) strtol(temp.c_str(), &ptr, 10);
     //atoi(temp.c_str());
 
     return serverDetails;
 }
 
 
-void menuSelection(int *sizeOfBoard, int *playerSelection) {
-    //string userInput;
+void menuSelection(int *playerSelection) {
+    int userInput;
+    bool flag = false;
+    /*
+     //string userInput;
     int userInput;
     cout << "Hello!" <<  endl << "Please enter size of board:";
 
@@ -78,8 +81,7 @@ void menuSelection(int *sizeOfBoard, int *playerSelection) {
         }
 
     }
-
-    *sizeOfBoard = userInput;
+    */
     cout << "Welcome to reversi!" << endl << endl;
     cout << "Choose an oppenent type:" << endl;
     cout << "1. a human local player" << endl << "2. an AI player" << endl << "3. a remote player" << endl;
@@ -89,8 +91,7 @@ void menuSelection(int *sizeOfBoard, int *playerSelection) {
     while (!flag) {
         cin >> userInput;
 
-        if (cin.fail())
-        {
+        if (cin.fail()) {
             cin.clear(); // clears error flags
             cin.ignore();
 
@@ -100,7 +101,7 @@ void menuSelection(int *sizeOfBoard, int *playerSelection) {
             }
         } else {
             // check if input is legal?
-            flag = ((userInput == 1) or (userInput == 2) or (userInput == 3));
+            flag = (userInput == 1) or (userInput == 2) or (userInput == 3);
             // move is illegal, print message..
             if (flag == false) {
                 cout << "Illegal move, Please enter 1 to play against "
@@ -115,16 +116,15 @@ void menuSelection(int *sizeOfBoard, int *playerSelection) {
 
 
 void menu() {
+    int sizeOfBoard, playerSelection;
     char buff[DATALEN];
     memset(&buff, 0, sizeof(buff));
-    int sizeOfBoard, playerSelection;
-
-    menuSelection(&sizeOfBoard, &playerSelection);
+    menuSelection(&playerSelection);
     cin.get();
 
     // play against a player
     if (playerSelection == 1) {
-        Board board = Board(sizeOfBoard); // board is created and initialized
+        Board board = Board(BOARD_SIZE); // board is created and initialized
         GenericLogic gameLogic = GenericLogic(&board);
         HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
         HumanPlayer p2 = HumanPlayer('O', &board, &gameLogic);
@@ -136,7 +136,7 @@ void menu() {
 
     // play against a AI player
     if (playerSelection == 2) {
-        Board board = Board(sizeOfBoard);
+        Board board = Board(BOARD_SIZE);
         GenericLogic gameLogic = GenericLogic(&board);
         HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
         AIPlayer aiPlayer = AIPlayer('O', &board, &gameLogic);
@@ -146,38 +146,39 @@ void menu() {
     }
 
     if (playerSelection == 3) {
-        Board board = Board(sizeOfBoard);
+        Board board = Board(BOARD_SIZE);
         GenericLogic gameLogic = GenericLogic(&board);
         ServerDetails serverDetails = getServerDetails("exe/clientConfig.txt");
 
         Client client(serverDetails.serverIP.c_str(), serverDetails.serverPort);
         client.connectToServer();
         client.waitingForOtherPlayer();
-
-        if (read(*client.getClientSock(), &buff, sizeof(buff)) == -1) {
-            throw "Error: reading result from socket";
+        int player;
+        if (read(client.getClientSock(), &player, sizeof(player)) == -1) {
+            throw "Error: get 1 or 2";
         }
+
         // the client get "1" from server
-        if (!strcmp(buff, "1")) {
+        if (player == 1) {
+            cout << "player one constructed" << endl;
             HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
             HumanPlayer p2 = HumanPlayer('O', &board, &gameLogic);
             Game game = Game(&p1, &p2);
-            GameFlow gameFlow = GameFlow(&game);
-            gameFlow.play();
-        }
-        // the client get "1" from server
-        if (!strcmp(buff, "2")) {
+            GameFlow gameFlow = GameFlow(&game, &client);
+            gameFlow.playOnline();
+        // the client get "2" from server
+        } else {
+            cout << "player two constructed.";
             HumanPlayer p1 = HumanPlayer('O', &board, &gameLogic);
             HumanPlayer p2 = HumanPlayer('X', &board, &gameLogic);
             Game game = Game(&p1, &p2);
-            GameFlow gameFlow = GameFlow(&game);
+            GameFlow gameFlow = GameFlow(&game, &client);
             gameFlow.playOnline();
         }
     }
 }
 
-int main()
-{
+int main() {
     menu();
 
     return 0;

@@ -4,9 +4,10 @@
 
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <cstdlib>
 #include "Client.h"
 
-#define DATALEN 4096
+#define DATALEN 1024
 
 using namespace std;
 
@@ -32,7 +33,6 @@ void Client::connectToServer() {
     if (server == NULL) {
         throw "Host is unreachable";
     }
-
     // Create a structure for the server address
     struct sockaddr_in serverAddress;
     bzero((char *)&address, sizeof(address));
@@ -51,32 +51,30 @@ void Client::connectToServer() {
 
 void Client::waitingForOtherPlayer() {
     char buff[DATALEN];
-    memset(&buff, 0, sizeof(buff));
 
-    if (read(clientSocket, &buff, static_cast<size_t>(sizeof(buff) == -1))) {
+    if (read(clientSocket, buff, DATALEN) == -1) {
         throw "Error reading result from socket";
     }
-    if (!strcmp(buff, "join")) {
+    if (strcmp(buff, "join") == 0) {
         cout << "Waiting for other player to join..." << endl;
     }
-    if (!strcmp(buff, "wait")){
-        cout << "Waiting for player's move..." << endl;
-    }
+
 }
 
 
-int* Client::getClientSock() {
-    return &this->clientSocket;
+int Client::getClientSock() {
+    return this->clientSocket;
 }
 
 void Client::getMessage(char *buffer) {
-    //char buffer[DATALEN];
-    read(this->clientSocket, buffer, sizeof(buffer));
+    if (read(this->clientSocket, buffer, sizeof(buffer)) == -1) {
+        throw "Error reading from server";
+    }
 }
 
-void Client::sendExercise(const char *buffer) {
-    if (write(clientSocket, &buffer, sizeof(buffer) == -1)) {
-        throw "Erro: writing buffer";
+void Client::sendExercise(char *buffer) {
+    if (write(this->clientSocket, buffer, sizeof(buffer)) == -1) {
+        throw "Error: writing buffer";
     }
 }
 
