@@ -65,13 +65,16 @@ void Server::start() {
         if (this->client1Sock == -1) {
             throw "Error: accepting client";
         }
-        cout << "Server: got connection from %s port %d\n"<< inet_ntoa(client1Address.sin_addr)<<
+        cout << "Server: got connection from " << inet_ntoa(client1Address.sin_addr) <<" port\n"<<
              ntohs(client1Address.sin_port) << endl;
+
         // update first player he is connected
-        string buff = "join";
+        char buff[DATALEN]= "join";
+        //strcpy(buff, "join");
         if (write(this->client1Sock, &buff , sizeof(buff)) == -1) {
             throw("Error: sending to player 1");
         }
+
         isFirstClient = false;
     }
     // connect to second player
@@ -80,7 +83,7 @@ void Server::start() {
         if (this->client2Sock == -1) {
             throw "Error: accepting client";
         }
-        cout << "Server: got connection from %s port %d\n"<< inet_ntoa(client2Address.sin_addr)<<
+        cout << "Server: got connection from " << inet_ntoa(client2Address.sin_addr) << " port " <<
              ntohs(client2Address.sin_port) << endl;
         cout << "Server complete connection with 2 players" << endl;
         char buff1 = '1';
@@ -102,7 +105,7 @@ void Server::start() {
 
 
 
-int Server::handleClients() {
+void Server::handleClients() {
     // init buffer for getting msg from player
     char buffer[DATALEN];
     memset(&buffer, 0, sizeof(buffer));
@@ -165,6 +168,8 @@ int Server::handleClients() {
         }
     } // end of while
     stop();
+
+
 }
 
 void Server::stop() {

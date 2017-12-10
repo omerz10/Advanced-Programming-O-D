@@ -13,7 +13,6 @@ int getServerPort(string fileName) {
         while (!file.eof()){
             getline (file,buffer);
         }
-
         file.close();
     }
     catch (std::ifstream::failure e) {

@@ -55,7 +55,7 @@ public:
     /*
      * send data to a client
      */
-    int handleClients();
+    void handleClients();
 
     /*
      * stop connection with all clients

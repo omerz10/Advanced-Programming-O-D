@@ -56,7 +56,7 @@ void Client::waitingForOtherPlayer() {
     char buff[DATALEN];
     memset(&buff, 0, sizeof(buff));
 
-    if (read(clientSocket, &buff, sizeof(buff) == -1)) {
+    if (read(clientSocket, &buff, static_cast<size_t>(sizeof(buff) == -1))) {
         throw "Error reading result from socket";
     }
     if (!strcmp(buff, "join")) {
