@@ -12,7 +12,6 @@ int getServerPort(string fileName) {
         file.open(fileName.c_str());
         while (!file.eof()){
             getline (file,buffer);
-            cout << buffer;
         }
 
         file.close();

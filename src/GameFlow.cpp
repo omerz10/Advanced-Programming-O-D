@@ -5,6 +5,7 @@
  *  Created by omerz on 30/10/17.
  *      Author: zuckero
  */
+#include <sstream>
 #include "GameFlow.h"
 
 #define DATALEN 4096
@@ -84,12 +85,15 @@ void GameFlow::showScores() {
 }
 
 void GameFlow::parseToString(Cell c, char *buff) {
-    string tempString;
+
     memset(&buff, 0, sizeof(buff));
-    tempString += to_string(c.getX());
-    tempString += ", ";
-    tempString += to_string(c.getY());
-    strcpy(buff, tempString.c_str());
+    stringstream ss;
+    ss << c.getX();
+    ss << ", ";
+    ss << c.getY();
+    string str = ss.str();
+
+    strcpy(buff, str.c_str());
 }
 
 Cell GameFlow::parseFromString(char *str) {
@@ -118,6 +122,7 @@ void GameFlow::playOnline() {
         this->client->sendExercise(buff); // send move to server
         this->client->waitingForOtherPlayer();// wait for response from server
     }
+
     while(1) {
         // gets message from server
         if (isFirst) {

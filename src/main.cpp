@@ -154,7 +154,7 @@ void menu() {
         client.connectToServer();
         client.waitingForOtherPlayer();
 
-        if (read(*client.getClientSock(), &buff, sizeof(buff) == -1)) {
+        if (read(*client.getClientSock(), &buff, sizeof(buff)) == -1) {
             throw "Error: reading result from socket";
         }
         // the client get "1" from server
