@@ -65,8 +65,7 @@ void Server::start() {
         if (this->client1Sock == -1) {
             throw "Error: accepting client";
         }
-        cout << "Server: got connection from %s port %d\n"<< inet_ntoa(client1Address.sin_addr)<<
-             ntohs(client1Address.sin_port) << endl;
+        cout << "First client connected" << endl;
         // update first player he is connected
         string buff = "join";
         if (write(this->client1Sock, &buff , sizeof(buff)) == -1) {
@@ -80,8 +79,7 @@ void Server::start() {
         if (this->client2Sock == -1) {
             throw "Error: accepting client";
         }
-        cout << "Server: got connection from %s port %d\n"<< inet_ntoa(client2Address.sin_addr)<<
-             ntohs(client2Address.sin_port) << endl;
+        cout << "Second client connected" << endl;
         cout << "Server complete connection with 2 players" << endl;
         char buff1 = '1';
         // send '1' (black) to first player
