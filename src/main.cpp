@@ -15,41 +15,40 @@
 #include "Structs.h"
 
 
-#define CLIENTSNUMBER 2
 #define DATALEN 4096
+
+using namespace std;
 
 ServerDetails getServerDetails(string fileName) {
     ServerDetails serverDetails;
     string buffer;
-    std::ifstream file;
-    file.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
+    ifstream file;
+    file.exceptions (ifstream::failbit | ifstream::badbit);
     try {
-        file.open (fileName.c_str());
+        file.open(fileName.c_str());
         while (!file.eof()){
-            getline (file,buffer);
-            cout << buffer;
+            getline(file,buffer);
         }
-
         file.close();
     }
-    catch (std::ifstream::failure e) {
-        std::cerr << "Exception opening/reading/closing file\n";
+    catch (ifstream::failure e) {
+        cerr << "Exception opening/reading/closing file\n";
     }
-
     // Insert the string into a stream
     stringstream ss(buffer);
     // extract ip and port
     string temp;
+    char *ptr;
     ss >> serverDetails.serverIP;
     ss >> temp;
-    serverDetails.serverPort = atoi(temp.c_str());
-    return serverDetails;
+    serverDetails.serverPort = (int)strtol(temp.c_str(), &ptr, 10);
+    //atoi(temp.c_str());
 
+    return serverDetails;
 }
 
 
 void menuSelection(int *sizeOfBoard, int *playerSelection) {
-
     //string userInput;
     int userInput;
     cout << "Hello!" <<  endl << "Please enter size of board:";
@@ -101,7 +100,7 @@ void menuSelection(int *sizeOfBoard, int *playerSelection) {
             }
         } else {
             // check if input is legal?
-            flag = ((userInput == 1) or (userInput == 2));
+            flag = ((userInput == 1) or (userInput == 2) or (userInput == 3));
             // move is illegal, print message..
             if (flag == false) {
                 cout << "Illegal move, Please enter 1 to play against "
@@ -149,7 +148,7 @@ void menu() {
     if (playerSelection == 3) {
         Board board = Board(sizeOfBoard);
         GenericLogic gameLogic = GenericLogic(&board);
-        ServerDetails serverDetails = getServerDetails("/exe/clientConfig.txt");
+        ServerDetails serverDetails = getServerDetails("exe/clientConfig.txt");
 
         Client client(serverDetails.serverIP.c_str(), serverDetails.serverPort);
         client.connectToServer();

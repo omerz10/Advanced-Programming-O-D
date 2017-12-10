@@ -17,6 +17,8 @@
 #define MAX_CLIENTS 2
 #define DATALEN 4096
 
+
+
 Server::Server(int port): port(port) {
     this->isFirstClient = true;
 }
@@ -112,7 +114,7 @@ int Server::handleClients() {
     while(true) {
 
         if (this->isFirstClient) {
-            write(this->client1Sock, "first", sizeof(buffer));
+            write(this->client1Sock, "first", sizeof("first"));
             this->isFirstClient = false;
         }
         // send and receive from player 'black'
@@ -126,16 +128,16 @@ int Server::handleClients() {
 
         // send to white player that black didn't play a move
         if (strstr(buffer, "NoMove")) {
-            write(this->client2Sock, "NoMove", sizeof(buffer));
+            write(this->client2Sock, "NoMove", sizeof("NoMove"));
         }
         //
         else if (strstr(buffer, "End")) {
-            write(this->client2Sock, "End", sizeof(buffer));
+            write(this->client2Sock, "End", sizeof("End"));
             break;
         }
         // black played a move
         else {
-            write(this->client1Sock, "wait", sizeof(buffer));
+            write(this->client1Sock, "wait", sizeof("wait"));
             write(this->client2Sock, buffer, sizeof(buffer));
         }
 
@@ -150,14 +152,15 @@ int Server::handleClients() {
         }
         // no move for white
         if (strstr(buffer, "NoMove")) {
-            write(this->client1Sock, "NoMove", sizeof(buffer));
+            write(this->client1Sock, "NoMove", sizeof("NoMove"));
         }
         else if (strstr(buffer, "End")) {
-            write(this->client1Sock, "End", sizeof(buffer));
+            write(this->client1Sock, "End", sizeof("End"));
             break;
         }
         // white played a move
         else {
+            write(this->client2Sock, "wait", sizeof("wait"));
             write(this->client1Sock, buffer, sizeof(buffer));
         }
     } // end of while

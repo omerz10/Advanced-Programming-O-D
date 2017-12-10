@@ -16,7 +16,6 @@ GameFlow::GameFlow(Game *g, Client *c): game(g), client(c) {}
 
 // readability function - less clutter in playOneTurn() function..
 void GameFlow::lastPlayerMoveMsg(Player *lastPlayer, bool playerMoves) {
-
     if (playerMoves) {
         // print "last player played..." msg here
         cout << lastPlayer->getType() << " played (" << lastPlayer->getLastMove().getX() + 1 << "," <<
@@ -84,81 +83,81 @@ void GameFlow::showScores() {
     }
 }
 
-char * parseToString(Cell c) {
-    return nullptr;
+void GameFlow::parseToString(Cell c, char *buff) {
+    string tempString;
+    memset(&buff, 0, sizeof(buff));
+    tempString += to_string(c.getX());
+    tempString += ", ";
+    tempString += to_string(c.getY());
+    strcpy(buff, tempString.c_str());
+}
+
+Cell GameFlow::parseFromString(char *str) {
+    int x,y;
+    x = str[0] - '0';
+    y = str[3] - '0';
+    return Cell(x, y);
 }
 
 void GameFlow::playOnline() {
+    Player *localPlayer = this->game->getP1();
+    Player *remotePlayer = this->game->getP2();
+    bool isFirst = false;
     char buff[DATALEN];
     memset(&buff, 0, sizeof(buff));
-    bool endMovesForP1 = true, endMovesForP2 = true;
+    bool endMovesForLocal = true, endMovesForRemote = true;
 
-    // show board for the first time...
-    this->game->getP1()->showBoard();
+    this->client->getMessage(buff); // for local player proceed with game, for remote player - wait.
 
-    // stop when end moves for both P1 & P2
-    while(endMovesForP1 and endMovesForP2) {
-
-        if (firstMove) {
-
-            endMovesForP1 = this->game->playOneMove(this->game->getP1());
-
-            strcpy(buff, parseToString(this->game->getLastPlayer()->getLastMove()));
-            this->client->sendExercise(buff);
+    // play first move for "local player"
+    if (strcmp(buff, "first") == 0) { // black player
+        isFirst = true;
+        localPlayer->showBoard(); // show board for the first time...
+        this->game->playOneMove(localPlayer); // play move
+        parseToString(this->game->getLastPlayer()->getLastMove(), buff); // parse move
+        this->client->sendExercise(buff); // send move to server
+        this->client->waitingForOtherPlayer();// wait for response from server
+    }
+    while(1) {
+        // gets message from server
+        if (isFirst) {
+            this->client->getMessage(buff);
+        }
+        if (strcmp(buff, "End") == 0) {
+            break;
+        } else if (strcmp(buff, "NoMove") == 0) {
+            endMovesForRemote = false;
+        } else {
+            Cell tempCell = parseFromString(buff); // parse move from server
+            remotePlayer->setLastMove(tempCell.getX(), tempCell.getY()); // set last move
+            remotePlayer->playTurn(); // play turn
         }
 
-        // get move from remote
-        // I played
-        // I will send to server
-        // I'm waiting
-        // David move
+        localPlayer->showBoard(); // show board
+        lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForRemote); // print moves if they exist
+        endMovesForLocal = this->game->playOneMove(localPlayer); // play one move for local
 
-        this->myTurn = true; // init to true in the constructor
-
-
-
-
-        // print out the board
-        this->game->getP1()->showBoard();
-        this->client->waitingForOtherPlayer();
-
-        // player played, waiting for answer
-        this->myTurn = false;
-
-        // print "last played msg.."
-        lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForP1);
-
-        // play move for P2
-        endMovesForP2 = this->game->playOneMove(this->game->getP2());
-
-        // print out the board
-        this->game->getP2()->showBoard();
-
-
-        // print "last played msg.."
-        lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForP2);
-
-        // end of turn, clear both of the players' members for the next turn
-
-    } // end of game
-
+        localPlayer->showBoard(); // show board
+        if (endMovesForLocal) { // moves exist for local player
+            parseToString(localPlayer->getLastMove(), buff); // parse cell to string
+            this->client->sendExercise(buff); // send to server
+            this->client->waitingForOtherPlayer(); // wait for player
+        } else { // no moves for local player
+            if (!endMovesForRemote) { // no moves for remote as well
+                this->client->sendExercise("End"); // end game
+            } else { // no moves for local but there were moves for remote
+                this->client->sendExercise("NoMove");
+                // wait for other player
+                this->client->waitingForOtherPlayer();
+            }
+        }
+        if (!isFirst) {
+            isFirst = true;
+        }
+    }
+    // end of game
     cout << "Game over!" << endl;
     updateScores();
     showScores();
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

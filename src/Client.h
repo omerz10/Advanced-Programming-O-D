@@ -27,8 +27,9 @@ public:
 
     int* getClientSock();
 
-    void sendExercise(char* buffer);
+    void sendExercise(const char* buffer);
 
+    void getMessage(char *buffer);
 };
 
 

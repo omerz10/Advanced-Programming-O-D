@@ -65,8 +65,8 @@ public:
      */
     void showScores();
 
-    char *parseToString(Cell c);
-
+    void parseToString(Cell c, char *buff);
+    Cell parseFromString(char *str);
     void playOnline();
 
 };

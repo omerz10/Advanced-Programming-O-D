@@ -7,9 +7,9 @@
 int getServerPort(string fileName) {
     string buffer;
     std::ifstream file;
-    file.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
+    file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     try {
-        file.open (fileName);
+        file.open(fileName.c_str());
         while (!file.eof()){
             getline (file,buffer);
             cout << buffer;
@@ -24,7 +24,7 @@ int getServerPort(string fileName) {
 }
 
 int main() {
-    int serverPort = getServerPort("/exe/serverConfig.txt");
+    int serverPort = getServerPort("exe/serverConfig.txt");
     Server server(serverPort);
     server.start();
 
