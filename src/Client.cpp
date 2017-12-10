@@ -28,8 +28,7 @@ void Client::connectToServer() {
 
     // Get a hostent structure for the given host address
     struct hostent *server;
-    server = gethostbyaddr((const void *)&address, sizeof
-            address, AF_INET);
+    server = gethostbyaddr((const void *)&address, sizeof address, AF_INET);
     if (server == NULL) {
         throw "Host is unreachable";
     }
@@ -37,15 +36,13 @@ void Client::connectToServer() {
     // Create a structure for the server address
     struct sockaddr_in serverAddress;
     bzero((char *)&address, sizeof(address));
-
     serverAddress.sin_family = AF_INET;
     memcpy((char *)&serverAddress.sin_addr.s_addr, (char *)server->h_addr, server->h_length);
     // htons converts values between host and network byte
     //orders
     serverAddress.sin_port = htons(this->serverPort);
     // Establish a connection with the TCP server
-    if (connect(clientSocket, (struct sockaddr
-    *)&serverAddress, sizeof(serverAddress)) == -1) {
+    if (connect(clientSocket, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1) {
         throw "Error connecting to server";
     }
     cout << "Connected to server" << endl;
