@@ -102,30 +102,39 @@ Cell GameFlow::parseFromString(char *str) {
 void GameFlow::playOnline() {
     Player *localPlayer = this->game->getP1();
     Player *remotePlayer = this->game->getP2();
-    //Player *localPlayer;
-    //Player *remotePlayer;
     char buff[DATALEN];
-    memset(buff, 0, sizeof(buff));
     bool endMovesForLocal = true, endMovesForRemote = true;
 
     // play first move for "local player"
     if (this->client->getID() == 1) {
-        //localPlayer = this->game->getP1();
-        //remotePlayer = this->game->getP2();
-        // black player
+        localPlayer->showBoard(); // show board for the first time...
+        this->game->playOneMove(localPlayer); // play move
+        localPlayer->showBoard();
+
+
+        parseToString(this->game->getLastPlayer()->getLastMove(), buff); // parse move
+
+
+        this->client->sendExercise(buff); // send move to server
+        cout << "Waiting for other player's move..." << endl;
+        //this->client->getMessage(buff);
+
+    } else if (this->client->getID() == 2) {
+        Cell tempCell = parseFromString(buff); // parse move from server
+        remotePlayer->getPlayerMoves();
+        remotePlayer->setLastMove(tempCell.getX(), tempCell.getY()); // set last move
+        remotePlayer->playTurn(); // play turn
+
         localPlayer->showBoard(); // show board for the first time...
         this->game->playOneMove(localPlayer); // play move
         localPlayer->showBoard();
         parseToString(this->game->getLastPlayer()->getLastMove(), buff); // parse move
+
         this->client->sendExercise(buff); // send move to server
         cout << "Waiting for other player's move..." << endl;
-        this->client->getMessage(buff);
-
     }
-//    } else if (this->client->getID() == 2){
-//        //localPlayer = this->game->getP2();
-//        //remotePlayer = this->game->getP1();
-//    }
+
+
 
     while(true) {
         // gets message from server
@@ -157,7 +166,8 @@ void GameFlow::playOnline() {
                 // wait for other player;
             }
         }
-        this->client->getMessage(buff);
+        cout << buff << endl;
+        //this->client->getMessage(buff);
     }
 
 

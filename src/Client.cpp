@@ -69,13 +69,17 @@ int Client::getClientSock() {
 }
 
 void Client::getMessage(char *buffer) {
-    if (read(this->clientSocket, buffer, sizeof(buffer)) == -1) {
+    char temp[DATALEN];
+    strcpy(temp, buffer);
+    if (read(clientSocket, temp, DATALEN) == -1) {
         throw "Error reading from server";
     }
 }
 
 void Client::sendExercise(char *buffer) {
-    if (write(this->clientSocket, buffer, sizeof(buffer)) == -1) {
+    char temp[DATALEN];
+    strcpy(temp, buffer);
+    if (write(clientSocket, temp, DATALEN) == -1) {
         throw "Error: writing buffer";
     }
 }

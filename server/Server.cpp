@@ -81,7 +81,6 @@ void Server::start() {
             throw ("Error: sending to player 1");
         }
         this->handleClients(client1Sock, client2Sock);
-
     }
 }
 
@@ -91,11 +90,9 @@ void Server::handleClients(int client1Sock, int client2Sock) {
     // init buffer for getting msg from player
     char buffer[DATALEN];
     char temp[DATALEN];
-    memset(&buffer, 0, sizeof(buffer));
     // messages from each player
     ssize_t blackMsg, whiteMsg;
-     bool isFirstClient = true;
-    bool isSecondClient = true;
+
     // send & receive from players until gets "isEnd" message
     while(true) {
 
@@ -112,16 +109,13 @@ void Server::handleClients(int client1Sock, int client2Sock) {
         if (strcmp(buffer, "NoMove") == 0) {
             write(client2Sock, "NoMove", sizeof("NoMove"));
         }
-        //
+
         else if (strcmp(buffer, "End") == 0) {
             write(client2Sock, "End", sizeof("End"));
             break;
         }
-        
-        write(client2Sock, buffer, DATALEN);
-        strcpy(buffer, "wait");
-        write(client1Sock, buffer, DATALEN);
-        // send and receive from player 'black'
+        strcpy(temp, buffer);
+        write(client2Sock, &temp, DATALEN);
         whiteMsg = read(client2Sock, buffer, DATALEN);
         if (whiteMsg == 0) {
             throw "Error: connection with black player is closed";
@@ -139,10 +133,9 @@ void Server::handleClients(int client1Sock, int client2Sock) {
             write(client1Sock, "End", sizeof("End"));
             break;
         }
-        
-        write(client1Sock, buffer, DATALEN);
-        strcpy(buffer, "wait");
-        write(client2Sock, buffer, DATALEN);
+        strcpy(temp, buffer);
+        write(client1Sock, &temp, DATALEN);
+
 
     } // end of while
     close(client1Sock);
