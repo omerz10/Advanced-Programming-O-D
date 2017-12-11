@@ -150,29 +150,29 @@ void menu() {
         GenericLogic gameLogic = GenericLogic(&board);
         ServerDetails serverDetails = getServerDetails("exe/clientConfig.txt");
 
-        Client client(serverDetails.serverIP.c_str(), serverDetails.serverPort);
-        client.connectToServer();
-        client.waitingForOtherPlayer();
+        Client *client =  new Client(serverDetails.serverIP.c_str(), serverDetails.serverPort);
+        client->connectToServer();
+        client->waitingForOtherPlayer();
         int player;
-        if (read(client.getClientSock(), &player, sizeof(player)) == -1) {
+        if (read(client->getClientSock(), &player, sizeof(player)) == -1) {
             throw "Error: get 1 or 2";
         }
 
         // the client get "1" from server
         if (player == 1) {
-            cout << "player one constructed" << endl;
-            HumanPlayer p1 = HumanPlayer('X', &board, &gameLogic);
-            HumanPlayer p2 = HumanPlayer('O', &board, &gameLogic);
-            Game game = Game(&p1, &p2);
-            GameFlow gameFlow = GameFlow(&game, &client);
+            HumanPlayer *p1 = new HumanPlayer('X', &board, &gameLogic);
+            HumanPlayer *p2 = new HumanPlayer('O', &board, &gameLogic);
+            Game game = Game(p1, p2);
+            GameFlow gameFlow = GameFlow(&game, client);
+            client->setID(1);
             gameFlow.playOnline();
         // the client get "2" from server
         } else {
-            cout << "player two constructed.";
-            HumanPlayer p1 = HumanPlayer('O', &board, &gameLogic);
-            HumanPlayer p2 = HumanPlayer('X', &board, &gameLogic);
-            Game game = Game(&p1, &p2);
-            GameFlow gameFlow = GameFlow(&game, &client);
+            HumanPlayer *p1 = new HumanPlayer('O', &board, &gameLogic);
+            HumanPlayer *p2 = new HumanPlayer('X', &board, &gameLogic);
+            Game game = Game(p1, p2);
+            GameFlow gameFlow = GameFlow(&game, client);
+            client->setID(2);
             gameFlow.playOnline();
         }
     }

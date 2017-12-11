@@ -15,13 +15,11 @@
 
 
 #define MAX_CLIENTS 2
-#define DATALEN 4096
+#define DATALEN 1024
 
 
 
-Server::Server(int port): port(port) {
-    this->isFirstClient = true;
-}
+Server::Server(int port): port(port) {}
 
 void Server::start() {
     // init server socket
@@ -92,21 +90,17 @@ void Server::start() {
 void Server::handleClients(int client1Sock, int client2Sock) {
     // init buffer for getting msg from player
     char buffer[DATALEN];
+    char temp[DATALEN];
     memset(&buffer, 0, sizeof(buffer));
     // messages from each player
     ssize_t blackMsg, whiteMsg;
-    // start read and write actions with both player
-    this->isFirstClient = true;
-
-    // send & receive from playyers until gets "isEnd" message
+     bool isFirstClient = true;
+    bool isSecondClient = true;
+    // send & receive from players until gets "isEnd" message
     while(true) {
 
-        if (this->isFirstClient) {
-            write(client1Sock, "first", sizeof("first"));
-            this->isFirstClient = false;
-        }
         // send and receive from player 'black'
-        blackMsg = read(client1Sock, buffer, sizeof(buffer));
+        blackMsg = read(client1Sock, buffer, DATALEN);
         if (blackMsg == 0) {
             throw "Error: connection with black player is closed";
         }
@@ -123,34 +117,33 @@ void Server::handleClients(int client1Sock, int client2Sock) {
             write(client2Sock, "End", sizeof("End"));
             break;
         }
-        // black played a move
-        else {
-            write(client1Sock, "wait", sizeof("wait"));
-            write(client2Sock, buffer, sizeof(buffer));
-        }
-
-        // send and receive from player 'white'
-        whiteMsg = read(client2Sock, buffer, sizeof(buffer));
-        // server get message from player 'black'
+        
+        write(client2Sock, buffer, DATALEN);
+        strcpy(buffer, "wait");
+        write(client1Sock, buffer, DATALEN);
+        // send and receive from player 'black'
+        whiteMsg = read(client2Sock, buffer, DATALEN);
         if (whiteMsg == 0) {
-            throw "Error: connection with white player is closed";
+            throw "Error: connection with black player is closed";
         }
         if (whiteMsg == -1) {
-            throw "Error: connect to white player ";
+            throw "Error: connect to black player ";
         }
-        // no move for white
-        if (strstr(buffer, "NoMove")) {
+
+        // send to white player that black didn't play a move
+        if (strcmp(buffer, "NoMove") == 0) {
             write(client1Sock, "NoMove", sizeof("NoMove"));
         }
-        else if (strstr(buffer, "End")) {
+            //
+        else if (strcmp(buffer, "End") == 0) {
             write(client1Sock, "End", sizeof("End"));
             break;
         }
-        // white played a move
-        else {
-            write(client2Sock, "wait", sizeof("wait"));
-            write(client1Sock, buffer, sizeof(buffer));
-        }
+        
+        write(client1Sock, buffer, DATALEN);
+        strcpy(buffer, "wait");
+        write(client2Sock, buffer, DATALEN);
+
     } // end of while
     close(client1Sock);
     close(client2Sock);

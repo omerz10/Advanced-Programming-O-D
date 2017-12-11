@@ -6,9 +6,10 @@
  *      Author: zuckero
  */
 #include <sstream>
+#include <cstdlib>
 #include "GameFlow.h"
 
-#define DATALEN 4096
+#define DATALEN 1024
 
 
 GameFlow::GameFlow (Game *g): game(g){}
@@ -82,8 +83,6 @@ void GameFlow::showScores() {
 }
 
 void GameFlow::parseToString(Cell c, char *buff) {
-
-    memset(&buff, 0, sizeof(buff));
     stringstream ss;
     ss << c.getX();
     ss << ", ";
@@ -95,69 +94,73 @@ void GameFlow::parseToString(Cell c, char *buff) {
 
 Cell GameFlow::parseFromString(char *str) {
     int x,y;
-    x = str[0] - '0';
-    y = str[3] - '0';
+    x = atoi(&str[0]);
+    y = atoi(&str[2]);
     return Cell(x, y);
 }
 
 void GameFlow::playOnline() {
     Player *localPlayer = this->game->getP1();
     Player *remotePlayer = this->game->getP2();
-    bool isFirst = false;
+    //Player *localPlayer;
+    //Player *remotePlayer;
     char buff[DATALEN];
-    memset(&buff, 0, sizeof(buff));
+    memset(buff, 0, sizeof(buff));
     bool endMovesForLocal = true, endMovesForRemote = true;
 
-    this->client->getMessage(buff); // for local player proceed with game, for remote player - wait.
-
     // play first move for "local player"
-    if (strcmp(buff, "first") == 0) { // black player
-        isFirst = true;
+    if (this->client->getID() == 1) {
+        //localPlayer = this->game->getP1();
+        //remotePlayer = this->game->getP2();
+        // black player
         localPlayer->showBoard(); // show board for the first time...
         this->game->playOneMove(localPlayer); // play move
+        localPlayer->showBoard();
         parseToString(this->game->getLastPlayer()->getLastMove(), buff); // parse move
         this->client->sendExercise(buff); // send move to server
-        this->client->waitingForOtherPlayer();// wait for response from server
+        cout << "Waiting for other player's move..." << endl;
+        this->client->getMessage(buff);
+
     }
+//    } else if (this->client->getID() == 2){
+//        //localPlayer = this->game->getP2();
+//        //remotePlayer = this->game->getP1();
+//    }
 
-    while(1) {
-
+    while(true) {
         // gets message from server
-        if (isFirst) {
-            this->client->getMessage(buff);
-        }
+        this->client->getMessage(buff);
+
         if (strcmp(buff, "End") == 0) {
             break;
         } else if (strcmp(buff, "NoMove") == 0) {
             endMovesForRemote = false;
         } else {
             Cell tempCell = parseFromString(buff); // parse move from server
+            remotePlayer->getPlayerMoves();
             remotePlayer->setLastMove(tempCell.getX(), tempCell.getY()); // set last move
             remotePlayer->playTurn(); // play turn
         }
-
         localPlayer->showBoard(); // show board
-        lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForRemote); // print moves if they exist
+        //lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForRemote); // print moves if they exist
         endMovesForLocal = this->game->playOneMove(localPlayer); // play one move for local
-
-        localPlayer->showBoard(); // show board
         if (endMovesForLocal) { // moves exist for local player
             parseToString(localPlayer->getLastMove(), buff); // parse cell to string
             this->client->sendExercise(buff); // send to server
-            this->client->waitingForOtherPlayer(); // wait for player
+
         } else { // no moves for local player
             if (!endMovesForRemote) { // no moves for remote as well
-                this->client->sendExercise("End"); // end game
+                this->client->sendExercise("End");
+                break;// end game
             } else { // no moves for local but there were moves for remote
                 this->client->sendExercise("NoMove");
-                // wait for other player
-                this->client->waitingForOtherPlayer();
+                // wait for other player;
             }
         }
-        if (!isFirst) {
-            isFirst = true;
-        }
+        this->client->getMessage(buff);
     }
+
+
     // end of game
     cout << "Game over!" << endl;
     updateScores();

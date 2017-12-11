@@ -21,7 +21,7 @@ private:
 
     int port;
     int serverSock;
-    bool isFirstClient;
+
 
 
 public:

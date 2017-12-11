@@ -19,6 +19,7 @@ private:
     const char *serverIP;
     int serverPort;
     int clientSocket;
+    int id;
 
 public:
 
@@ -30,9 +31,13 @@ public:
 
     int getClientSock();
 
-    void sendExercise(char* buffer);
+    void sendExercise(char *buffer);
 
     void getMessage(char *buffer);
+
+    void setID(int id);
+
+    int getID();
 };
 
 

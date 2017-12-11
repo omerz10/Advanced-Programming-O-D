@@ -58,7 +58,9 @@ void Client::waitingForOtherPlayer() {
     if (strcmp(buff, "join") == 0) {
         cout << "Waiting for other player to join..." << endl;
     }
-
+    if(strcmp(buff,"wait") == 0) {
+        cout << "Waiting for other player's move..." << endl;
+    }
 }
 
 
@@ -76,5 +78,14 @@ void Client::sendExercise(char *buffer) {
     if (write(this->clientSocket, buffer, sizeof(buffer)) == -1) {
         throw "Error: writing buffer";
     }
+}
+
+void Client::setID(int id) {
+    this->id = id;
+
+}
+
+int Client::getID() {
+    return this->id;
 }
 
