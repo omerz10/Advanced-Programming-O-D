@@ -120,11 +120,10 @@ void GameFlow::playOnline() {
         this->client->sendExercise(buff); // send move to server
         cout << "Waiting for other player's move..." << endl;
         this->client->getMessage(buff);
-
     }
 //    } else if (this->client->getID() == 2){
-//        //localPlayer = this->game->getP2();
-//        //remotePlayer = this->game->getP1();
+//        localPlayer = this->game->getP2();
+//        remotePlayer = this->game->getP1();
 //    }
 
     while(true) {

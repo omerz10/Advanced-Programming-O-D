@@ -91,10 +91,10 @@ void Server::handleClients(int client1Sock, int client2Sock) {
     // init buffer for getting msg from player
     char buffer[DATALEN];
     char temp[DATALEN];
-    memset(&buffer, 0, sizeof(buffer));
+    memset(buffer, 0, strlen(buffer));
     // messages from each player
     ssize_t blackMsg, whiteMsg;
-     bool isFirstClient = true;
+    bool isFirstClient = true;
     bool isSecondClient = true;
     // send & receive from players until gets "isEnd" message
     while(true) {
@@ -119,8 +119,8 @@ void Server::handleClients(int client1Sock, int client2Sock) {
         }
         
         write(client2Sock, buffer, DATALEN);
-        strcpy(buffer, "wait");
-        write(client1Sock, buffer, DATALEN);
+        //strcpy(buffer, "wait");
+        //write(client1Sock, buffer, DATALEN);
         // send and receive from player 'black'
         whiteMsg = read(client2Sock, buffer, DATALEN);
         if (whiteMsg == 0) {
