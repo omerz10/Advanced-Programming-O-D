@@ -11,6 +11,7 @@
 #include <string.h>
 #include <iostream>
 #include <stdio.h>
+#include <poll.h>
 
 
 using namespace std;
@@ -21,8 +22,6 @@ private:
 
     int port;
     int serverSock;
-
-
 
 public:
 
@@ -41,7 +40,9 @@ public:
      */
     void handleClients(int c1, int c2);
 
+    bool pollClient(int currentClient, int otherClient);
 
+    bool isClientClosed(int clientNumber);
 };
 
 

@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include "Client.h"
 
-#define DATALEN 1024
+#define DATALEN 512
 
 using namespace std;
 
@@ -69,13 +69,19 @@ int Client::getClientSock() {
 }
 
 void Client::getMessage(char *buffer) {
-    if (read(this->clientSocket, buffer, sizeof(buffer)) == -1) {
+    char temp[DATALEN];
+    memset(temp, 0, DATALEN);
+    
+    if (read(clientSocket, temp, DATALEN) == -1) {
         throw "Error reading from server";
     }
+    strcpy(buffer, temp);
 }
 
 void Client::sendExercise(char *buffer) {
-    if (write(this->clientSocket, buffer, sizeof(buffer)) == -1) {
+    char temp[DATALEN];
+    strcpy(temp, buffer);
+    if (write(clientSocket, &temp, DATALEN) == -1) {
         throw "Error: writing buffer";
     }
 }

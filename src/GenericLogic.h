@@ -16,21 +16,8 @@
 
 class GenericLogic : public Logic {
 
-private:
-
-    /*
-     * holds reference of the board
-     */
-    Board* board;
-
 public:
     
-    /*
-     * constructor.
-     * construct Player with his type and reference of board
-     */
-    GenericLogic(Board *board);
-
 
     /**
      * returns true if the player has actual possible cells and keep the in 'moves' member,

@@ -4,26 +4,40 @@
 #include "Server.h"
 
 
-int getServerPort(string fileName) {
+int getServerPort(string *fileName) {
     string buffer;
+    const char *begin;
+    char *end;
     std::ifstream file;
     file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     try {
-        file.open(fileName.c_str());
+        file.open((*fileName).c_str());
         while (!file.eof()){
             getline (file,buffer);
         }
         file.close();
     }
-    catch (std::ifstream::failure e) {
+    catch (std::ifstream::failure &e) {
         std::cerr << "Exception opening/reading/closing file\n";
     }
-    return atoi(buffer.c_str());
+    begin = buffer.c_str();
+    end = (char*)(begin + strlen(begin));
+    return (int)strtol(begin, &end,10);
+            //atoi(buffer.c_str());
 }
 
 int main() {
-    int serverPort = getServerPort("exe/serverConfig.txt");
+    string path = "exe/serverConfig.txt";
+    int serverPort = getServerPort(&path);
     Server server(serverPort);
-    server.start();
 
+    while (true) {
+        try {
+            server.start();
+            cout << endl << "Restarting server.." << endl;
+        } catch (const char *exception) {
+            cout << exception << endl;
+            break;
+        }
+    }
 }

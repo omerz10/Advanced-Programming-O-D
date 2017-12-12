@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include "GameFlow.h"
 
-#define DATALEN 1024
+#define DATALEN 512
 
 
 GameFlow::GameFlow (Game *g): game(g){}
@@ -22,6 +22,8 @@ void GameFlow::lastPlayerMoveMsg(Player *lastPlayer, bool playerMoves) {
         // print "last player played..." msg here
         cout << lastPlayer->getType() << " played (" << lastPlayer->getLastMove().getX() + 1 << "," <<
              lastPlayer->getLastMove().getY() + 1 << ")" << endl << endl;
+    } else {
+        cout << "Player " << lastPlayer->getType() << " had no moves" << endl << endl;
     }
 }
 
@@ -72,13 +74,13 @@ void GameFlow::showScores() {
          << ": " << this->game->getP1Score() << endl << this->game->getP2()->getType()
             << ": " << this->game->getP2Score() << endl << endl;
     if (this->game->getP1Score() > this->game->getP2Score()) {
-        cout << this->game->getP1()->getType() << " Win!";
+        cout << "Player " << this->game->getP1()->getType() << " Won!";
     }
     if (this->game->getP2Score() > this->game->getP1Score()) {
-        cout << this->game->getP2()->getType() << " Win!";
+        cout << "Player " << this->game->getP2()->getType() << " Won!";
     }
     if (this->game->getP2Score() == this->game->getP1Score()) {
-        cout << "It's a tiy!";
+        cout << "It's a tie!";
     }
 }
 
@@ -102,11 +104,9 @@ Cell GameFlow::parseFromString(char *str) {
 void GameFlow::playOnline() {
     Player *localPlayer = this->game->getP1();
     Player *remotePlayer = this->game->getP2();
-    //Player *localPlayer;
-    //Player *remotePlayer;
-    char buff[DATALEN];
-    memset(buff, 0, sizeof(buff));
-    bool endMovesForLocal = true, endMovesForRemote = true;
+    char buff[DATALEN], temp[DATALEN];
+    memset(buff, 0, DATALEN);
+    bool endMovesForLocal, endMovesForRemote;
 
     // play first move for "local player"
     if (this->client->getID() == 1) {
@@ -114,17 +114,12 @@ void GameFlow::playOnline() {
         //remotePlayer = this->game->getP2();
         // black player
         localPlayer->showBoard(); // show board for the first time...
-        this->game->playOneMove(localPlayer); // play move
+        endMovesForLocal = this->game->playOneMove(localPlayer); // play move
         localPlayer->showBoard();
         parseToString(this->game->getLastPlayer()->getLastMove(), buff); // parse move
         this->client->sendExercise(buff); // send move to server
-        cout << "Waiting for other player's move..." << endl;
-        this->client->getMessage(buff);
+        cout << endl <<"Waiting for other player's move..." << endl;
     }
-//    } else if (this->client->getID() == 2){
-//        localPlayer = this->game->getP2();
-//        remotePlayer = this->game->getP1();
-//    }
 
     while(true) {
         // gets message from server
@@ -135,33 +130,41 @@ void GameFlow::playOnline() {
         } else if (strcmp(buff, "NoMove") == 0) {
             endMovesForRemote = false;
         } else {
+            endMovesForRemote = true;
             Cell tempCell = parseFromString(buff); // parse move from server
             remotePlayer->getPlayerMoves();
             remotePlayer->setLastMove(tempCell.getX(), tempCell.getY()); // set last move
             remotePlayer->playTurn(); // play turn
+
         }
+
         localPlayer->showBoard(); // show board
-        //lastPlayerMoveMsg(this->game->getLastPlayer(), endMovesForRemote); // print moves if they exist
+        lastPlayerMoveMsg(remotePlayer, endMovesForRemote); // show last player's move
+
         endMovesForLocal = this->game->playOneMove(localPlayer); // play one move for local
+
         if (endMovesForLocal) { // moves exist for local player
             parseToString(localPlayer->getLastMove(), buff); // parse cell to string
             this->client->sendExercise(buff); // send to server
-
         } else { // no moves for local player
             if (!endMovesForRemote) { // no moves for remote as well
-                this->client->sendExercise("End");
+                memset(temp, 0, DATALEN);
+                strcpy(temp, "End");
+                this->client->sendExercise(temp);
                 break;// end game
             } else { // no moves for local but there were moves for remote
-                this->client->sendExercise("NoMove");
+                memset(temp, 0, DATALEN);
+                strcpy(temp, "NoMove");
+                this->client->sendExercise(temp);
                 // wait for other player;
             }
         }
-        this->client->getMessage(buff);
+        cout << endl << "Waiting for other player's move..." << endl;
     }
 
 
     // end of game
-    cout << "Game over!" << endl;
+    cout << "Game Over!" << endl;
     updateScores();
     showScores();
 

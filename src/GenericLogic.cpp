@@ -4,9 +4,6 @@
 
 #include "GenericLogic.h"
 
-GenericLogic::GenericLogic (Board *board): board(board) {
-
-}
 
 PossibleMove GenericLogic::getPossibleMoves(Board *board, char playerID) {
 
