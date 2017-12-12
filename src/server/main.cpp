@@ -27,7 +27,7 @@ int getServerPort(string *fileName) {
 }
 
 int main() {
-    string path = "exe/serverConfig.txt";
+    string path = "serverConfig.txt";
     int serverPort = getServerPort(&path);
     Server server(serverPort);
 

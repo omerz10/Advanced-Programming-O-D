@@ -84,7 +84,7 @@ void menuSelection(int *playerSelection) {
 
 
 void menu() {
-    string path = "exe/clientConfig.txt";
+    string path = "clientConfig.txt";
     int playerSelection;
     char buff[DATALEN];
     memset(&buff, 0, sizeof(buff));

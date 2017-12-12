@@ -1,3 +1,198 @@
+commit 8a27494c9e62a47689b8b80b5c80fe06d72b8747
+Merge: 18ae3ea 179a917
+Author: nakashdavid <nakashdavid@gmail.com>
+Date:   Tue Dec 12 20:47:56 2017 +0200
+
+    Merge branch 'master' of https://github.com/omerz10/Advanced-Programming-O-D
+    
+    # Conflicts:
+    #       exe/clientConfig.txt
+    #       exe/serverConfig.txt
+    #       server/Server.cpp
+    #       src/GameFlow.cpp
+
+commit 18ae3eaf568fad1924b316a3bfc15537c2981b55
+Author: nakashdavid <nakashdavid@gmail.com>
+Date:   Tue Dec 12 01:56:05 2017 +0200
+
+    update
+
+commit 179a917cd375f349586566dffff7ab129adb5220
+Author: Omer <omerz1990@gmail.com>
+Date:   Tue Dec 12 01:53:43 2017 +0200
+
+    update until new logic1
+
+commit bbe866819f9e6eac7ee434cf0553eaba3310532c
+Author: Omer <omerz1990@gmail.com>
+Date:   Tue Dec 12 00:24:07 2017 +0200
+
+    update until new logic1
+
+commit 6520fb6a48fcc473a97e216059f5d4f69e294e67
+Author: Omer <omerz1990@gmail.com>
+Date:   Mon Dec 11 00:35:30 2017 +0200
+
+    update until new logic
+
+commit 0b0ffb417b09e74fb8baefaee0253a08253bb860
+Merge: 3293e07 29bcd7c
+Author: nakashdavid <nakashdavid@gmail.com>
+Date:   Sun Dec 10 18:20:39 2017 +0200
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       exe/clientConfig.txt
+    #       exe/serverConfig.txt
+    #       server/Server.cpp
+
+commit 3293e072d5064d6800dc8a5ef6b452385a6ee467
+Author: nakashdavid <nakashdavid@gmail.com>
+Date:   Sun Dec 10 18:19:49 2017 +0200
+
+    Added client and server config parsing
+
+commit 29bcd7c6cf71d70e6e36ad3ab23d6462214e4a0e
+Author: Omer <omerz1990@gmail.com>
+Date:   Sun Dec 10 15:54:02 2017 +0200
+
+    update
+
+commit f50d32bf9ff731b18b888122064bb20a7427f328
+Author: nakashdavid <nakashdavid@gmail.com>
+Date:   Sun Dec 10 14:31:22 2017 +0200
+
+    Added client and server config parsing
+
+commit 630a3e6490a5801c207b70478316c0ef4270db82
+Author: nakashdavid <nakashdavid@gmail.com>
+Date:   Sun Dec 10 11:24:54 2017 +0200
+
+    Added client and server config parsing
+
+commit 8faf15aa8af318b4bf1df1a131028d9dcb0a85b7
+Author: Omer <omerz1990@gmail.com>
+Date:   Sat Dec 9 18:18:42 2017 +0200
+
+    Merge branch 'master' of https://github.com/omerz10/Advanced-Programming-O-D
+    
+    # Conflicts:
+    #       src/Client.cpp
+    #       src/Game.h
+
+commit c1e5b6aa0c8aa074eead096ce8cfcf6c205695a7
+Merge: 3e52dfa facf33d
+Author: Omer <omerz1990@gmail.com>
+Date:   Sat Dec 9 16:24:23 2017 +0200
+
+    Merge branch 'master' of https://github.com/omerz10/Advanced-Programming-O-D
+
+commit 3e52dfa7c050fa680edd255f0b526e24b6774af0
+Author: Omer <omerz1990@gmail.com>
+Date:   Sat Dec 9 16:24:13 2017 +0200
+
+    Merge branch 'master' of https://github.com/omerz10/Advanced-Programming-O-D
+    
+    # Conflicts:
+    #       src/Client.cpp
+    #       src/Game.h
+
+commit facf33d1787167db9a553a69b59c9e356edc082a
+Author: nakashdavid <nakashdavid@gmail.com>
+Date:   Sat Dec 9 16:23:44 2017 +0200
+
+    Added client and server config parsing
+
+commit f88f5dba8f98ab1919059133624b18ac9c8222f2
+Author: Omer <omerz1990@gmail.com>
+Date:   Sat Dec 9 16:03:24 2017 +0200
+
+    Merge branch 'master' of https://github.com/omerz10/Advanced-Programming-O-D
+    
+    # Conflicts:
+    #       src/Client.cpp
+    #       src/Game.h
+
+commit 17124cd66c639aa74957763c63c6df9fd9e41375
+Merge: 331ef66 71ff7dc
+Author: Omer <omerz1990@gmail.com>
+Date:   Sat Dec 9 07:59:41 2017 +0200
+
+    Merge branch 'master' of https://github.com/omerz10/Advanced-Programming-O-D
+    
+    # Conflicts:
+    #       src/Client.cpp
+    #       src/Game.h
+
+commit 331ef666f5fed731ec9ad59edc60414676212484
+Author: Omer <omerz1990@gmail.com>
+Date:   Sat Dec 9 07:57:33 2017 +0200
+
+    with new client
+
+commit 71ff7dc901e7ad840bcc4808dad03676646e8cdb
+Merge: 7c5c7b8 b9d8d21
+Author: nakashdavid <nakashdavid@gmail.com>
+Date:   Fri Dec 8 22:36:15 2017 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 7c5c7b835d2b2b607640a10e730916c404891c82
+Author: nakashdavid <nakashdavid@gmail.com>
+Date:   Fri Dec 8 22:36:00 2017 +0200
+
+    update
+
+commit b9d8d21de7b6109bff19afd9e1c38e6ad15dfd06
+Author: Omer <omerz1990@gmail.com>
+Date:   Fri Dec 8 19:09:56 2017 +0200
+
+    with new client
+
+commit 47dea55b83adee5ce778e6b5360f8f511723f9f5
+Author: Omer <omerz1990@gmail.com>
+Date:   Thu Dec 7 22:38:03 2017 +0200
+
+    with new client
+
+commit 292525d5a05715da69d081a346d9dc2ca6c99110
+Author: Omer <omerz1990@gmail.com>
+Date:   Mon Dec 4 23:51:27 2017 +0200
+
+    with final server
+
+commit 88b20bfbb26531f32635f9e78eb6d995f8a46b77
+Author: Omer <omerz1990@gmail.com>
+Date:   Sat Dec 2 22:06:21 2017 +0200
+
+    with server
+
+commit 243f3ab143b3673171847f1701db41a9d6bf4493
+Merge: f907fb7 8ec0694
+Author: Omer <omerz1990@gmail.com>
+Date:   Fri Dec 1 15:08:40 2017 +0200
+
+    Merge branch 'master' of https://github.com/omerz10/Advanced-Programming-O-D
+
+commit f907fb70068163b5133ab19cbd35263f652069de
+Author: Omer <omerz1990@gmail.com>
+Date:   Fri Dec 1 15:08:28 2017 +0200
+
+    almost final ver
+
+commit 8ec0694d71bab87a6a5e8363fc7d16fd1d2cf883
+Author: nakashdavid <nakashdavid@gmail.com>
+Date:   Fri Dec 1 00:15:40 2017 +0200
+
+    reorganize..
+
+commit b7dc65e7417a018120e581b1676881c879e32a62
+Author: Omer <omerz1990@gmail.com>
+Date:   Thu Nov 30 14:17:24 2017 +0200
+
+    almost final ver
+
 commit 7c5587bff9bc33ba75315479eec4bd33ca771432
 Merge: 66258a8 582414d
 Author: Omer <omerz1990@gmail.com>

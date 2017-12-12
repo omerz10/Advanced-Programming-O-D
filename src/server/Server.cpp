@@ -108,7 +108,6 @@ void Server::handleClients(int client1Sock, int client2Sock) {
     while(true) {
         // read from player 1's client
         memset(buffer, 0, DATALEN);
-
         blackMsg = read(client1Sock, buffer, DATALEN);
 
         // check input
@@ -137,6 +136,7 @@ void Server::handleClients(int client1Sock, int client2Sock) {
         if (pollClient(client1Sock, client2Sock)) {
             break;
         }
+
         write(client2Sock, &temp, DATALEN);
 
 
@@ -169,6 +169,7 @@ void Server::handleClients(int client1Sock, int client2Sock) {
         if (pollClient(client2Sock, client1Sock)) {
             break;
         }
+
         write(client1Sock, &buffer, DATALEN);
     } // end of while
 
@@ -183,8 +184,8 @@ bool Server::isClientClosed(int clientNumber) {
     pfd.events = POLLIN | POLLHUP | POLLRDNORM;
     pfd.revents = 0;
     if (pfd.revents == 0) {
-        // call poll every 100 miliseconds
-        if (poll(&pfd, 1, 100) > 0) {
+        // call poll every 500 miliseconds
+        if (poll(&pfd, 1, 500) > 0) {
             // if result is bigger than 0, it means there is either data
             // on the socket, or played closed his window(closed socket)
             char buff[32];
@@ -201,12 +202,12 @@ bool Server::pollClient(int currentClient, int otherClient) {
     char temp[DATALEN];
     // check for lost connection
     if (isClientClosed(otherClient)) {
-        cout << "Player 2 disconnected from the game, restarting game.." << endl;
+        cout << "Other player has disconnected from the game, restarting.." << endl;
         memset(temp, 0, DATALEN);
         strcpy(temp, "End");
         write(currentClient, &temp, DATALEN);
         return true;
     }
-    return true;
+    return false;
 }
 
