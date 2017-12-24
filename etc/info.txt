@@ -1,0 +1,5 @@
+David Nakash 203752902 
+Omer Zucker 200876548
+Tirgul Group 5
+
+Run the exec files from exe/client_exe and exe/server_exe

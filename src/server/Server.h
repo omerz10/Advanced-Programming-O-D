@@ -8,11 +8,14 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
-#include <string.h>
+
 #include <iostream>
 #include <stdio.h>
 #include <poll.h>
+#include <map>
 
+#include "Command.h"
+#include "../client/Structs.h"
 
 using namespace std;
 
@@ -22,6 +25,8 @@ private:
 
     int port;
     int serverSock;
+    map < string, GameThread > games; // map of games according to game name (real member)
+
 
 public:
 
@@ -33,7 +38,12 @@ public:
     /*
      * initialize a server by its all functions
      */
-    void start();
+    void start(int clientSocket);
+
+    /*
+     *  second player connecting to the server
+     */
+    void join(int clientSocket);
 
     /*
      * send data to a client

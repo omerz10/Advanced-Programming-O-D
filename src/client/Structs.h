@@ -25,6 +25,11 @@ struct ServerDetails {
     int serverPort;
 };
 
+struct GameThread {
+    bool running;
+    int player1Socket;
+    int player2Socket;
+};
 
 
 #endif //PROJECT_UPDATED_STRUCTS_H

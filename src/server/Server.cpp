@@ -3,6 +3,7 @@
 //
 
 #include "Server.h"
+#include "StartCommand.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -19,9 +20,13 @@
 
 
 
-Server::Server(int port): port(port) {}
+Server::Server(int port): port(port) {
 
-void Server::start() {
+
+
+}
+
+void Server::start(int socketClient) {
     char temp[DATALEN];
 
     // init server socket
@@ -47,52 +52,53 @@ void Server::start() {
     socklen_t client1AddressLen1 = sizeof((struct sockaddr*) &clientAddress1);
     socklen_t client1AddressLen2 = sizeof((struct sockaddr*) &clientAddress2);
 
-    while (true) {
-        int client1Sock = accept(serverSock, (struct sockaddr *) &clientAddress1, &client1AddressLen1);
-        if (client1Sock == -1) {
-            throw "Error: accepting client";
-        }
-        cout << "Received connection from " << inet_ntoa(clientAddress1.sin_addr) << " port " <<
-             ntohs(clientAddress1.sin_port) << endl;
 
-        // update first player he is connected
-        memset(temp, 0, DATALEN);
-        strcpy(temp, "join");
-        if (write(client1Sock, temp, DATALEN) == -1) {
-            throw ("Error: sending to player 1");
-        }
-        int client2Sock = accept(serverSock, (struct sockaddr *) &clientAddress2, &client1AddressLen2);
-        if (client2Sock == -1) {
-            throw "Error: accepting client";
-        }
-        cout << "Received connection from " << inet_ntoa(clientAddress2.sin_addr) << " port " <<
-             ntohs(clientAddress2.sin_port) << endl;
-        cout << "Server completed connection with 2 players.." << endl;
-        cout << "----- The Game Begins -----" << endl;
-        memset(temp, 0, DATALEN);
-        strcpy(temp, "wait");
-        // update second player he is connected
-        if (write(client2Sock, temp, DATALEN) == -1) {
-            throw ("Error: sending to player 2");
-        }
+    int client1Sock = accept(serverSock, (struct sockaddr *) &clientAddress1, &client1AddressLen1);
+    if (client1Sock == -1) {
+        throw "Error: accepting client";
+    }
+    cout << "Received connection from " << inet_ntoa(clientAddress1.sin_addr) << " port " <<
+         ntohs(clientAddress1.sin_port) << endl;
 
-        int firstClient = 1;
-        // send '1' (black) to first player
-        if (write(client1Sock, &firstClient, sizeof(firstClient)) == -1) {
-            throw ("Error: sending to player 1");
-        }
-        int secondClient = 2;
-        // send '2' (white) to second player
-        if (write(client2Sock, &secondClient, sizeof(secondClient)) == -1) {
-            throw ("Error: sending to player 1");
-        }
+    // update first player he is connected
+    memset(temp, 0, DATALEN);
+    strcpy(temp, "join");
+    if (write(client1Sock, temp, DATALEN) == -1) {
+        throw ("Error: sending to player 1");
+    }
+}
 
+void join(int clientSocket) {
+    int client2Sock = accept(serverSock, (struct sockaddr *) &clientAddress2, &client1AddressLen2);
+    if (client2Sock == -1) {
+        throw "Error: accepting client";
+    }
+    cout << "Received connection from " << inet_ntoa(clientAddress2.sin_addr) << " port " <<
+         ntohs(clientAddress2.sin_port) << endl;
+    cout << "Server completed connection with 2 players.." << endl;
+    cout << "----- The Game Begins -----" << endl;
+    memset(temp, 0, DATALEN);
+    strcpy(temp, "wait");
+    // update second player he is connected
+    if (write(client2Sock, temp, DATALEN) == -1) {
+        throw ("Error: sending to player 2");
+    }
 
-        try {
-            this->handleClients(client1Sock, client2Sock);
-        } catch (const char *exception) {
-            throw exception;
-        }
+    int firstClient = 1;
+    // send '1' (black) to first player
+    if (write(client1Sock, &firstClient, sizeof(firstClient)) == -1) {
+        throw ("Error: sending to player 1");
+    }
+    int secondClient = 2;
+    // send '2' (white) to second player
+    if (write(client2Sock, &secondClient, sizeof(secondClient)) == -1) {
+        throw ("Error: sending to player 1");
+    }
+
+    try {
+        this->handleClients(client1Sock, client2Sock);
+    } catch (const char *exception) {
+        throw exception;
     }
 }
 
