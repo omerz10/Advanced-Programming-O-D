@@ -217,3 +217,7 @@ bool Server::pollClient(int currentClient, int otherClient) {
     return false;
 }
 
+map<string, GameThread> Server::getGames() {
+    return map<string, GameThread>();
+}
+

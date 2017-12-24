@@ -45,6 +45,8 @@ public:
      */
     void join(int clientSocket);
 
+    map < string, GameThread > getGames();
+
     /*
      * send data to a client
      */

@@ -12,10 +12,10 @@
 
 Controller::Controller(Server *server) {
     this->server = server;
-    this->commands["start"] = new StartCommand(this->server->);
-    this->commands["list_games"] = new ListGamesCommand(this->games);
-    this->commands["join"] = new JoinCommand(this->games);
-    this->commands["play"] = new PlayCommand(this->games);
+    this->commands["start"] = new StartCommand(this->server->getGames());
+    this->commands["list_games"] = new ListGamesCommand(this->server->getGames());
+    this->commands["join"] = new JoinCommand(this->server->getGames());
+    this->commands["play"] = new PlayCommand(this->server->getGames());
 }
 
 void Controller::executeCommand(string commandString, int clientSocket) {
