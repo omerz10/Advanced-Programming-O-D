@@ -11,7 +11,7 @@ JoinCommand::JoinCommand(map <string, GameThread> gMap) {
     this->gamesList = gMap;
 }
 
-int JoinCommand::execute(vector <string> stringV, int clientSocket) {
+int JoinCommand::execute(Server* server,vector<string> stringV, int clientSocket) {
     // iterator
     std::map<string, GameThread >::iterator it;
     it = this->gamesList.find(stringV[ARGUMENT]);
@@ -22,10 +22,10 @@ int JoinCommand::execute(vector <string> stringV, int clientSocket) {
         if (!this->gamesList[stringV[ARGUMENT]].running) { // check if game NOT running
             // insert 2nd player into the game
             this->gamesList[stringV[ARGUMENT]].player2Socket = clientSocket;
+            // add player to game in server
+            server->join(stringV[ARGUMENT], clientSocket);
             // set game running to true
             this->gamesList[stringV[ARGUMENT]].running = true;
-
-
 
         } else { // game is running, cannot join this game
             return -1;

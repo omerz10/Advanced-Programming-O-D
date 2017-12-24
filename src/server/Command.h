@@ -17,12 +17,8 @@ private:
 
     map<string, GameThread> gamesList; // reference
 
-protected:
-    Server *server;
-
 public:
-
-    virtual int execute(vector<string> stringV, int clientSocket) = 0;
+    virtual int execute(Server *server, vector<string> stringV, int clientSocket) = 0;
 
 };
 

@@ -13,14 +13,13 @@
 class Controller {
 public:
 
-    Controller(Server *server);
+    Controller(map < string, GameThread > gamesMap);
 
-    void executeCommand(string commandString, int clientSocket);
+    void executeCommand(Server *server, string commandString, int clientSocket);
 
 private:
-
     map < string, Command* > commands; // map of commands according to name
-    Server *server;
+    map < string, GameThread > games;
 };
 
 

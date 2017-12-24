@@ -15,7 +15,7 @@ class ListGamesCommand : public Command {
 public:
     ListGamesCommand(map<string, GameThread> gMap);
 
-    int execute(vector<string> stringV, int clientSocket);
+    int execute(Server* server,vector<string> stringV, int clientSocket);
 
 private:
     map<string, GameThread> gamesList; // reference
