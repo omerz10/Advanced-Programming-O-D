@@ -49,6 +49,11 @@ public:
 
     Controller *getContoller();
 
+    void runOneGame(int client1Sock, int client2Sock);
+
+    bool isClientClosed(int clientNumber);
+
+    bool pollClient(int currentClient, int otherClient);
 };
 
 

@@ -9,6 +9,9 @@
 #include "Board.h"
 #include "../server/Server.h"
 typedef enum Status {ZeroConnected, FirstConnected, SecondConnected, PlayingGame};
+
+typedef enum Errors {CompleteBlackPlayer = 1, CompleteWhitePlayer = 2, CannotJoinGame = -1, GameNotFound = -2};
+
 /**
  Struct that holds the possible moves (in order to make it easier for the programmer...).
  */
