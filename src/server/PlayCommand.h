@@ -11,11 +11,9 @@
 
 class PlayCommand : public Command {
 public:
-    PlayCommand(Server *server);
 
     void execute(Server *server, vector<string> args, int clientSocket);
-private:
-    Server *server;
+
 };
 
 #endif //ADVANCED_PROGRAMMING_O_D_PLAYCOMMAND_H

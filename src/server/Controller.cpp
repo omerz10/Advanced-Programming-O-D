@@ -36,7 +36,7 @@ void Controller::executeCommand(Server *server, string commandString, int client
     it = this->commands.find(commandName);
     // check if command is part of specified commands
     if (it != this->commands.end()) { // found command
-        this->commands[commandName]->execute(arguments, clientSocket);
+        this->commands[commandName]->execute(server, arguments, clientSocket);
     } else {
         cout << "Error in command!" << endl;
     }

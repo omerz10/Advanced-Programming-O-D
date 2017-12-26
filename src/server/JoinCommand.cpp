@@ -9,24 +9,22 @@
 #define GAME_NAME 0  // name of game chosen by user
 #define DATALEN 512
 
-JoinCommand::JoinCommand(Server *server) {
-    this->server = server;
-}
 
 
-void JoinCommand::execute(vector<string> args, int clientSocket) {
+
+void JoinCommand::execute(Server *server, vector<string> args, int clientSocket) {
     char temp[DATALEN];
 
     // iterator
     std::map<string, GameThread >::iterator it;
-    it = gameMap.find(args[GAME_NAME]);
+    it = server->getGames().find(args[GAME_NAME]);
 
     // look for game
-    if (it != gameMap.end()) { // game found
+    if (it != server->getGames().end()) { // game found
         // check if possible to join game
-        if (!gameMap[args[GAME_NAME]].PlayingGame) { // check if game NOT running
+        if (!server->getGames()[args[GAME_NAME]].PlayingGame) { // check if game NOT running
             // insert 2nd player into the game
-            gameMap[args[GAME_NAME]].player2Socket = clientSocket;
+            server->getGames()[args[GAME_NAME]].player2Socket = clientSocket;
 
             cout << "Server completed connection with 2 players.." << endl;
             cout << "----- The Game Begins -----" << endl;
@@ -34,23 +32,23 @@ void JoinCommand::execute(vector<string> args, int clientSocket) {
 
             strcpy(temp, "wait");
             // update second player he is connected
-            if (write(gameMap[args[GAME_NAME]].player2Socket, temp, DATALEN) == -1) {
+            if (write(server->getGames()[args[GAME_NAME]].player2Socket, temp, DATALEN) == -1) {
                 throw ("Error: sending to player 2");
             }
 
             int firstClient = 1;
             // send '1' (black) to first player
-            if (write(gameMap[args[GAME_NAME]].player1Socket, &firstClient, sizeof(firstClient)) == -1) {
+            if (write(server->getGames()[args[GAME_NAME]].player1Socket, &firstClient, sizeof(firstClient)) == -1) {
                 throw ("Error: sending to player 1");
             }
             int secondClient = 2;
             // send '2' (white) to second player
-            if (write(gameMap[args[GAME_NAME]].player2Socket, &secondClient, sizeof(secondClient)) == -1) {
+            if (write(server->getGames()[args[GAME_NAME]].player2Socket, &secondClient, sizeof(secondClient)) == -1) {
                 throw ("Error: sending to player 1");
             }
 
             // set game running to true
-            gameMap[args[GAME_NAME]].SecondConnected;
+            server->getGames()[args[GAME_NAME]].SecondConnected;
 
 
             try {
@@ -70,8 +68,4 @@ void JoinCommand::execute(vector<string> args, int clientSocket) {
     }
     // function output
     //return 0;
-}
-
-JoinCommand::JoinCommand(Server *server) {
-    this->server = server;
 }

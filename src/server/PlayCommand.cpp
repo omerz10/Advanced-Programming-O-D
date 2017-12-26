@@ -8,11 +8,8 @@
 
 
 
-PlayCommand::PlayCommand(Server *server) {
-    this->server = server;
-}
 
-void PlayCommand::execute(vector<string> args, int clientSocket) {
+void PlayCommand::execute(Server *server, vector<string> args, int clientSocket) {
     string tempString;
 
     tempString += args[X];

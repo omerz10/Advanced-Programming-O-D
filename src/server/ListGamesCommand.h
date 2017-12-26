@@ -11,13 +11,10 @@ using namespace std;
 
 class ListGamesCommand : public Command {
 public:
-    //ListGamesCommand(map<string, GameThread> gMap);
 
-    void execute(vector<string> args, int clientSocket,
-                 map < string, struct GameThread > gameThread);
+    void execute(Server *server, vector<string> args, int clientSocket);
 
 private:
-    map<string, GameThread> gamesList; // reference
 };
 
 

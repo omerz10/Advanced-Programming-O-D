@@ -83,7 +83,7 @@ void menuSelection(int *playerSelection) {
     cin.clear();
     *playerSelection = userInput;
 }
-
+/*
 void* countNumbers(void *tArgs) {
     GameThread *ptr = (GameThread *)tArgs;
     (*ptr).player1Socket = 6;
@@ -111,10 +111,10 @@ void threadCheck() {
     cout<<"player 1 socket : " << gameThread.player1Socket << endl;
 
 }
-
+*/
 void menu() {
 
-    threadCheck();
+    //threadCheck();
 
     string path = "clientConfig.txt";
     int playerSelection;
