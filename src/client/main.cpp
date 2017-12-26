@@ -13,6 +13,8 @@
 #include <cstdlib>
 #include "GameFlow.h"
 #include "Structs.h"
+#include <pthread.h>
+
 
 #define BOARD_SIZE 8
 #define DATALEN 512
@@ -82,14 +84,45 @@ void menuSelection(int *playerSelection) {
     *playerSelection = userInput;
 }
 
+void* countNumbers(void *tArgs) {
+    GameThread *ptr = (GameThread *)tArgs;
+    (*ptr).player1Socket = 6;
+
+    pthread_exit(0);
+}
+
+
+void threadCheck() {
+    GameThread gameThread;
+    gameThread.player2Socket = 2;
+    gameThread.player1Socket = 1;
+    gameThread.running = true;
+
+    cout<<"player 1 socket : " << gameThread.player1Socket << endl;
+
+    pthread_t thread;
+    int rc = pthread_create(&thread, NULL, countNumbers, &gameThread);
+    if (rc) {
+        cout << "Error: unable to create thread, " << rc << endl;
+        exit(-1);
+    }
+    pthread_join(thread, NULL);
+
+    cout<<"player 1 socket : " << gameThread.player1Socket << endl;
+
+}
 
 void menu() {
+
+    threadCheck();
+
     string path = "clientConfig.txt";
     int playerSelection;
     char buff[DATALEN];
     memset(&buff, 0, sizeof(buff));
     menuSelection(&playerSelection);
     cin.get();
+
 
     // play against a player
     if (playerSelection == 1) {

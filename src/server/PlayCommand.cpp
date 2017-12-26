@@ -8,17 +8,18 @@
 
 
 
-PlayCommand::PlayCommand(map<string, GameThread> gMap) {
-    this->gamesList = gMap;
+PlayCommand::PlayCommand(Server *server) {
+    this->server = server;
 }
 
-int PlayCommand::execute(Server* server,vector<string> stringV, int clientSocket) {
+void PlayCommand::execute(vector<string> args, int clientSocket) {
     string tempString;
 
-    tempString += stringV[X];
+    tempString += args[X];
     tempString += " ";
-    tempString += stringV[Y];
+    tempString += args[Y];
 
-    server->handleClients(server->getGames()[],  , );
-    return 0;
+
+    //server->handleClients(server->getGames()[],  , );
+
 }

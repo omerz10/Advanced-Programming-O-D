@@ -3,3 +3,12 @@
 //
 
 #include "ListGamesCommand.h"
+/*
+ListGamesCommand::ListGamesCommand(map<string, GameThread> gMap) {
+    this->gamesList = gMap;
+}
+*/
+void ListGamesCommand::execute(vector<string> args, int clientSocket,
+                               map < string, struct GameThread > gameThread) {
+    return 0;
+}

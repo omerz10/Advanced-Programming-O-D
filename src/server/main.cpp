@@ -34,7 +34,7 @@ int main() {
 
     while (true) {
         try {
-            server.start();
+            //server.start();
             cout << endl << "Restarting server.." << endl;
         } catch (const char *exception) {
             cout << exception << endl;

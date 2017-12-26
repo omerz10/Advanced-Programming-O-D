@@ -15,18 +15,71 @@
 #include <sstream>
 
 
+
 #define MAX_CLIENTS 100
 #define DATALEN 512
 
 
+/*
+ * main thread listener
+ */
 
-Server::Server(int port): port(port) {
+
+
+void mainThreadListener(Server *server) {
+    //pthread_t mainThread;
+    pthread_t gameThread;
+    string buffer;
+    cin >> buffer;
+    struct sockaddr_in clientAddress;
+    socklen_t client1AddressLen = sizeof((struct sockaddr *) &clientAddress);
+
+    cout << "Listening to clients.." << endl;
+    listen(server->serverSock, MAX_CLIENTS);
+
+    while (strcmp(buffer, "exit")) {
+        string buff;
+        char temp[DATALEN];
+        cout << "Waiting for client connections..." << endl;
+        // Accept a new client connection
+        int clientSocket = accept(server->serverSock, (struct sockaddr *) &clientAddress, &client1AddressLen);
+        if (clientSocket == -1) {
+            throw "Error on accept";
+        }
+        cout << "Received connection from " << inet_ntoa(clientAddress.sin_addr) << " port " <<
+             ntohs(clientAddress.sin_port) << endl;
+
+
+        // open thread
+
+        int rc = pthread_create(&gameThread, NULL, , &this->games);
+        if (rc) {
+            cout << "Error: unable to create thread, " << rc << endl;
+            exit(-1);
+
+            // envelope function
+            {
+                ssize_t msg;
+                msg = read(clientSocket, temp, DATALEN); // socket comes from outside
+                strcpy(buff, temp);
+                this->controller->executeCommand(this, buff, clientSocket);
+                // close thread
+            }
+        }
+
+
+
+    }
+
+
 }
+
+
+Server::Server(int port): port(port) {}
 
 
 void Server::initialize() {
     char temp[DATALEN];
-
     // init server socket
     this->serverSock = socket(AF_INET, SOCK_STREAM, 0);
     if (this->serverSock == -1) {
@@ -45,72 +98,8 @@ void Server::initialize() {
 
 }
 
-void Server::listener() {
-    string buffer;
-    struct sockaddr_in clientAddress;
-    socklen_t client1AddressLen = sizeof((struct sockaddr*) &clientAddress);
-
-    cout << "Listening to clients.." << endl;
-    listen(this->serverSock, MAX_CLIENTS);
-
-    while (strcmp(buffer, "exit")) {
-        string buff;
-        char temp[DATALEN];
-        cout << "Waiting for client connections..." << endl;
-        // Accept a new client connection
-        int clientSocket = accept(this->serverSock, (struct sockaddr *)&clientAddress, &client1AddressLen);
-        if (clientSocket == -1) {
-            throw "Error on accept";
-        }
-        cout << "Received connection from " << inet_ntoa(clientAddress.sin_addr) << " port " <<
-             ntohs(clientAddress.sin_port) << endl;
 
 
-        // open a thread
-
-        {
-            ssize_t msg;
-            msg = read(clientSocket, temp, DATALEN); // socket comes from outside
-            strcpy(buff, temp);
-            this->controller->executeCommand(this, buff, clientSocket);
-            // close thread
-        }
-
-    }
-
-
-void Server::join(string gameName, int clientSocket) {
-
-    this->games[gameName].player2Socket = clientSocket;
-
-    cout << "Received connection from " << inet_ntoa(clientAddress2.sin_addr) << " port " <<
-         ntohs(clientAddress2.sin_port) << endl;
-    cout << "Server completed connection with 2 players.." << endl;
-    cout << "----- The Game Begins -----" << endl;
-    memset(temp, 0, DATALEN);
-    strcpy(temp, "wait");
-    // update second player he is connected
-    if (write(client2Sock, temp, DATALEN) == -1) {
-        throw ("Error: sending to player 2");
-    }
-
-    int firstClient = 1;
-    // send '1' (black) to first player
-    if (write(client1Sock, &firstClient, sizeof(firstClient)) == -1) {
-        throw ("Error: sending to player 1");
-    }
-    int secondClient = 2;
-    // send '2' (white) to second player
-    if (write(client2Sock, &secondClient, sizeof(secondClient)) == -1) {
-        throw ("Error: sending to player 1");
-    }
-
-    try {
-        this->handleClients(client1Sock, client2Sock);
-    } catch (const char *exception) {
-        throw exception;
-    }
-}
 
 
 void Server::handleClients(int client1Sock, int client2Sock) {
@@ -125,8 +114,6 @@ void Server::handleClients(int client1Sock, int client2Sock) {
         // read from player 1's client
         memset(buffer, 0, DATALEN);
         blackMsg = read(client1Sock, buffer, DATALEN);
-
-
 
         // check input
         if (blackMsg == 0) {
@@ -196,51 +183,15 @@ void Server::handleClients(int client1Sock, int client2Sock) {
     close(client2Sock);
 }
 
-bool Server::isClientClosed(int clientNumber) {
-    pollfd pfd;
-    pfd.fd = clientNumber;
-    pfd.events = POLLIN | POLLHUP | POLLRDNORM;
-    pfd.revents = 0;
-    if (pfd.revents == 0) {
-        // call poll every 500 miliseconds
-        if (poll(&pfd, 1, 500) > 0) {
-            // if result is bigger than 0, it means there is either data
-            // on the socket, or played closed his window(closed socket)
-            char buff[32];
-            if (recv(clientNumber, buff, sizeof(buff), MSG_PEEK | MSG_DONTWAIT) == 0) {
-                // if recv function returns zero it means the connection has been closed.
-                return true;
-            }
-        }
-    }
-    return false;
-}
 
-bool Server::pollClient(int currentClient, int otherClient) {
-    char temp[DATALEN];
-    // check for lost connection
-    if (isClientClosed(otherClient)) {
-        cout << "Other player has disconnected from the game, restarting.." << endl;
-        memset(temp, 0, DATALEN);
-        strcpy(temp, "End");
-        write(currentClient, &temp, DATALEN);
-        return true;
-    }
-    return false;
-}
 
 map<string, GameThread> Server::getGames() {
     return map<string, GameThread>();
 }
 
-
-
-
-
-
-    //handleClient(clientSocket);
-    // Close communication with the client
-    //close(clientSocket);
-
+Controller *Server::getContoller() {
+    return this->controller;
 }
+
+
 

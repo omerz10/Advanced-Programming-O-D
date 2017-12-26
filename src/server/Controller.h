@@ -5,6 +5,10 @@
 #ifndef ADVANCED_PROGRAMMING_O_D_CONTROLLER_H
 #define ADVANCED_PROGRAMMING_O_D_CONTROLLER_H
 
+
+class Command;
+class Server;
+
 #include <string.h>
 #include <map>
 #include "Command.h"

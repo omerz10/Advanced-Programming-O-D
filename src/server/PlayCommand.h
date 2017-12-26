@@ -11,11 +11,11 @@
 
 class PlayCommand : public Command {
 public:
-    PlayCommand(map<string, GameThread> gMap);
+    PlayCommand(Server *server);
 
-    int execute(Server* server,vector<string> stringV, int clientSocket);
+    void execute(Server *server, vector<string> args, int clientSocket);
 private:
-    map<string, GameThread> gamesList; // reference
+    Server *server;
 };
 
 #endif //ADVANCED_PROGRAMMING_O_D_PLAYCOMMAND_H

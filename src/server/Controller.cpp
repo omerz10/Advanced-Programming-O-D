@@ -11,10 +11,10 @@
 
 Controller::Controller(map < string, GameThread > gamesMap) {
     this->games = gamesMap;
-    this->commands["start"] = new StartCommand(this->games);
-    this->commands["list_games"] = new ListGamesCommand(this->games);
-    this->commands["join"] = new JoinCommand(this->games);
-    this->commands["play"] = new PlayCommand(this->games);
+    this->commands["start"] = new StartCommand();
+    this->commands["list_games"] = new ListGamesCommand();
+    this->commands["join"] = new JoinCommand();
+    this->commands["play"] = new PlayCommand();
 }
 
 void Controller::executeCommand(Server *server, string commandString, int clientSocket) {
@@ -36,7 +36,7 @@ void Controller::executeCommand(Server *server, string commandString, int client
     it = this->commands.find(commandName);
     // check if command is part of specified commands
     if (it != this->commands.end()) { // found command
-        this->commands[commandName]->execute(server, arguments, clientSocket);
+        this->commands[commandName]->execute(arguments, clientSocket);
     } else {
         cout << "Error in command!" << endl;
     }

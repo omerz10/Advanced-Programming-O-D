@@ -5,17 +5,16 @@
 #ifndef ADVANCED_PROGRAMMING_O_D_LISTGAMESCOMMAND_H
 #define ADVANCED_PROGRAMMING_O_D_LISTGAMESCOMMAND_H
 
-
-//#include <map>
 #include <map>
 #include "Command.h"
 using namespace std;
 
 class ListGamesCommand : public Command {
 public:
-    ListGamesCommand(map<string, GameThread> gMap);
+    //ListGamesCommand(map<string, GameThread> gMap);
 
-    int execute(Server* server,vector<string> stringV, int clientSocket);
+    void execute(vector<string> args, int clientSocket,
+                 map < string, struct GameThread > gameThread);
 
 private:
     map<string, GameThread> gamesList; // reference

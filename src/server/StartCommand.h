@@ -15,9 +15,9 @@ using namespace std;
 
 class StartCommand : public Command {
 public:
-    StartCommand(map<string, GameThread> gMap);
+    //StartCommand(map<string, GameThread> gMap);
 
-    int execute(Server* server,vector<string> stringV, int clientSocket);
+    void execute(Server *server, vector<string> args, int clientSocket));
 
 private:
     map<string, GameThread> gamesList; // reference

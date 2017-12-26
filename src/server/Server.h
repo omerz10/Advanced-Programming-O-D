@@ -18,21 +18,21 @@ class Controller;
 #include <map>
 
 #include "Command.h"
-#include "../client/Structs.h"
+
 #include "Controller.h"
+#include "../client/Structs.h"
 
 using namespace std;
 
 class Server {
 
-private:
+public:
 
     int port;
     int serverSock;
-    map < string, GameThread > games; // map of games according to game name (real member)
+    map < string, struct GameThread > games; // map of games according to game name (real member)
     Controller *controller;
 
-public:
 
 
     /*
@@ -46,14 +46,10 @@ public:
     void initialize();
 
 
-    void listener();
-    /*
-     *  second player connecting to the server
-     */
-    void join(string gameName, int clientSocket);
+
 
     map < string, GameThread > getGames();
-
+    Controller *getContoller();
     /*
      * send data to a client
      */

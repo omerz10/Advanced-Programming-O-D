@@ -14,11 +14,10 @@ using namespace std;
 
 class Command {
 private:
-
-    map<string, GameThread> gamesList; // reference
+    //map<string, GameThread> gamesList; // reference
 
 public:
-    virtual int execute(Server *server, vector<string> stringV, int clientSocket) = 0;
+    virtual void execute(Server *server, vector<string> args, int clientSocket) = 0;
 
 };
 

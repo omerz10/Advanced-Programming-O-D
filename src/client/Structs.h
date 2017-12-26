@@ -7,6 +7,7 @@
 #define PROJECT_UPDATED_STRUCTS_H
 
 #include "Board.h"
+#include "../server/Server.h"
 
 /**
  Struct that holds the possible moves (in order to make it easier for the programmer...).
@@ -25,10 +26,13 @@ struct ServerDetails {
     int serverPort;
 };
 
-struct GameThread {
-    bool running;
+typedef struct GameThread {
+
+    Server *server;
+    typedef enum Status {ZeroConnected, FirstConnected, SecondConnected, PlayingGame};
     int player1Socket;
     int player2Socket;
+
 };
 
 
