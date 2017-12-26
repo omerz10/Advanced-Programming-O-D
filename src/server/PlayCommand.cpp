@@ -9,12 +9,10 @@
 
 
 
-void PlayCommand::execute(Server *server, vector<string> args, int clientSocket) {
-    string tempString;
+void PlayCommand::execute(CommandArgument commandArgument) {
+    // return value
+    commandArgument.commandParam;
 
-    tempString += args[X];
-    tempString += " ";
-    tempString += args[Y];
 
 
     //server->handleClients(server->getGames()[],  , );

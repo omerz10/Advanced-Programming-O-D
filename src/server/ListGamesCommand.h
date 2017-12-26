@@ -11,10 +11,8 @@ using namespace std;
 
 class ListGamesCommand : public Command {
 public:
+    void execute(CommandArgument commandArgument);
 
-    void execute(Server *server, vector<string> args, int clientSocket);
-
-private:
 };
 
 

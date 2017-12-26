@@ -17,7 +17,7 @@ private:
     //map<string, GameThread> gamesList; // reference
 
 public:
-    virtual void execute(Server *server, vector<string> args, int clientSocket) = 0;
+    virtual void execute(CommandArgument commandArgument) = 0;
 
 };
 

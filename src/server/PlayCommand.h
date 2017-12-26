@@ -12,7 +12,7 @@
 class PlayCommand : public Command {
 public:
 
-    void execute(Server *server, vector<string> args, int clientSocket);
+    void execute(CommandArgument commandArgument);
 
 };
 

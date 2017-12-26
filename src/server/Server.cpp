@@ -4,7 +4,7 @@
 
 #include "Server.h"
 #include "StartCommand.h"
-
+#include <sstream>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -27,19 +27,19 @@
 
 
 void mainThreadListener(Server *server) {
-    //pthread_t mainThread;
     pthread_t gameThread;
-    string buffer;
-    cin >> buffer;
+    char buffer[DATALEN];
     struct sockaddr_in clientAddress;
-    socklen_t client1AddressLen = sizeof((struct sockaddr *) &clientAddress);
 
+    // get input from user
+    cin >> buffer;
+    string commandString = buffer;
+
+    socklen_t client1AddressLen = sizeof((struct sockaddr *) &clientAddress);
     cout << "Listening to clients.." << endl;
     listen(server->serverSock, MAX_CLIENTS);
 
-    while (strcmp(buffer, "exit")) {
-        string buff;
-        char temp[DATALEN];
+    while (strcmp(buffer, "exit") != 0) {
         cout << "Waiting for client connections..." << endl;
         // Accept a new client connection
         int clientSocket = accept(server->serverSock, (struct sockaddr *) &clientAddress, &client1AddressLen);
@@ -49,19 +49,29 @@ void mainThreadListener(Server *server) {
         cout << "Received connection from " << inet_ntoa(clientAddress.sin_addr) << " port " <<
              ntohs(clientAddress.sin_port) << endl;
 
+        // create commandArgs
+
+        CommandArgument cArgs;
+        cArgs.server = server;
+        cArgs.clientSocket = clientSocket;
+        //vector<string> arguments;
+        stringstream ss(commandString);
+        // extract command name
+        string commandName;
+        ss >> cArgs.commandName;
+        ss >> cArgs.commandParam;
 
         // open thread
-
-        int rc = pthread_create(&gameThread, NULL, , &this->games);
+        int rc = pthread_create(&gameThread, NULL, server->controller->executeCommand, &cArgs);
         if (rc) {
             cout << "Error: unable to create thread, " << rc << endl;
-            exit(-1);
+            //exit(-1);
+
 
             // envelope function
             {
-                ssize_t msg;
+                size_t msg;
                 msg = read(clientSocket, temp, DATALEN); // socket comes from outside
-                strcpy(buff, temp);
                 this->controller->executeCommand(this, buff, clientSocket);
                 // close thread
             }
@@ -75,34 +85,8 @@ void mainThreadListener(Server *server) {
 }
 
 
-Server::Server(int port): port(port) {}
 
-
-void Server::initialize() {
-    char temp[DATALEN];
-    // init server socket
-    this->serverSock = socket(AF_INET, SOCK_STREAM, 0);
-    if (this->serverSock == -1) {
-        throw "Error: opening socket";
-    }
-    // init server ip address
-    struct sockaddr_in serverAddress;
-    bzero((void *)&serverAddress, sizeof(serverAddress));
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = INADDR_ANY;
-    serverAddress.sin_port = htons(port);
-
-    if (bind(serverSock, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
-        throw "error binding to socket";
-    }
-
-}
-
-
-
-
-
-void Server::handleClients(int client1Sock, int client2Sock) {
+void handleClients(int client1Sock, int client2Sock) {
     // init buffer for getting msg from player
     char buffer[DATALEN];
     char temp[DATALEN];
@@ -181,6 +165,66 @@ void Server::handleClients(int client1Sock, int client2Sock) {
     // close client sockets
     close(client1Sock);
     close(client2Sock);
+}
+
+
+bool isClientClosed(int clientNumber) {
+    pollfd pfd;
+    pfd.fd = clientNumber;
+    pfd.events = POLLIN | POLLHUP | POLLRDNORM;
+    pfd.revents = 0;
+    if (pfd.revents == 0) {
+        // call poll every 500 miliseconds
+        if (poll(&pfd, 1, 500) > 0) {
+            // if result is bigger than 0, it means there is either data
+            // on the socket, or played closed his window(closed socket)
+            char buff[32];
+            if (recv(clientNumber, buff, sizeof(buff), MSG_PEEK | MSG_DONTWAIT) == 0) {
+                // if recv function returns zero it means the connection has been closed.
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool pollClient(int currentClient, int otherClient) {
+    char temp[DATALEN];
+    // check for lost connection
+    if (isClientClosed(otherClient)) {
+        cout << "Other player has disconnected from the game, restarting.." << endl;
+        memset(temp, 0, DATALEN);
+        strcpy(temp, "End");
+        write(currentClient, &temp, DATALEN);
+        return true;
+    }
+    return false;
+}
+
+
+
+
+Server::Server(int port): port(port) {}
+
+
+void Server::initialize() {
+    char temp[DATALEN];
+    // init server socket
+    this->serverSock = socket(AF_INET, SOCK_STREAM, 0);
+    if (this->serverSock == -1) {
+        throw "Error: opening socket";
+    }
+    // init server ip address
+    struct sockaddr_in serverAddress;
+    bzero((void *)&serverAddress, sizeof(serverAddress));
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_addr.s_addr = INADDR_ANY;
+    serverAddress.sin_port = htons(port);
+
+    if (bind(serverSock, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
+        throw "error binding to socket";
+    }
+
 }
 
 

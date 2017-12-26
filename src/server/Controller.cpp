@@ -2,12 +2,13 @@
 // Created by David Nakash on 24/12/2017.
 //
 
-#include <sstream>
+
 #include "Controller.h"
 #include "StartCommand.h"
 #include "ListGamesCommand.h"
 #include "JoinCommand.h"
 #include "PlayCommand.h"
+
 
 Controller::Controller(map < string, GameThread > gamesMap) {
     this->games = gamesMap;
@@ -17,26 +18,16 @@ Controller::Controller(map < string, GameThread > gamesMap) {
     this->commands["play"] = new PlayCommand();
 }
 
-void Controller::executeCommand(Server *server, string commandString, int clientSocket) {
-    vector<string> arguments;
-    stringstream ss(commandString);
+void* Controller::executeCommand(void* cArgs) {
 
-    // extract command name
-    string commandName;
-    ss >> commandName;
-    // extract arguments
-    while (!ss.eofbit) {
-        string arg;
-        ss >> arg;
-        arguments.push_back(arg);
-    }
+    CommandArgument *cmdArgs = (CommandArgument *)cArgs;
 
     // now execute function
-    std::map<string, Command* >::iterator it;
-    it = this->commands.find(commandName);
+    map<string, Command* >::iterator it;
+    it = this->commands.find((*cmdArgs).commandName);
     // check if command is part of specified commands
     if (it != this->commands.end()) { // found command
-        this->commands[commandName]->execute(server, arguments, clientSocket);
+        this->commands[(*cmdArgs).commandName]->execute(*cmdArgs);
     } else {
         cout << "Error in command!" << endl;
     }
