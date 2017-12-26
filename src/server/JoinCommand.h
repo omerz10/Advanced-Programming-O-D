@@ -10,12 +10,8 @@
 
 class JoinCommand : public Command {
 public:
-    JoinCommand(map<string, GameThread> gMap);
+    void execute(Server *server, vector<string> args, int clientSocket);
 
-    int execute(vector<string> stringV, int clientSocket);
-
-private:
-    map<string, GameThread> gamesList; // reference
 };
 
 #endif //ADVANCED_PROGRAMMING_O_D_JOINCOMMAND_H

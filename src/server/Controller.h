@@ -5,6 +5,10 @@
 #ifndef ADVANCED_PROGRAMMING_O_D_CONTROLLER_H
 #define ADVANCED_PROGRAMMING_O_D_CONTROLLER_H
 
+
+class Command;
+class Server;
+
 #include <string.h>
 #include <map>
 #include "Command.h"
@@ -13,14 +17,13 @@
 class Controller {
 public:
 
-    Controller(Server *server);
+    Controller(map < string, GameThread > gamesMap);
 
-    void executeCommand(string commandString, int clientSocket);
+    void executeCommand(Server *server, string commandString, int clientSocket);
 
 private:
-
     map < string, Command* > commands; // map of commands according to name
-    Server *server;
+    map < string, GameThread > games;
 };
 
 

@@ -3,13 +3,20 @@
 //
 
 #include "PlayCommand.h"
-
-PlayCommand::PlayCommand(map<string, GameThread> gMap) {
-    this->gamesList = gMap;
-}
-
-int PlayCommand::execute(vector<string> stringV, int clientSocket) {
+#define X 0
+#define Y 1
 
 
-    return 0;
+
+
+void PlayCommand::execute(Server *server, vector<string> args, int clientSocket) {
+    string tempString;
+
+    tempString += args[X];
+    tempString += " ";
+    tempString += args[Y];
+
+
+    //server->handleClients(server->getGames()[],  , );
+
 }

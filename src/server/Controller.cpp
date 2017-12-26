@@ -8,19 +8,19 @@
 #include "ListGamesCommand.h"
 #include "JoinCommand.h"
 #include "PlayCommand.h"
-#include "Server.h"
 
-Controller::Controller(Server *server) {
-    this->server = server;
-    this->commands["start"] = new StartCommand(this->server->getGames());
-    this->commands["list_games"] = new ListGamesCommand(this->server->getGames());
-    this->commands["join"] = new JoinCommand(this->server->getGames());
-    this->commands["play"] = new PlayCommand(this->server->getGames());
+Controller::Controller(map < string, GameThread > gamesMap) {
+    this->games = gamesMap;
+    this->commands["start"] = new StartCommand();
+    this->commands["list_games"] = new ListGamesCommand();
+    this->commands["join"] = new JoinCommand();
+    this->commands["play"] = new PlayCommand();
 }
 
-void Controller::executeCommand(string commandString, int clientSocket) {
+void Controller::executeCommand(Server *server, string commandString, int clientSocket) {
     vector<string> arguments;
     stringstream ss(commandString);
+
     // extract command name
     string commandName;
     ss >> commandName;
@@ -36,11 +36,10 @@ void Controller::executeCommand(string commandString, int clientSocket) {
     it = this->commands.find(commandName);
     // check if command is part of specified commands
     if (it != this->commands.end()) { // found command
-        this->commands[commandName]->execute(arguments, clientSocket);
+        this->commands[commandName]->execute(server, arguments, clientSocket);
     } else {
         cout << "Error in command!" << endl;
     }
-
 }
 
 

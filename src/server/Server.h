@@ -5,6 +5,9 @@
 #ifndef EX4_SERVER_H
 #define EX4_SERVER_H
 
+
+class Controller;
+
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -15,20 +18,22 @@
 #include <map>
 
 #include "Command.h"
+
+#include "Controller.h"
 #include "../client/Structs.h"
 
 using namespace std;
 
 class Server {
 
-private:
+public:
 
     int port;
     int serverSock;
-    map < string, GameThread > games; // map of games according to game name (real member)
+    map < string, struct GameThread > games; // map of games according to game name (real member)
+    Controller *controller;
 
 
-public:
 
     /*
      * construct a server
@@ -36,17 +41,15 @@ public:
     Server(int port);
 
     /*
-     * initialize a server by its all functions
+     * initialize server
      */
-    void start(int clientSocket);
+    void initialize();
 
-    /*
-     *  second player connecting to the server
-     */
-    void join(int clientSocket1, int clientSocket2);
+
+
 
     map < string, GameThread > getGames();
-
+    Controller *getContoller();
     /*
      * send data to a client
      */
