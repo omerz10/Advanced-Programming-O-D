@@ -19,7 +19,7 @@ public:
 
     Controller(map < string, GameThread > gamesMap);
 
-    void executeCommand(Server *server, string commandString, int clientSocket);
+    void* executeCommand(void* cArgs);
 
 private:
     map < string, Command* > commands; // map of commands according to name

@@ -8,24 +8,24 @@
 #define DATALEN  512
 
 
-void StartCommand::execute(Server *server, vector<string> args, int clientSocket) {
+void StartCommand::execute(CommandArgument cArgs) {
 
-    std::map<string, GameThread >::iterator it;
-    it = server->getGames().find(args[GAME_NAME]);
+    map<string, GameThread >::iterator it;
+    it = cArgs.server->getGames().find(cArgs.commandParam);
 
     // check if game exists
-    if (it != server->getGames().end()) { // game found
+    if (it != cArgs.server->getGames().end()) { // game found
         // send -1 to player
     } else { // game no found, start a new one
 
-        server->getGames()[args[GAME_NAME]].player1Socket = clientSocket;
-        server->getGames()[args[GAME_NAME]].FirstConnected;
+        cArgs.server->getGames()[cArgs.commandParam].player1Socket = cArgs.clientSocket;
+        cArgs.server->getGames()[cArgs.commandParam].status = FirstConnected;
 
         char temp[DATALEN];
         // update first player he is connected
         memset(temp, 0, DATALEN);
         strcpy(temp, "join");
-        if (write(server->getGames()[args[GAME_NAME]].player1Socket, temp, DATALEN) == -1) {
+        if (write(cArgs.server->getGames()[cArgs.commandParam].player1Socket, temp, DATALEN) == -1) {
             throw ("Error: sending to player 1");
         }
     }

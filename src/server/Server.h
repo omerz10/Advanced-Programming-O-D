@@ -11,7 +11,6 @@ class Controller;
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
-
 #include <iostream>
 #include <stdio.h>
 #include <poll.h>
@@ -34,7 +33,6 @@ public:
     Controller *controller;
 
 
-
     /*
      * construct a server
      */
@@ -46,18 +44,11 @@ public:
     void initialize();
 
 
-
-
     map < string, GameThread > getGames();
+
+
     Controller *getContoller();
-    /*
-     * send data to a client
-     */
-    void handleClients(int c1, int c2);
 
-    bool pollClient(int currentClient, int otherClient);
-
-    bool isClientClosed(int clientNumber);
 };
 
 

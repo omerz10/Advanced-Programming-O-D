@@ -8,11 +8,12 @@
 
 #include "Board.h"
 #include "../server/Server.h"
-
+typedef enum Status {ZeroConnected, FirstConnected, SecondConnected, PlayingGame};
 /**
  Struct that holds the possible moves (in order to make it easier for the programmer...).
  */
-struct PossibleMove {
+
+typedef struct PossibleMove {
 
     vector<vector<Cell> > changeableCells;
 
@@ -21,18 +22,24 @@ struct PossibleMove {
     bool possible;
 };
 
-struct ServerDetails {
+typedef struct ServerDetails {
     string serverIP;
     int serverPort;
 };
 
-typedef struct GameThread {
 
+typedef struct CommandArgument {
     Server *server;
-    typedef enum Status {ZeroConnected, FirstConnected, SecondConnected, PlayingGame};
+    string commandName;
+    string commandParam;
+    Status status;
+    int clientSocket;
+};
+
+typedef struct GameThread {
     int player1Socket;
     int player2Socket;
-
+    Status status;
 };
 
 
