@@ -43,7 +43,7 @@ public:
     /*
      *  second player connecting to the server
      */
-    void join(int clientSocket);
+    void join(int clientSocket1, int clientSocket2);
 
     map < string, GameThread > getGames();
 

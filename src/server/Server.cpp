@@ -22,8 +22,6 @@
 
 Server::Server(int port): port(port) {
 
-
-
 }
 
 void Server::start(int socketClient) {
@@ -68,7 +66,7 @@ void Server::start(int socketClient) {
     }
 }
 
-void join(int clientSocket) {
+void Server::join(int clientSocket1, int clientSocket2) {
     int client2Sock = accept(serverSock, (struct sockaddr *) &clientAddress2, &client1AddressLen2);
     if (client2Sock == -1) {
         throw "Error: accepting client";
