@@ -24,6 +24,39 @@
  * main thread listener
  */
 
+bool Server::isClientClosed(int clientNumber) {
+    pollfd pfd;
+    pfd.fd = clientNumber;
+    pfd.events = POLLIN | POLLHUP | POLLRDNORM;
+    pfd.revents = 0;
+    if (pfd.revents == 0) {
+        // call poll every 500 miliseconds
+        if (poll(&pfd, 1, 500) > 0) {
+            // if result is bigger than 0, it means there is either data
+            // on the socket, or played closed his window(closed socket)
+            char buff[32];
+            if (recv(clientNumber, buff, sizeof(buff), MSG_PEEK | MSG_DONTWAIT) == 0) {
+                // if recv function returns zero it means the connection has been closed.
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+bool Server::pollClient(int currentClient, int otherClient) {
+    char temp[DATALEN];
+    // check for lost connection
+    if (isClientClosed(otherClient)) {
+        cout << "Other player has disconnected from the game, restarting.." << endl;
+        memset(temp, 0, DATALEN);
+        strcpy(temp, "End");
+        write(currentClient, &temp, DATALEN);
+        return true;
+    }
+    return false;
+}
 
 
 void mainThreadListener(Server *server) {
@@ -143,8 +176,6 @@ void Server::handleClients(int client1Sock, int client2Sock) {
         }
 
         write(client2Sock, &temp, DATALEN);
-
-
 
         // read from player 2's client
         memset(temp, 0, DATALEN);
