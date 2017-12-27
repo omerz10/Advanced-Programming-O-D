@@ -31,10 +31,10 @@ int main() {
     string path = "serverConfig.txt";
     int serverPort = getServerPort(&path);
     Server server(serverPort);
-
+    server.initialize();
     while (true) {
         try {
-            //server.start();
+            server.runServer();
             cout << endl << "Restarting server.." << endl;
         } catch (const char *exception) {
             cout << exception << endl;

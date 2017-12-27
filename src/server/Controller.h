@@ -17,9 +17,9 @@ class Server;
 class Controller {
 public:
 
-    Controller(map < string, GameThread > gamesMap);
+    explicit Controller(map < string, GameThread > gamesMap);
 
-    void* executeCommand(void* cArgs);
+     void* executeCommand(void* cArgs);
 
 private:
     map < string, Command* > commands; // map of commands according to name

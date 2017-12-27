@@ -49,6 +49,7 @@ void JoinCommand::execute(CommandArgument cArgs) {
             cArgs.server->getGames()[cArgs.commandParam].status = SecondConnected;
 
             try {
+                // run game
                 (*cArgs.server).runOneGame(cArgs.server->getGames()[cArgs.commandParam].player1Socket,
                                            cArgs.server->getGames()[cArgs.commandParam].player2Socket);
             } catch (const char *exception) {
@@ -67,6 +68,5 @@ void JoinCommand::execute(CommandArgument cArgs) {
             throw ("Error: sending to player 1");
         }
     }
-    // function output
-    //return 0;
+
 }

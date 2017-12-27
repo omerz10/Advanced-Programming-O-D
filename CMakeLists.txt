@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(Advanced_Programming_O_D)
 
 set(CMAKE_CXX_STANDARD 98)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -pthread")
 
 add_subdirectory(tests/lib/googletest-master)
 include_directories(tests/lib/googletest-master/googletest/include)
@@ -31,7 +32,7 @@ set(SERVER_FILES src/server/Server.cpp src/server/Server.h)
 set(TEST_FILES tests/test_main.cpp tests/test_board.cpp tests/test_cell.cpp tests/test_game.cpp
         tests/test_genericLogic.cpp tests/test_AIPlayer.cpp tests/test_humanPlayer.cpp)
 
-add_executable(Advanced_Programming_O_D ${SOURCE_FILES} src/client/main.cpp src/client/Client.cpp src/client/Client.h src/server/Command.h src/server/StartCommand.cpp src/server/StartCommand.h src/server/Controller.cpp src/server/Controller.h src/server/ListGamesCommand.cpp src/server/ListGamesCommand.h src/server/JoinCommand.cpp src/server/JoinCommand.h src/server/PlayCommand.cpp src/server/PlayCommand.h)
+add_executable(Advanced_Programming_O_D ${SOURCE_FILES} src/client/main.cpp src/client/Client.cpp src/client/Client.h src/server/Command.h src/server/StartCommand.cpp src/server/StartCommand.h src/server/Controller.cpp src/server/Controller.h src/server/ListGamesCommand.cpp src/server/ListGamesCommand.h src/server/JoinCommand.cpp src/server/JoinCommand.h src/server/PlayCommand.cpp src/server/PlayCommand.h src/client/Game.cpp)
 add_executable(SERVER ${SERVER_FILES} src/server/main.cpp)
 add_executable(RunTests ${TEST_FILES} ${SOURCE_FILES} tests/test_main.cpp)
 

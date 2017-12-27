@@ -23,6 +23,60 @@
 /*
  * main thread listener
  */
+CommandArgument buildResponse(string argument, Server *server, int clientSocket) {
+    CommandArgument cArgs;
+    cArgs.server = server;
+    cArgs.clientSocket = clientSocket;
+    //vector<string> arguments;
+    stringstream ss(argument);
+    // extract command name
+    ss >> cArgs.commandName;
+    // extract command parameters
+    ss >> cArgs.commandParam;
+
+    return cArgs;
+}
+
+
+void mainThreadListener(Server *server) {
+    pthread_t gameThread;
+    char consoleBuffer[DATALEN];
+    char buffer[DATALEN];
+    struct sockaddr_in clientAddress;
+
+    // get input from user
+    cin >> consoleBuffer;
+
+    socklen_t client1AddressLen = sizeof((struct sockaddr *) &clientAddress);
+    cout << "Listening to clients.." << endl;
+    listen(server->serverSock, MAX_CLIENTS);
+
+    while (strcmp(consoleBuffer, "exit") != 0) {
+
+        cout << "Waiting for client connections..." << endl;
+        // Accept a new client connection
+        int clientSocket = accept(server->serverSock, (struct sockaddr *) &clientAddress, &client1AddressLen);
+        if (clientSocket == -1) {
+            throw "Error on accept";
+        }
+        cout << "Received connection from " << inet_ntoa(clientAddress.sin_addr) << " port " <<
+             ntohs(clientAddress.sin_port) << endl;
+
+        // create commandArgs
+        read(clientSocket, buffer, DATALEN);
+        string commandString;// = buffer;
+        commandString = buffer;
+        CommandArgument cArgs = buildResponse(commandString, server, clientSocket);
+
+        // open thread
+        int rc = pthread_create(&gameThread, NULL, globalExecuteCommand, &cArgs);
+        if (rc) {
+            cout << "Error: unable to create thread, " << rc << endl;
+            exit(-1);
+        }
+    }
+}
+
 
 bool Server::isClientClosed(int clientNumber) {
     pollfd pfd;
@@ -59,51 +113,9 @@ bool Server::pollClient(int currentClient, int otherClient) {
 }
 
 
-void mainThreadListener(Server *server) {
-    pthread_t gameThread;
-    char consoleBuffer[DATALEN];
-    char buffer[DATALEN];
-    struct sockaddr_in clientAddress;
-
-    // get input from user
-    cin >> consoleBuffer;
 
 
-    socklen_t client1AddressLen = sizeof((struct sockaddr *) &clientAddress);
-    cout << "Listening to clients.." << endl;
-    listen(server->serverSock, MAX_CLIENTS);
 
-    while (strcmp(consoleBuffer, "exit") != 0) {
-        cout << "Waiting for client connections..." << endl;
-        // Accept a new client connection
-        int clientSocket = accept(server->serverSock, (struct sockaddr *) &clientAddress, &client1AddressLen);
-        if (clientSocket == -1) {
-            throw "Error on accept";
-        }
-        cout << "Received connection from " << inet_ntoa(clientAddress.sin_addr) << " port " <<
-             ntohs(clientAddress.sin_port) << endl;
-
-        // create commandArgs
-        read(clientSocket, buffer, DATALEN);
-        string commandString = buffer;
-        CommandArgument cArgs;
-        cArgs.server = server;
-        cArgs.clientSocket = clientSocket;
-        //vector<string> arguments;
-        stringstream ss(commandString);
-        // extract command name
-        string commandName;
-        ss >> cArgs.commandName;
-        ss >> cArgs.commandParam;
-
-        // open thread
-        int rc = pthread_create(&gameThread, NULL, server->controller->executeCommand, &cArgs);
-        if (rc) {
-            cout << "Error: unable to create thread, " << rc << endl;
-            exit(-1);
-        }
-    }
-}
 
 bool isClientClosed(int clientNumber) {
     pollfd pfd;
@@ -240,7 +252,6 @@ void Server::initialize() {
     if (bind(serverSock, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
         throw "error binding to socket";
     }
-
 }
 
 
@@ -249,9 +260,18 @@ map<string, GameThread> Server::getGames() {
     return map<string, GameThread>();
 }
 
-Controller *Server::getContoller() {
-    return this->controller;
+
+void Server::runServer() {
+    mainThreadListener(this);
 }
+
+void *Server::globalExecuteCommand(void *cArgs) {
+    CommandArgument *commandArgument = (CommandArgument*) cArgs;
+
+    return commandArgument->server->controller->executeCommand(cArgs);
+}
+
+
 
 
 

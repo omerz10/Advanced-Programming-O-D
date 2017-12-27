@@ -43,18 +43,23 @@ public:
      */
     void initialize();
 
+    void runServer();
+
+    void* executeCommand(void *cArgs);
 
     map < string, GameThread > getGames();
 
-
-    Controller *getContoller();
 
     void runOneGame(int client1Sock, int client2Sock);
 
     bool isClientClosed(int clientNumber);
 
     bool pollClient(int currentClient, int otherClient);
+
+    static void* globalExecuteCommand(void *cArgs);
 };
+
+
 
 
 #endif //EX4_SERVER_H

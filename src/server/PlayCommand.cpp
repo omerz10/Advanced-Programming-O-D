@@ -6,15 +6,10 @@
 #define X 0
 #define Y 1
 
+#define DATALEN 512
 
 
+void PlayCommand::execute(CommandArgument cmdArgs) {
 
-void PlayCommand::execute(CommandArgument commandArgument) {
-    // return value
-    commandArgument.commandParam;
-
-
-
-    //server->handleClients(server->getGames()[],  , );
-
+    write(cmdArgs.clientSocket, cmdArgs.commandParam.c_str(), sizeof(cmdArgs.commandParam.c_str()));
 }
