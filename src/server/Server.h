@@ -7,8 +7,7 @@
 
 
 
-using namespace std;
-
+//using namespace std;
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -18,6 +17,7 @@ using namespace std;
 #include <sstream>
 #include <arpa/inet.h>
 #include "Controller.h"
+#include "GameManager.h"
 
 class Server {
 

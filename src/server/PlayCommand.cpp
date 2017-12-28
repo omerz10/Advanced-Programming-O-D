@@ -11,5 +11,5 @@
 
 void PlayCommand::execute(CommandArgument *cmdArgs) {
 
-    write(cmdArgs.clientSocket, cmdArgs.commandParam.c_str(), sizeof(cmdArgs.commandParam.c_str()));
+    write(cmdArgs->getClientSocket(), cmdArgs->getCommandParam().c_str(), sizeof(cmdArgs->getCommandParam().c_str()));
 }

@@ -5,22 +5,26 @@
 #ifndef ADVANCED_PROGRAMMING_O_D_COMMANDARGUMENT_H
 #define ADVANCED_PROGRAMMING_O_D_COMMANDARGUMENT_H
 
+using namespace std;
 
-#include "GameManager.h"
-#include "Controller.h"
+#include <string>
 
 class CommandArgument {
+
 private:
     GameManager *gameManager;
     Controller *controller;
     string commandName;
-    string commandParam;
     int clientSocket;
+    string commandParam;
 public:
-    CommandArgument(GameManager *gM, Controller *cont);
-    void setCommandName(string commandName);
-    void setCommandParam(string commandParam);
-    void setClientSocket(int clientSocket);
+    CommandArgument(GameManager *gM, Controller *cont, string cN, string cP, int clientSocket);
+    // getters
+    string getCommandName();
+    string getCommandParam();
+    int getClientSocket();
+    Controller *getController();
+    GameManager *getManager();
 
 };
 

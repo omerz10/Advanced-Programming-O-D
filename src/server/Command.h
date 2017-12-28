@@ -4,7 +4,7 @@
 
 #ifndef ADVANCED_PROGRAMMING_O_D_COMMAND_H
 #define ADVANCED_PROGRAMMING_O_D_COMMAND_H
-
+class CommandArgument;
 using namespace std;
 #include <vector>
 #include "ServerStructs.h"

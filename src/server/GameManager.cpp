@@ -123,7 +123,7 @@ static void runOneGame(int client1Sock, int client2Sock) {
     close(client2Sock);
 }
 */
-void GameManager::runOneGame(int client1Sock, int client2Sock) {
+void GameManager::runOneGame(Controller *controller, int client1Sock, int client2Sock) {
     // init buffer for getting msg from player
     char buffer[DATALEN];
     char temp[DATALEN];

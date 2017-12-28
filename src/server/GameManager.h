@@ -6,7 +6,7 @@
 #define ADVANCED_PROGRAMMING_O_D_GAMEMANEGER_H
 
 using namespace std;
-
+class Controller;
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -23,7 +23,7 @@ public:
 
 
 
-    static void runOneGame(int client1Sock, int client2Sock);
+    static void runOneGame(Controller* controller, int client1Sock, int client2Sock);
 
     static bool isClientClosed(int clientNumber);
 

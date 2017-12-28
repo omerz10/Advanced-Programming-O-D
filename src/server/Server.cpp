@@ -3,7 +3,6 @@
 //
 
 #include "Server.h"
-#include "CommandArgument.h"
 
 
 #define MAX_CLIENTS 100
@@ -13,16 +12,7 @@
 /*
  * main thread listener
  */
-CommandArgument* buildResponse(string argument, Server *server, int clientSocket) {
-    cArgs.server = server;
-
-
-    return cArgs;
-}
-
-
-void mainThreadListener(GameManager *gameManager, Controller *controller) {
-
+void mainThreadListener(Server *server, GameManager *gameManager, Controller *controller) {
     pthread_t gameThread;
     char consoleBuffer[DATALEN];
     char buffer[DATALEN];
@@ -52,21 +42,17 @@ void mainThreadListener(GameManager *gameManager, Controller *controller) {
         string commandString;// = buffer;
         commandString = buffer;
         // build response
-        CommandArgument cArgs(gameManager, controller);
-        cArgs.setClientSocket(clientSocket);
+
         //vector<string> arguments;
         stringstream ss(buffer);
         // extract command name
         ss >> commandName;
         // extract command parameters
         ss >> commandParam;
-        cArgs.setCommandName(commandName);
-        cArgs.setCommandParam(commandParam);
+        CommandArgument *cArgs = new CommandArgument(gameManager, controller, commandName, commandParam, clientSocket);
 
 
-
-        // open thread
-        int rc = pthread_create(&gameThread, NULL, Controller::executeCommand, &cArgs);
+        int rc = pthread_create(&gameThread, NULL, executeCommand, cArgs);
         if (rc) {
             cout << "Error: unable to create thread, " << rc << endl;
             exit(-1);
@@ -74,8 +60,10 @@ void mainThreadListener(GameManager *gameManager, Controller *controller) {
     }
 }
 
+void *handle
 
-Server::Server(int port, GameManager *gameManager, Controller *controller): port(port) {}
+Server::Server(int port, GameManager *gameManager, Controller *controller): port(port)
+        , gameManager(gameManager), controller(controller) {}
 
 
 void Server::initialize() {
@@ -98,14 +86,8 @@ void Server::initialize() {
 }
 
 
-
-map<string, GameThread> Server::getGames() {
-    return map<string, GameThread>();
-}
-
-
 void Server::runServer() {
-    mainThreadListener(this);
+    mainThreadListener(this, this->gameManager, this->controller);
 }
 
 

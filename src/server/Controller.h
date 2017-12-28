@@ -10,13 +10,14 @@
 #include "ListGamesCommand.h"
 #include "JoinCommand.h"
 #include "PlayCommand.h"
-
+#include "CommandArgument.h"
 
 class Controller {
 public:
 
     Controller();
-    static void* executeCommand(void* cArgs);
+    ~Controller();
+    void executeCommand(void* cArgs);
 
     map < string, Command* > getCommands();
 private:

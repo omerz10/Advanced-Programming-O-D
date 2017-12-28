@@ -7,13 +7,11 @@
 
 
 #include "Command.h"
-#include "GameManager.h"
 #include <map>
 
 class JoinCommand : public Command {
 public:
     void execute(CommandArgument *commandArgument);
-
 };
 
 #endif //ADVANCED_PROGRAMMING_O_D_JOINCOMMAND_H
