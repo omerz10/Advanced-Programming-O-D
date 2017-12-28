@@ -10,17 +10,25 @@
 #include "ListGamesCommand.h"
 #include "JoinCommand.h"
 #include "PlayCommand.h"
-#include "CommandArgument.h"
+#include "GameManager.h"
+
+
+
+
 
 class Controller {
+
+
 public:
+
+
 
     Controller();
     ~Controller();
-    void executeCommand(void* cArgs);
 
     map < string, Command* > getCommands();
 private:
+
     map < string, Command* > commands; // map of commands according to name
 };
 

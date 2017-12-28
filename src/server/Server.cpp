@@ -2,65 +2,132 @@
 // Created by omerz on 01/12/17.
 //
 
+#include <cstdlib>
 #include "Server.h"
 
 
-#define MAX_CLIENTS 100
+#define MAX_CLIENTS 1000
 #define DATALEN 512
 
+
+struct ClientData {
+    GameManager *gameManager;
+    Controller *controller;
+    int clientSocket;
+};
+
+
+struct ServerData {
+    Server *server;
+    GameManager *gameManager;
+    Controller *controller;
+};
+
+void *handleClient(void *data);
 
 /*
  * main thread listener
  */
-void mainThreadListener(Server *server, GameManager *gameManager, Controller *controller) {
-    pthread_t gameThread;
+void mainThreadListener(Server *server, GameManager *gM, Controller *controller) {
+    pthread_t mainThread;
     char consoleBuffer[DATALEN];
-    char buffer[DATALEN];
-    string commandParam, commandName;
-    struct sockaddr_in clientAddress;
+    ServerData serverData;
+    serverData.server = server;
+    serverData.gameManager = gM;
+    serverData.controller = controller;
 
     // get input from user
     cin >> consoleBuffer;
-
-    socklen_t client1AddressLen = sizeof((struct sockaddr *) &clientAddress);
     cout << "Listening to clients.." << endl;
     listen(server->serverSock, MAX_CLIENTS);
 
-    while (strcmp(consoleBuffer, "exit") != 0) {
+    int rc = pthread_create(&mainThread, NULL, clientsListener, &serverData);
+    if (rc) {
+        cout << "Error: unable to create thread, " << rc << endl;
+        exit(-1);
+    }
 
+    string input;
+    do {
+        getline(cin, input);
+    } while(input.compare("exit") != 0);
+}
+
+
+void *clientsListener(void* serverData) {
+    pthread_t newThread;
+    ClientData clientData;
+    ServerData *sData = (ServerData *) serverData;
+    struct sockaddr_in clientAddress;
+    socklen_t client1AddressLen = sizeof((struct sockaddr *) &clientAddress);
+
+    while(true) {
         cout << "Waiting for client connections..." << endl;
         // Accept a new client connection
-        int clientSocket = accept(server->serverSock, (struct sockaddr *) &clientAddress, &client1AddressLen);
+        int clientSocket = accept(sData->server->serverSock, (struct sockaddr *) &clientAddress, &client1AddressLen);
         if (clientSocket == -1) {
             throw "Error on accept";
         }
         cout << "Received connection from " << inet_ntoa(clientAddress.sin_addr) << " port " <<
              ntohs(clientAddress.sin_port) << endl;
 
-        // create commandArgs
-        read(clientSocket, buffer, DATALEN);
-        string commandString;// = buffer;
-        commandString = buffer;
-        // build response
-
-        //vector<string> arguments;
-        stringstream ss(buffer);
-        // extract command name
-        ss >> commandName;
-        // extract command parameters
-        ss >> commandParam;
-        CommandArgument *cArgs = new CommandArgument(gameManager, controller, commandName, commandParam, clientSocket);
+        clientData.clientSocket = clientSocket;
+        clientData.controller = sData->controller;
+        clientData.gameManager = sData->gameManager;
 
 
-        int rc = pthread_create(&gameThread, NULL, executeCommand, cArgs);
+        int rc = pthread_create(&newThread, NULL, handleClient, &clientData);
         if (rc) {
             cout << "Error: unable to create thread, " << rc << endl;
             exit(-1);
         }
     }
+
 }
 
-void *handle
+
+void *handleClient(void *data) {
+    ClientData *cData = (ClientData *)data;
+
+    // get command from client
+    char buffer[DATALEN];
+
+
+    bool flag = true; //TODO: change for enums for one client (choose / waiting / playing)
+    while (flag) {
+        read(cData->clientSocket, buffer, DATALEN);
+
+        // create command struct
+
+        string commandString, commandParam, commandName;
+        commandString = buffer;
+        stringstream ss(buffer);
+        // extract command name
+        ss >> commandName;
+        // extract command parameters
+        ss >> commandParam;
+        // create struct for command arguments
+        CommandArguments cmdArgs;
+        cmdArgs.controller = cData->controller;
+        cmdArgs.gameManager = cData->gameManager;
+        cmdArgs.name = commandName;
+        cmdArgs.param = commandParam;
+        cmdArgs.clientSocket = cData->clientSocket;
+
+        // execute function
+        map<string, Command* >::iterator it;
+        it = cmdArgs.controller->getCommands().find(cmdArgs.name);
+        //check if command is part of specified commands
+        if (it != cmdArgs.controller->getCommands().end()) { // found command
+            cmdArgs.controller->getCommands()[cmdArgs.name]->execute(&cmdArgs);
+        } else {
+            cout << "Error in command!" << endl;
+        }
+    }
+}
+
+
+
 
 Server::Server(int port, GameManager *gameManager, Controller *controller): port(port)
         , gameManager(gameManager), controller(controller) {}

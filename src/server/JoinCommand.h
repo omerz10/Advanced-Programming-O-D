@@ -11,7 +11,7 @@
 
 class JoinCommand : public Command {
 public:
-    void execute(CommandArgument *commandArgument);
+    void execute(CommandArguments *commandArgument);
 };
 
 #endif //ADVANCED_PROGRAMMING_O_D_JOINCOMMAND_H

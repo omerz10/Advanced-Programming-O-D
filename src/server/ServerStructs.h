@@ -8,7 +8,9 @@
 
 #include <string>
 
-enum Status {ZeroConnected, FirstConnected, SecondConnected, PlayingGame};
+enum clientStatus {};
+
+enum gameStatus {ZeroConnected, FirstConnected, SecondConnected, PlayingGame};
 
 enum Errors {CompleteBlackPlayer = 1, CompleteWhitePlayer = 2, CannotJoinGame = -1, GameNotFound = -2};
 
@@ -16,8 +18,9 @@ enum Errors {CompleteBlackPlayer = 1, CompleteWhitePlayer = 2, CannotJoinGame = 
 typedef struct GameThread {
     int player1Socket;
     int player2Socket;
-    Status status;
+    gameStatus status;
 } GameThread;
+
 
 
 

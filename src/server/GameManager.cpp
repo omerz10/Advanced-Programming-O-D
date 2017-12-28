@@ -135,7 +135,6 @@ void GameManager::runOneGame(Controller *controller, int client1Sock, int client
         // read from player 1's client
         memset(buffer, 0, DATALEN);
         blackMsg = read(client1Sock, buffer, DATALEN);
-
         // check input
         if (blackMsg == 0) {
             throw "Error: connection with black player is closed";

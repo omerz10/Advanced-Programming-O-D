@@ -10,11 +10,11 @@ ListGamesCommand::ListGamesCommand(map<string, GameThread> gMap) {
 */
 #define DATALEN 512
 
-void ListGamesCommand:: execute(CommandArgument *commandArgument) {
+void ListGamesCommand:: execute(CommandArguments *commandArgument) {
     map<string, GameThread >::iterator it;
     string result;
     // build response
-    for(it = commandArgument.server->getGames().begin(); it !=commandArgument.server->getGames().end(); ++it) {
+    for(it = commandArgument->gameManager->getGames().begin(); it != commandArgument->gameManager->getGames().end(); ++it) {
         result += it->first;
         result += " ";
     }
@@ -24,7 +24,7 @@ void ListGamesCommand:: execute(CommandArgument *commandArgument) {
     // update first player he is connected
     memset(temp, 0, DATALEN);
     strcpy(temp, result.c_str());
-    if (write(commandArgument.clientSocket, temp, DATALEN) == -1) {
+    if (write(commandArgument->clientSocket, temp, DATALEN) == -1) {
         throw ("Error: sending to player 1");
     }
 }

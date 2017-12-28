@@ -9,7 +9,7 @@
 #define DATALEN 512
 
 
-void PlayCommand::execute(CommandArgument *cmdArgs) {
+void PlayCommand::execute(CommandArguments *cmdArgs) {
 
-    write(cmdArgs->getClientSocket(), cmdArgs->getCommandParam().c_str(), sizeof(cmdArgs->getCommandParam().c_str()));
+    write(cmdArgs->clientSocket, cmdArgs->param.c_str(), sizeof(cmdArgs->param.c_str()));
 }

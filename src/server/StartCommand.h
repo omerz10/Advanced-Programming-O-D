@@ -15,7 +15,7 @@ using namespace std;
 
 class StartCommand : public Command {
 public:
-    void execute(CommandArgument *commandArgument);
+    void execute(CommandArguments *commandArgument);
 };
 
 

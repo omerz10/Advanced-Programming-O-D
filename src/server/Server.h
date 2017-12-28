@@ -2,12 +2,12 @@
 // Created by omerz on 01/12/17.
 //
 
+//using namespace std;
+
+
 #ifndef EX4_SERVER_H
 #define EX4_SERVER_H
 
-
-
-//using namespace std;
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -18,6 +18,16 @@
 #include <arpa/inet.h>
 #include "Controller.h"
 #include "GameManager.h"
+#include "ServerStructs.h"
+
+struct CommandArguments {
+    GameManager *gameManager;
+    Controller *controller;
+    int clientSocket;
+    string name;
+    string param;
+};
+
 
 class Server {
 
@@ -25,10 +35,8 @@ public:
 
     int port;
     int serverSock;
-
     Controller *controller;
     GameManager *gameManager;
-
     /*
      * construct a server
      */
@@ -39,8 +47,6 @@ public:
     void initialize();
 
     void runServer();
-
-
 
 };
 

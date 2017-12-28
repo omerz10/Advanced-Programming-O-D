@@ -5,7 +5,10 @@
 
 #include <iostream>
 #include "Controller.h"
+#include "Server.h"
 
+
+#define DATALEN 512
 
 
 Controller::Controller() {
@@ -16,10 +19,6 @@ Controller::Controller() {
     this->commands["play"] = new PlayCommand();
 }
 
-map<string, Command *> Controller::getCommands() {
-    return this->commands;
-}
-
 Controller::~Controller() {
     delete(this->commands["start"]);
     delete(this->commands["list_games"]);
@@ -27,17 +26,14 @@ Controller::~Controller() {
     delete(this->commands["play"]);
 }
 
-void * executeCommand(void *cArgs) {
-    CommandArgument *cmdArgs = (CommandArgument *)cArgs;
-    // now execute function
-    map<string, Command* >::iterator it;
-    it = cmdArgs->getController()->getCommands().find(cmdArgs->getCommandName());
-    // check if command is part of specified commands
-    if (it != cmdArgs->getController()->getCommands().end()) { // found command
-        cmdArgs->getController()->getCommands()[cmdArgs->getCommandName()]->execute(cmdArgs);
-    } else {
-        cout << "Error in command!" << endl;
-    }
+
+
+
+map<string, Command *> Controller::getCommands() {
+    return this->commands;
 }
+
+
+
 
 

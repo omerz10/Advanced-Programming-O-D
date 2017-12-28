@@ -22,4 +22,11 @@ typedef struct PossibleMove {
 } PossibleMove;
 
 
+typedef struct ServerDetails {
+    string serverIP;
+    int serverPort;
+
+} ServerDetails;
+
+
 #endif //PROJECT_UPDATED_STRUCTS_H
