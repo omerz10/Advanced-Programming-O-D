@@ -8,14 +8,13 @@
 #include <string>
 #include <map>
 #include "Command.h"
-#include "../client/Structs.h"
 using namespace std;
 
 
 
 class StartCommand : public Command {
 public:
-    void execute(CommandArgument commandArgument);
+    void execute(CommandArgument *commandArgument);
 };
 
 

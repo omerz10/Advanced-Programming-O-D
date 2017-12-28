@@ -6,18 +6,12 @@
 #define ADVANCED_PROGRAMMING_O_D_COMMAND_H
 
 using namespace std;
-
 #include <vector>
-#include "../client/Structs.h"
-#include "Server.h"
-
+#include "ServerStructs.h"
 
 class Command {
-private:
-    //map<string, GameThread> gamesList; // reference
-
 public:
-    virtual void execute(CommandArgument commandArgument) = 0;
+    virtual void execute(CommandArgument *commandArgument) = 0;
 
 };
 

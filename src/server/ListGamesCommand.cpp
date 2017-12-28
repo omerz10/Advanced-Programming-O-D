@@ -10,7 +10,7 @@ ListGamesCommand::ListGamesCommand(map<string, GameThread> gMap) {
 */
 #define DATALEN 512
 
-void ListGamesCommand:: execute(CommandArgument commandArgument) {
+void ListGamesCommand:: execute(CommandArgument *commandArgument) {
     map<string, GameThread >::iterator it;
     string result;
     // build response

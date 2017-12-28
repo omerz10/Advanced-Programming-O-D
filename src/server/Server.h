@@ -6,22 +6,18 @@
 #define EX4_SERVER_H
 
 
-class Controller;
+
+using namespace std;
 
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <iostream>
-#include <stdio.h>
 #include <poll.h>
 #include <map>
-
-#include "Command.h"
-
+#include <sstream>
+#include <arpa/inet.h>
 #include "Controller.h"
-#include "../client/Structs.h"
-
-using namespace std;
 
 class Server {
 
@@ -29,15 +25,14 @@ public:
 
     int port;
     int serverSock;
-    map < string, struct GameThread > games; // map of games according to game name (real member)
-    Controller *controller;
 
+    Controller *controller;
+    GameManager *gameManager;
 
     /*
      * construct a server
      */
-    Server(int port);
-
+    Server(int port, GameManager *gameManager, Controller *controller);
     /*
      * initialize server
      */
@@ -45,18 +40,8 @@ public:
 
     void runServer();
 
-    void* executeCommand(void *cArgs);
-
-    map < string, GameThread > getGames();
 
 
-    void runOneGame(int client1Sock, int client2Sock);
-
-    bool isClientClosed(int clientNumber);
-
-    bool pollClient(int currentClient, int otherClient);
-
-    static void* globalExecuteCommand(void *cArgs);
 };
 
 

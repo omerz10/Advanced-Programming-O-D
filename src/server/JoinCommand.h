@@ -7,10 +7,12 @@
 
 
 #include "Command.h"
+#include "GameManager.h"
+#include <map>
 
 class JoinCommand : public Command {
 public:
-    void execute(CommandArgument commandArgument);
+    void execute(CommandArgument *commandArgument);
 
 };
 

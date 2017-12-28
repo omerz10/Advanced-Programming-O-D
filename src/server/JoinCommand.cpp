@@ -2,20 +2,21 @@
 // Created by David Nakash on 24/12/2017.
 //
 
-#include <map>
-#include <arpa/inet.h>
+
 #include "JoinCommand.h"
-#include "../client/Structs.h"
+
+
 #define GAME_NAME 0  // name of game chosen by user
 #define DATALEN 512
 
 
-void JoinCommand::execute(CommandArgument cArgs) {
+void JoinCommand::execute(CommandArgument *cArgs) {
     char temp[DATALEN];
 
     // iterator
     map<string, GameThread >::iterator it;
     it = cArgs.server->getGames().find(cArgs.commandParam);
+
 
     // look for game
     if (it != cArgs.server->getGames().end()) { // game found
@@ -50,7 +51,7 @@ void JoinCommand::execute(CommandArgument cArgs) {
 
             try {
                 // run game
-                (*cArgs.server).runOneGame(cArgs.server->getGames()[cArgs.commandParam].player1Socket,
+                GameManager::runOneGame(cArgs.server->getGames()[cArgs.commandParam].player1Socket,
                                            cArgs.server->getGames()[cArgs.commandParam].player2Socket);
             } catch (const char *exception) {
                 throw exception;

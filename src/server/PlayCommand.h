@@ -12,7 +12,7 @@
 class PlayCommand : public Command {
 public:
 
-    void execute(CommandArgument commandArgument);
+    void execute(CommandArgument *commandArgument);
 
 };
 
