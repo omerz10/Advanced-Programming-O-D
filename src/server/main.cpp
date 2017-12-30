@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <cstdlib>
 #include "Server.h"
+
+
+using namespace std;
 
 int getServerPort(string *fileName) {
 
@@ -29,9 +31,12 @@ int getServerPort(string *fileName) {
 int main() {
     string path = "serverConfig.txt";
     int serverPort = getServerPort(&path);
+    GameManager gameManager = GameManager();
 
+    Controller controller = Controller();
+    controller.init();
 
-    Server server(serverPort);
+    Server server(serverPort, &gameManager, &controller);
     server.initialize();
     while (true) {
         try {

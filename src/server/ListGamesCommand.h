@@ -3,16 +3,18 @@
 //
 
 #ifndef ADVANCED_PROGRAMMING_O_D_LISTGAMESCOMMAND_H
-#define ADVANCED_PROGRAMMING_O_D_LISTGAMESCOMMAND_H
 
+#define ADVANCED_PROGRAMMING_O_D_LISTGAMESCOMMAND_H
 #include <map>
 #include "Command.h"
-
 using namespace std;
+
+
 
 class ListGamesCommand : public Command {
 public:
-    //void execute(CommandArguments *commandArgument);
+
+    void execute(CmdArg *commandArgument);
 
 };
 

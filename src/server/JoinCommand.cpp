@@ -6,24 +6,23 @@
 #include "JoinCommand.h"
 
 
-#define GAME_NAME 0  // name of game chosen by user
 #define DATALEN 512
 
 
-void JoinCommand::execute(CommandArguments *cArgs) {
+void JoinCommand::execute(CmdArg *cArgs) {
     char temp[DATALEN];
 
     // iterator
     map<string, GameThread >::iterator it;
-    it = cArgs->gameManager->getGames().find(cArgs->param);
+    it = cArgs->gameManager->games.find(cArgs->param);
 
 
     // look for game
-    if (it != cArgs->gameManager->getGames().end()) { // game found
+    if (it != cArgs->gameManager->games.end()) { // game found
         // check if possible to join game
-        if (cArgs->gameManager->getGames()[cArgs->param].status == PlayingGame) { // check if game NOT running
+        if (cArgs->gameManager->games[cArgs->param].status == PlayingGame) { // check if game NOT running
             // insert 2nd player into the game
-            cArgs->gameManager->getGames()[cArgs->param].player2Socket = cArgs->clientSocket;
+            cArgs->gameManager->games[cArgs->param].player2Socket = cArgs->clientSocket;
 
             cout << "Server completed connection with 2 players.." << endl;
             cout << "----- The Game Begins -----" << endl;
@@ -31,37 +30,37 @@ void JoinCommand::execute(CommandArguments *cArgs) {
 
             strcpy(temp, "wait");
             // update second player he is connected
-            if (write(cArgs->gameManager->getGames()[cArgs->param].player2Socket, temp, DATALEN) == -1) {
+            if (write(cArgs->gameManager->games[cArgs->param].player2Socket, temp, DATALEN) == -1) {
                 throw ("Error: sending to player 2");
             }
 
             int firstClient = CompleteBlackPlayer;
             // send '1' (black) to first player
-            if (write(cArgs->gameManager->getGames()[cArgs->param].player1Socket
+            if (write(cArgs->gameManager->games[cArgs->param].player1Socket
                     , &firstClient, sizeof(firstClient)) == -1) {
                 throw ("Error: sending to player 1");
             }
             int secondClient = CompleteWhitePlayer;
             // send '2' (white) to second player
-            if (write(cArgs->gameManager->getGames()[cArgs->param].player2Socket
+            if (write(cArgs->gameManager->games[cArgs->param].player2Socket
                     , &secondClient, sizeof(secondClient)) == -1) {
                 throw ("Error: sending to player 1");
             }
 
             // set game running to true
-            cArgs->gameManager->getGames()[cArgs->param].status = SecondConnected;
+            cArgs->gameManager->games[cArgs->param].status = SecondConnected;
 
             try {
                 // run game
-                GameManager::runOneGame(cArgs->controller
-                        , cArgs->gameManager->getGames()[cArgs->param].player1Socket
-                        , cArgs->gameManager->getGames()[cArgs->param].player2Socket);
+                cArgs->gameManager->runOneGame(cArgs->controller
+                        , cArgs->gameManager->games[cArgs->param].player1Socket
+                        , cArgs->gameManager->games[cArgs->param].player2Socket);
             } catch (const char *exception) {
                 throw exception;
             }
         } else { // game is running, cannot join this game
             int error = CannotJoinGame;
-            if (write(cArgs->gameManager->getGames()[cArgs->param].player1Socket
+            if (write(cArgs->gameManager->games[cArgs->param].player1Socket
                     , &error, sizeof(error)) == -1) {
                 throw ("Error: sending to player 1");
             }
@@ -69,10 +68,11 @@ void JoinCommand::execute(CommandArguments *cArgs) {
     } else { // game not found, cannot execute join
         // return error value
         int error = GameNotFound;
-        if (write(cArgs->gameManager->getGames()[cArgs->param].player1Socket
+        if (write(cArgs->gameManager->games[cArgs->param].player1Socket
                 , &error, sizeof(error)) == -1) {
             throw ("Error: sending to player 1");
         }
     }
 
 }
+

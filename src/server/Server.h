@@ -5,9 +5,9 @@
 //using namespace std;
 
 
-#ifndef EX4_SERVER_H
-#define EX4_SERVER_H
+#ifndef ADVANCED_PROGRAMMING_O_D_SERVER_H
 
+#define ADVANCED_PROGRAMMING_O_D_SERVER_H
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -17,16 +17,12 @@
 #include <sstream>
 #include <arpa/inet.h>
 #include "Controller.h"
+
+
 #include "GameManager.h"
 #include "ServerStructs.h"
 
-struct CommandArguments {
-    GameManager *gameManager;
-    Controller *controller;
-    int clientSocket;
-    string name;
-    string param;
-};
+using namespace std;
 
 
 class Server {
@@ -41,6 +37,7 @@ public:
      * construct a server
      */
     Server(int port, GameManager *gameManager, Controller *controller);
+
     /*
      * initialize server
      */
@@ -53,4 +50,4 @@ public:
 
 
 
-#endif //EX4_SERVER_H
+#endif //ADVANCED_PROGRAMMING_O_D_SERVER_H
