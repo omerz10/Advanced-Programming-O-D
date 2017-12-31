@@ -21,7 +21,7 @@ void Controller::init() {
     this->commands["join"] = new JoinCommand();
     this->commands["play"] = new PlayCommand();
     this->commands["NoMove"] = new NoMoveCommand();
-    this->commands["EndG"] = new EndCommand();
+    this->commands["End"] = new EndCommand();
 }
 
 void Controller::executeCommand(GameManager *gm, ClientThread clientT, string str) {

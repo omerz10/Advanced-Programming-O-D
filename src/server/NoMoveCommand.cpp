@@ -6,6 +6,5 @@
 #include "NoMoveCommand.h"
 
 void NoMoveCommand::execute(CmdArg *cmdArgs) {
-
     write(cmdArgs->clientThread.clientSocket, cmdArgs->name.c_str(), sizeof(cmdArgs->param.c_str()));
 }

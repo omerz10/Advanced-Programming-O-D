@@ -28,23 +28,39 @@ using namespace std;
 
 class Server {
 
-public:
+private:
 
     int port;
     int serverSock;
     Controller *controller;
     GameManager *gameManager;
+    vector<pthread_t> clientsThreads;
+    vector <ClientThread> socketsStatus;
+
+public:
+
     /*
-     * construct a server
-     */
+ * construct a server
+ */
     Server(int port, GameManager *gameManager, Controller *controller);
 
+    vector<pthread_t> getClientsThreads();
+
+    void addThread(pthread_t thread);
+
+    void removeSockets(vector <ClientThread> v);
     /*
      * initialize server
      */
     void initialize();
 
     void runServer();
+
+    int getServerSocket();
+
+    vector <ClientThread> getSocketsStatus();
+
+    void closeClientsConnectios();
 
 };
 

@@ -48,4 +48,5 @@ int main() {
             break;
         }
     }
+    server.closeClientsConnectios();
 }

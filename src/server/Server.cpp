@@ -31,22 +31,20 @@ void *handleClient(void *data) {
     // get command from client
     char buffer[DATALEN];
     string commandString;
+    cData->clientThread.status = ClientChoice;
 
-    bool flag = true; //TODO: change for enums for one client (choose / waiting / playing)
-
-    while (cData->clientThread.status != clientEndGame) {
+    while (cData->clientThread.status == ClientChoice) {
         read(cData->clientThread.clientSocket, buffer, DATALEN);
-        strcpy(commandString, buffer);
-        if (cData->clientThread.status != clientChoice) {
-            break;
-        }
+        commandString = buffer;
         cData->controller->executeCommand(cData->gameManager, cData->clientThread, commandString);
     }
+    return NULL;
 }
 
 void *clientsListener(void* serverData) {
     pthread_t newThread;
     ClientData clientData;
+    bzero((void *) &clientData, sizeof(clientData));
     ServerData *sData = (ServerData *) serverData;
     struct sockaddr_in clientAddress;
     socklen_t client1AddressLen = sizeof((struct sockaddr *) &clientAddress);
@@ -54,7 +52,8 @@ void *clientsListener(void* serverData) {
     while(true) {
         cout << "Waiting for client connections..." << endl;
         // Accept a new client connection
-        int clientSocket = accept(sData->server->serverSock, (struct sockaddr *) &clientAddress, &client1AddressLen);
+        int clientSocket = accept(sData->server->getServerSocket(), (struct sockaddr *) &clientAddress
+                , &client1AddressLen);
         if (clientSocket == -1) {
             throw "Error on accept";
         }
@@ -62,7 +61,7 @@ void *clientsListener(void* serverData) {
              ntohs(clientAddress.sin_port) << endl;
 
         clientData.clientThread.clientSocket = clientSocket;
-        clientData.clientThread.status = clientChoice;
+        clientData.clientThread.status = ClientChoice;
         clientData.controller = sData->controller;
         clientData.gameManager = sData->gameManager;
 
@@ -71,8 +70,12 @@ void *clientsListener(void* serverData) {
             cout << "Error: unable to create thread, " << rc << endl;
             exit(-1);
         }
+        // adding thread
+        sData->server->addThread(newThread);
+        // remove sockets and statuses from vector of ClientThread
+        sData->server->removeSockets(sData->server->getSocketsStatus());
     }
-
+    return NULL;
 }
 
 /*
@@ -89,23 +92,28 @@ void mainThreadListener(Server *server, GameManager *gM, Controller *controller)
     // get input from user
     cin >> consoleBuffer;
     cout << "Listening to clients.." << endl;
-    listen(server->serverSock, MAX_CLIENTS);
+    listen(server->getServerSocket(), MAX_CLIENTS);
 
     int rc = pthread_create(&mainThread, NULL, clientsListener, &serverData);
     if (rc) {
         cout << "Error: unable to create thread, " << rc << endl;
         exit(-1);
     }
-
     string input;
     do {
         getline(cin, input);
     } while(strcmp(input.c_str(), "exit") != 0);
+
+    // close all threads
+    for (unsigned int i = 0; i < server->getClientsThreads().size(); i++) {
+        pthread_cancel(server->getClientsThreads()[i]);
+        pthread_join(server->getClientsThreads()[i], NULL);
+    }
+
+    // close main thread
+    pthread_cancel(mainThread);
+    pthread_join(mainThread, NULL);
 }
-
-
-
-
 
 
 Server::Server(int port, GameManager *gameManager, Controller *controller): port(port)
@@ -134,6 +142,45 @@ void Server::initialize() {
 
 void Server::runServer() {
     mainThreadListener(this, this->gameManager, this->controller);
+}
+
+vector<pthread_t> Server::getClientsThreads() {
+    return clientsThreads;
+}
+
+void Server::addThread(pthread_t thread) {
+    this->clientsThreads.push_back(thread);
+}
+
+void Server::removeSockets(vector <ClientThread> socketsStatus) {
+    vector<ClientThread>::iterator it;
+    for (it = socketsStatus.begin(); it != socketsStatus.end(); it++) {
+        if (it->status == ClientEndGame) {
+            socketsStatus.erase(it);
+        }
+    }
+
+}
+
+int Server::getServerSocket() {
+    return this->serverSock;
+}
+
+
+vector <ClientThread> Server::getSocketsStatus() {
+    return this->socketsStatus;
+}
+
+
+void Server::closeClientsConnectios() {
+    vector <ClientThread>::iterator it;
+    char buffer[DATALEN];
+    memset(buffer, '\0', sizeof(buffer));
+    strcpy(buffer, "exit");
+    for (it = this->socketsStatus.begin(); it != this->socketsStatus.end(); it++) {
+        write(it->clientSocket, buffer, DATALEN);
+        close(it->clientSocket);
+    }
 }
 
 

@@ -11,17 +11,8 @@ class GameManager;
 class Controller;
 using namespace std;
 
-typedef struct CmdArg {
-    GameManager *gameManager;
-    Controller *controller;
-    ClientThread clientThread;
-    string name;
-    string param;
-} CmdArg;
 
-enum gameStatus {FirstConnected, SecondConnected, PlayingGame, GameEnded};
-
-enum clientStatus {clientChoice, clientPlaying, clientEndGame};
+enum clientStatus {ClientChoice, StartPlaying, Playing, ClientEndGame};
 
 typedef struct ClientThread {
     int clientSocket;
@@ -29,10 +20,19 @@ typedef struct ClientThread {
 } ClientThread;
 
 typedef struct GameThread {
-    int player1Socket;
-    int player2Socket;
-    gameStatus status;
+    ClientThread player1;
+    ClientThread player2;
+
 } GameThread;
+
+
+typedef struct CmdArg {
+    GameManager *gameManager;
+    Controller *controller;
+    ClientThread clientThread;
+    string name;
+    string param;
+} CmdArg;
 
 
 

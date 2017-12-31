@@ -5,8 +5,12 @@
 #ifndef ADVANCED_PROGRAMMING_O_D_LISTGAMESCOMMAND_H
 
 #define ADVANCED_PROGRAMMING_O_D_LISTGAMESCOMMAND_H
+
 #include <map>
 #include "Command.h"
+#include "GameManager.h"
+
+
 using namespace std;
 
 

@@ -8,6 +8,8 @@
 
 #include "ServerStructs.h"
 #include "Command.h"
+#include <map>
+#include "GameManager.h"
 
 class NoMoveCommand : public Command {
 

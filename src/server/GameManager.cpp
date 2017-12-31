@@ -12,7 +12,7 @@
 CmdArg GameManager::parseMessage(string msg, Controller *controller, int clientSocket) {
     CmdArg cmdArgs;
     cmdArgs.gameManager = this;
-    cmdArgs.clientSocket = clientSocket;
+    cmdArgs.clientThread.clientSocket = clientSocket;
     cmdArgs.controller = controller;
     stringstream ss(msg);
     // extract command name
@@ -23,8 +23,8 @@ CmdArg GameManager::parseMessage(string msg, Controller *controller, int clientS
 }
 void GameManager::runOneGame(string gameName, Controller *controller) {
 
-    int clientSocket1 = this->games[gameName].player1Socket;
-    int clientSocket2 = this->games[gameName].player2Socket;
+    int clientSocket1 = this->games[gameName].player1.clientSocket;
+    int clientSocket2 = this->games[gameName].player2.clientSocket;
 
     // init buffer for getting msg from player
     char buffer[DATALEN];
@@ -32,7 +32,7 @@ void GameManager::runOneGame(string gameName, Controller *controller) {
     // messages from each player
     ssize_t blackMsg, whiteMsg;
     // send & receive from players until gets "isEnd" message
-    while(this->games[gameName].status != GameEnded) {
+    while(this->games[gameName].player1.status == Playing && this->games[gameName].player2.status == Playing) {
         // read move from player 1
         memset(buffer, 0, DATALEN);
         blackMsg = read(clientSocket1, buffer, DATALEN);
@@ -52,8 +52,13 @@ void GameManager::runOneGame(string gameName, Controller *controller) {
             break;
         }
 
-        CmdArg cmdArgs1 = parseMessage(buffer, controller, this->games[gameName].player2Socket);
+        CmdArg cmdArgs1 = parseMessage(buffer, controller, this->games[gameName].player2.clientSocket);
         controller->getCommands()[cmdArgs1.name]->execute(&cmdArgs1);
+
+        // end of game
+        if (cmdArgs1.clientThread.status == ClientEndGame) {
+            break;
+        }
 
         // read from player 2's client
         memset(temp, 0, DATALEN);
@@ -72,8 +77,12 @@ void GameManager::runOneGame(string gameName, Controller *controller) {
             break;
         }
 
-        CmdArg cmdArgs2 = parseMessage(buffer, controller, this->games[gameName].player1Socket);
+        CmdArg cmdArgs2 = parseMessage(buffer, controller, this->games[gameName].player1.clientSocket);
         controller->getCommands()[cmdArgs2.name]->execute(&cmdArgs2);
+        // end of game
+        if (cmdArgs2.clientThread.status == ClientEndGame) {
+            break;
+        }
     } // end of while
 
     // close client sockets
@@ -117,6 +126,23 @@ bool GameManager::pollClient(int currentClient, int otherClient) {
 
 map< string, GameThread > GameManager::getGames() {
     return this->games;
+}
+
+
+void GameManager::deleteGame(string gameName) {
+    // update status of both player
+    this->games[gameName].player1.status = ClientEndGame;
+    this->games[gameName].player2.status = ClientEndGame;
+    // delete game
+    this->games.erase(gameName);
+}
+
+void GameManager::addNewGame(string gameName, ClientThread clientThread) {
+    GameThread gameThread;
+    bzero((void*) &gameThread, sizeof(gameThread));
+    gameThread.player1 = clientThread;
+    // insert new game to games
+    this->games.insert(std::pair<string , GameThread> (gameName, gameThread));
 }
 
 

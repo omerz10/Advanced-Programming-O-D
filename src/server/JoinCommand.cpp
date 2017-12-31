@@ -16,13 +16,12 @@ void JoinCommand::execute(CmdArg *cArgs) {
     map<string, GameThread >::iterator it;
     it = cArgs->gameManager->getGames().find(cArgs->param);
 
-
     // look for game
     if (it != cArgs->gameManager->getGames().end()) { // game found
         // check if possible to join game
-        if (cArgs->gameManager->getGames()[cArgs->param].status == PlayingGame) { // check if game NOT running
+        if (cArgs->gameManager->getGames()[cArgs->param].player1.status == StartPlaying) { // check if game NOT running
             // insert 2nd player into the game
-            cArgs->gameManager->getGames()[cArgs->param].player2Socket = cArgs->clientThread.clientSocket;
+            cArgs->gameManager->getGames()[cArgs->param].player2.clientSocket = cArgs->clientThread.clientSocket;
 
             cout << "Server completed connection with 2 players.." << endl;
             cout << "----- The Game Begins -----" << endl;
@@ -30,25 +29,26 @@ void JoinCommand::execute(CmdArg *cArgs) {
 
             strcpy(temp, "join");
             // update second player he is connected
-            if (write(cArgs->gameManager->getGames()[cArgs->param].player2Socket, temp, DATALEN) == -1) {
+            if (write(cArgs->gameManager->getGames()[cArgs->param].player2.clientSocket, temp, DATALEN) == -1) {
                 throw ("Error: sending to player 2");
             }
 
             int firstClient = CompleteBlackPlayer;
             // send '1' (black) to first player
-            if (write(cArgs->gameManager->getGames()[cArgs->param].player1Socket
+            if (write(cArgs->gameManager->getGames()[cArgs->param].player1.clientSocket
                     , &firstClient, sizeof(firstClient)) == -1) {
                 throw ("Error: sending to player 1");
             }
             int secondClient = CompleteWhitePlayer;
             // send '2' (white) to second player
-            if (write(cArgs->gameManager->getGames()[cArgs->param].player2Socket
+            if (write(cArgs->gameManager->getGames()[cArgs->param].player2.clientSocket
                     , &secondClient, sizeof(secondClient)) == -1) {
                 throw ("Error: sending to player 2");
             }
 
-            // set game running to true
-            cArgs->gameManager->getGames()[cArgs->param].status = SecondConnected;
+            // the players will now start playing with each other
+            cArgs->gameManager->getGames()[cArgs->param].player1.status = Playing;
+            cArgs->gameManager->getGames()[cArgs->param].player2.status = Playing;
 
             try {
                 // run game
@@ -58,7 +58,7 @@ void JoinCommand::execute(CmdArg *cArgs) {
             }
         } else { // game is running, cannot join this game
             int error = CannotJoinGame;
-            if (write(cArgs->gameManager->getGames()[cArgs->param].player1Socket
+            if (write(cArgs->gameManager->getGames()[cArgs->param].player1.clientSocket
                     , &error, sizeof(error)) == -1) {
                 throw ("Error: sending to player 1");
             }
@@ -66,7 +66,7 @@ void JoinCommand::execute(CmdArg *cArgs) {
     } else { // game not found, cannot execute join
         // return error value
         int error = GameNotFound;
-        if (write(cArgs->gameManager->getGames()[cArgs->param].player1Socket
+        if (write(cArgs->gameManager->getGames()[cArgs->param].player1.clientSocket
                 , &error, sizeof(error)) == -1) {
             throw ("Error: sending to player 1");
         }

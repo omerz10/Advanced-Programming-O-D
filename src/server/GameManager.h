@@ -34,6 +34,10 @@ public:
 
     CmdArg parseMessage(string msg, Controller *controller, int clientSocket);
 
+    void deleteGame(string gameName);
+
+    void addNewGame(string gameName, ClientThread clientThread);
+
 };
 
 
