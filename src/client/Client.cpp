@@ -55,10 +55,10 @@ void Client::waitingForOtherPlayer() {
     if (read(clientSocket, buff, DATALEN) == -1) {
         throw "Error reading result from socket";
     }
-    if (strcmp(buff, "join") == 0) {
+    if (strcmp(buff, "start") == 0) {
         cout << "Waiting for other player to join..." << endl;
     }
-    if(strcmp(buff,"wait") == 0) {
+    if(strcmp(buff,"join") == 0) {
         cout << "Waiting for other player's move..." << endl;
     }
 }

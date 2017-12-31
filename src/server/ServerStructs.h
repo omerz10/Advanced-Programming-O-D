@@ -14,18 +14,28 @@ using namespace std;
 typedef struct CmdArg {
     GameManager *gameManager;
     Controller *controller;
-    int clientSocket;
+    ClientThread clientThread;
     string name;
     string param;
-}CmdArg;
+} CmdArg;
 
-enum gameStatus {ZeroConnected, FirstConnected, SecondConnected, PlayingGame};
+enum gameStatus {FirstConnected, SecondConnected, PlayingGame, GameEnded};
+
+enum clientStatus {clientChoice, clientPlaying, clientEndGame};
+
+typedef struct ClientThread {
+    int clientSocket;
+    clientStatus status;
+} ClientThread;
 
 typedef struct GameThread {
     int player1Socket;
     int player2Socket;
     gameStatus status;
 } GameThread;
+
+
+
 
 
 #endif //ADVANCED_PROGRAMMING_O_D_SERVERSTRUCTS_H

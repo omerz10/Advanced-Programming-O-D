@@ -5,21 +5,37 @@
 
 
 
+#include <sstream>
 #include "GameManager.h"
 
 #define DATALEN 512
+CmdArg GameManager::parseMessage(string msg, Controller *controller, int clientSocket) {
+    CmdArg cmdArgs;
+    cmdArgs.gameManager = this;
+    cmdArgs.clientSocket = clientSocket;
+    cmdArgs.controller = controller;
+    stringstream ss(msg);
+    // extract command name
+    ss >> cmdArgs.name;
+    // extract command parameters
+    ss >> cmdArgs.param;
+    return cmdArgs;
+}
+void GameManager::runOneGame(string gameName, Controller *controller) {
 
-void GameManager::runOneGame(Controller *controller, int client1Sock, int client2Sock) {
+    int clientSocket1 = this->games[gameName].player1Socket;
+    int clientSocket2 = this->games[gameName].player2Socket;
+
     // init buffer for getting msg from player
     char buffer[DATALEN];
     char temp[DATALEN];
     // messages from each player
     ssize_t blackMsg, whiteMsg;
     // send & receive from players until gets "isEnd" message
-    while(true) {
-        // read from player 1's client
+    while(this->games[gameName].status != GameEnded) {
+        // read move from player 1
         memset(buffer, 0, DATALEN);
-        blackMsg = read(client1Sock, buffer, DATALEN);
+        blackMsg = read(clientSocket1, buffer, DATALEN);
         // check input
         if (blackMsg == 0) {
             throw "Error: connection with black player is closed";
@@ -28,30 +44,20 @@ void GameManager::runOneGame(Controller *controller, int client1Sock, int client
             throw "Error: connect to black player ";
         }
 
-        // send to 2nd player that black didn't play a move
-        if (strcmp(buffer, "NoMove") == 0) {
-            memset(temp, 0, DATALEN);
-            strcpy(temp, "NoMove");
-            write(client2Sock, &temp, DATALEN);
-        } else if (strcmp(buffer, "End") == 0) {
-            memset(temp, 0, DATALEN);
-            strcpy(temp, "End");
-            write(client2Sock, &temp, DATALEN);
-            break;
-        }
         memset(temp, 0, DATALEN);
         strcpy(temp, buffer);
 
         // check if connection still alive with first client
-        if (pollClient(client1Sock, client2Sock)) {
+        if (pollClient(clientSocket1, clientSocket2)) {
             break;
         }
 
-        write(client2Sock, &temp, DATALEN);
+        CmdArg cmdArgs1 = parseMessage(buffer, controller, this->games[gameName].player2Socket);
+        controller->getCommands()[cmdArgs1.name]->execute(&cmdArgs1);
 
         // read from player 2's client
         memset(temp, 0, DATALEN);
-        whiteMsg = read(client2Sock, temp, DATALEN);
+        whiteMsg = read(clientSocket2, temp, DATALEN);
         strcpy(buffer, temp);
 
         if (whiteMsg == 0) {
@@ -61,29 +67,18 @@ void GameManager::runOneGame(Controller *controller, int client1Sock, int client
             throw "Error: connect to black player ";
         }
 
-        // send to white player that black didn't play a move
-        if (strcmp(buffer, "NoMove") == 0) {
-            memset(temp, 0, DATALEN);
-            strcpy(temp, "NoMove");
-            write(client1Sock, &temp, DATALEN);
-        } else if (strcmp(buffer, "End") == 0) {
-            memset(temp, 0, DATALEN);
-            strcpy(temp, "End");
-            write(client1Sock, &temp, DATALEN);
+        // check if connection still alive with first client
+        if (pollClient(clientSocket2, clientSocket1)) {
             break;
         }
 
-        // check if connection still alive
-        if (pollClient(client2Sock, client1Sock)) {
-            break;
-        }
-
-        write(client1Sock, &buffer, DATALEN);
+        CmdArg cmdArgs2 = parseMessage(buffer, controller, this->games[gameName].player1Socket);
+        controller->getCommands()[cmdArgs2.name]->execute(&cmdArgs2);
     } // end of while
 
     // close client sockets
-    close(client1Sock);
-    close(client2Sock);
+    close(clientSocket1);
+    close(clientSocket2);
 }
 
 bool GameManager::isClientClosed(int clientNumber) {

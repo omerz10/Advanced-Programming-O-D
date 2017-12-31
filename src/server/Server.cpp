@@ -2,6 +2,7 @@
 // Created by omerz on 01/12/17.
 //
 
+#include <cstdlib>
 #include "Server.h"
 
 
@@ -12,7 +13,7 @@
 struct ClientData {
     GameManager *gameManager;
     Controller *controller;
-    int clientSocket;
+    ClientThread clientThread;
 };
 
 
@@ -22,46 +23,25 @@ struct ServerData {
     Controller *controller;
 };
 
+
+
 void *handleClient(void *data) {
     ClientData *cData = (ClientData *)data;
 
     // get command from client
     char buffer[DATALEN];
-
+    string commandString;
 
     bool flag = true; //TODO: change for enums for one client (choose / waiting / playing)
-    while (flag) {
-        read(cData->clientSocket, buffer, DATALEN);
 
-        // create command struct
-        string commandString, commandParam, commandName;
-        commandString = buffer;
-        stringstream ss(buffer);
-        // extract command name
-        ss >> commandName;
-        // extract command parameters
-        ss >> commandParam;
-        // create object for command arguments
-        //CommandArgument cmdArgs = CommandArgument(cData->gameManager, cData->controller, cData->clientSocket
-        //        , commandName, commandParam);
-        CmdArg cmdArg;
-        cmdArg.controller = cData->controller;
-        cmdArg.gameManager = cData->gameManager;
-        cmdArg.clientSocket = cData->clientSocket;
-        cmdArg.name = commandName;
-        cmdArg.param = commandParam;
-
-        map<string, GameThread >::iterator it;
-        //it = cmdArgs.getController()->getCommands().find(cmdArgs.getName());
-
-        //check if command is part of specified commands
-        if (cmdArg.gameManager->games.end() != it) { // found command
-            cmdArg.controller->commands[cmdArg.name]->execute(&cmdArg);
-        } else {
-            cout << "Error in command!" << endl;
+    while (cData->clientThread.status != clientEndGame) {
+        read(cData->clientThread.clientSocket, buffer, DATALEN);
+        strcpy(commandString, buffer);
+        if (cData->clientThread.status != clientChoice) {
+            break;
         }
+        cData->controller->executeCommand(cData->gameManager, cData->clientThread, commandString);
     }
-    return 0;
 }
 
 void *clientsListener(void* serverData) {
@@ -81,7 +61,8 @@ void *clientsListener(void* serverData) {
         cout << "Received connection from " << inet_ntoa(clientAddress.sin_addr) << " port " <<
              ntohs(clientAddress.sin_port) << endl;
 
-        clientData.clientSocket = clientSocket;
+        clientData.clientThread.clientSocket = clientSocket;
+        clientData.clientThread.status = clientChoice;
         clientData.controller = sData->controller;
         clientData.gameManager = sData->gameManager;
 

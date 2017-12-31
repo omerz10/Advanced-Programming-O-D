@@ -12,10 +12,14 @@
 using namespace std;
 
 class Controller {
+
 private:
-public:
     map < string, Command* > commands; // map of commands according to name
+
+public:
+
     map < string, Command* > getCommands();
+    void executeCommand(GameManager *gm, ClientThread clientT, string str);
     void init();
 };
 

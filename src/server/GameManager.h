@@ -17,15 +17,22 @@
 using namespace std;
 
 class GameManager {
+
+private:
+
+    map < string, GameThread > games;
+
 public:
-    map < string, GameThread > games; // map of games according to game name (real member)
+
     map < string, GameThread > getGames();
 
-    void runOneGame(Controller* controller, int client1Sock, int client2Sock);
+    void runOneGame(string gameName, Controller* controller);
 
     bool isClientClosed(int clientNumber);
 
     bool pollClient(int currentClient, int otherClient);
+
+    CmdArg parseMessage(string msg, Controller *controller, int clientSocket);
 
 };
 
