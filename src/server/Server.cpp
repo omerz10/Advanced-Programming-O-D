@@ -28,7 +28,11 @@ void Server::initialize() {
     if (bind(serverSock, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
         throw "error binding to socket";
     }
-    this->controller->mainThreadListener(this->serverSock);
+    //this->controller->mainThreadListener(this->serverSock);
+}
+
+int Server::getServerSocket() {
+    return this->serverSock;
 }
 
 

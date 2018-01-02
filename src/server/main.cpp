@@ -39,6 +39,7 @@ int main() {
     while (true) {
         try {
             //server.start();
+            controller.mainThreadListener(server.getServerSocket());
             cout << endl << "Restarting server.." << endl;
         } catch (const char *exception) {
             cout << exception << endl;

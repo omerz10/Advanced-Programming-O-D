@@ -9,6 +9,8 @@
 #ifndef EX2_GAMEFLOW_H
 #define EX2_GAMEFLOW_H
 
+enum ClientSelection {Choosing, StartGame, JoinGame, ShowListOfGames};
+
 #include "Board.h"
 #include "HumanPlayer.h"
 #include "AIPlayer.h"
@@ -47,7 +49,7 @@ public:
      */
     void play();
 
-
+    void playOnlineSelection();
     /*
      * prints the last player's move if it exists.
      * @param Player    lastPlayer

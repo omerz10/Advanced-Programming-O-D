@@ -15,48 +15,45 @@
 #include <arpa/inet.h>
 #include <map>
 #include "ServerStructs.h"
-
+#include <pthread.h>
 
 class Controller {
 
 private:
-    vector<pthread_t> clientsThreads;
-    vector <ClientThread> socketsStatus;
-    map < string, GameThread > games;
-    vector <string> joinable_games;
+    vector<pthread_t> clientsThreads; // vector of pthreads - manages threads...
+
+    vector <ClientThread> socketsStatus; // vector of ClientThread (which has clientSocket and status)
+
+    map < string, GameThread > games; // map of games
+
+    vector <string> joinable_games; // vector of joinable games
 
 public:
-    void mainThreadListener(int serverSocket);
 
-    vector<pthread_t> getClientsThreads();
-
-    void addThread(pthread_t thread);
-
-    void removeSockets(vector <ClientThread> v);
-
+    // runners
     void runServer();
+    void mainThreadListener(int serverSocket); // controller function that executes the void* funcs (in threads..)
+    void runOneGame(string gameName);
+    void closeClientsConnections();
 
-    int getServerSocket();
-
+    // getters
+    vector <string> getJoinableGames();
+    vector<pthread_t> getClientsThreads(); // get vector of threads
     vector <ClientThread> getSocketsStatus();
-
-    void closeClientsConnectios();
-
     map < string, GameThread > getGames();
 
-    void runOneGame(string gameName);
+    // setters
+    void addThread(pthread_t thread);
+    void addNewGame(string gameName, ClientThread *clientThread);
+    void deleteGame(string gameName);
+    void removeSockets(vector <ClientThread> v);
 
+    // polling
     bool isClientClosed(int clientNumber);
-
     bool pollClient(int currentClient, int otherClient);
 
+    // parsing
     CmdArg parseMessage(string msg, int clientSocket);
-
-    void deleteGame(string gameName);
-
-    void addNewGame(string gameName, ClientThread *clientThread);
-
-    vector <string> getJoinableGames();
 
 };
 

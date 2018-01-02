@@ -12,6 +12,7 @@
  Struct that holds the possible moves (in order to make it easier for the programmer...).
  */
 
+
 typedef struct PossibleMove {
 
     vector<vector<Cell> > changeableCells;

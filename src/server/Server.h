@@ -28,7 +28,7 @@ public:
     Server(int port, Controller *controller);
 
     void initialize();
-
+    int getServerSocket();
 };
 
 

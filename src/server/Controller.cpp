@@ -25,6 +25,64 @@ struct ServerData {
     Controller *controller;
 };
 
+void executeEnvelope(ClientThread* clientT, string command) {
+    cManager->executeCommand(clientT, command);
+}
+
+void *handleClient(void *data) {
+    ClientData *cData = (ClientData *)data;
+    // get command from client
+    char buffer[DATALEN];
+    string commandString;
+    ssize_t statusRead;
+
+    while (cData->clientThread.status == ClientChoice) {
+        statusRead = read(cData->clientThread.clientSocket, buffer, DATALEN);
+        if (statusRead == 0) {
+            close(cData->clientThread.clientSocket);
+            break;
+        }
+        commandString = buffer;
+        executeEnvelope(&cData->clientThread, commandString);
+
+    }
+    return NULL;
+}
+void *clientsListener(void* serverData) {
+    pthread_t newThread;
+    ClientData clientData;
+    bzero((void *) &clientData, sizeof(clientData));
+    ServerData *sData = (ServerData *) serverData;
+    struct sockaddr_in clientAddress;
+    socklen_t client1AddressLen = sizeof((struct sockaddr *) &clientAddress);
+
+    while(true) {
+        cout << "Waiting for client connections..." << endl;
+        // Accept a new client connection
+        int clientSocket = accept(sData->serverSocket, (struct sockaddr *) &clientAddress
+                , &client1AddressLen);
+        if (clientSocket == -1) {
+            throw "Error on accept";
+        }
+        cout << "Received connection from " << inet_ntoa(clientAddress.sin_addr) << " port " <<
+             ntohs(clientAddress.sin_port) << endl;
+
+        clientData.clientThread.clientSocket = clientSocket;
+        clientData.clientThread.status = ClientChoice;
+        clientData.controller = sData->controller;
+
+        int rc = pthread_create(&newThread, NULL, handleClient, &clientData);
+        if (rc) {
+            cout << "Error: unable to create thread, " << rc << endl;
+            exit(-1);
+        }
+        // adding thread
+        sData->controller->addThread(newThread);
+        // remove sockets and statuses from vector of ClientThread
+        sData->controller->removeSockets(sData->controller->getSocketsStatus());
+    }
+    return NULL;
+}
 
 /*
  * main thread listener
@@ -67,65 +125,10 @@ void Controller::mainThreadListener(int serverSocket) {
 }
 
 
-void *clientsListener(void* serverData) {
-    pthread_t newThread;
-    ClientData clientData;
-    bzero((void *) &clientData, sizeof(clientData));
-    ServerData *sData = (ServerData *) serverData;
-    struct sockaddr_in clientAddress;
-    socklen_t client1AddressLen = sizeof((struct sockaddr *) &clientAddress);
 
-    while(true) {
-        cout << "Waiting for client connections..." << endl;
-        // Accept a new client connection
-        int clientSocket = accept(sData->controller->getServerSocket(), (struct sockaddr *) &clientAddress
-                , &client1AddressLen);
-        if (clientSocket == -1) {
-            throw "Error on accept";
-        }
-        cout << "Received connection from " << inet_ntoa(clientAddress.sin_addr) << " port " <<
-             ntohs(clientAddress.sin_port) << endl;
 
-        clientData.clientThread.clientSocket = clientSocket;
-        clientData.clientThread.status = ClientChoice;
-        clientData.controller = sData->controller;
 
-        int rc = pthread_create(&newThread, NULL, handleClient, &clientData);
-        if (rc) {
-            cout << "Error: unable to create thread, " << rc << endl;
-            exit(-1);
-        }
-        // adding thread
-        sData->controller->addThread(newThread);
-        // remove sockets and statuses from vector of ClientThread
-        sData->controller->removeSockets(sData->controller->getSocketsStatus());
-    }
-    return NULL;
-}
 
-void executeEnvelope(ClientThread* clientT, string command) {
-    cManager->executeCommand(clientT, command);
-}
-
-void *handleClient(void *data) {
-    ClientData *cData = (ClientData *)data;
-    // get command from client
-    char buffer[DATALEN];
-    string commandString;
-    ssize_t statusRead;
-
-    while (cData->clientThread.status == ClientChoice) {
-        statusRead = read(cData->clientThread.clientSocket, buffer, DATALEN);
-        if (statusRead == 0) {
-            close(cData->clientThread.clientSocket);
-            break;
-        }
-        commandString = buffer;
-        executeEnvelope(&cData->clientThread, commandString);
-
-    }
-    return NULL;
-}
 
 
 vector<pthread_t> Controller::getClientsThreads() {
@@ -145,18 +148,18 @@ void Controller::removeSockets(vector <ClientThread> socketsStatus) {
     }
 
 }
-
+/*
 int Controller::getServerSocket() {
     return this->serverSock;
 }
-
+*/
 
 vector <ClientThread> Controller::getSocketsStatus() {
     return this->socketsStatus;
 }
 
 
-void Controller::closeClientsConnectios() {
+void Controller::closeClientsConnections() {
     vector <ClientThread>::iterator it;
     char buffer[DATALEN];
     bzero((void*)buffer, sizeof(buffer));

@@ -7,7 +7,7 @@ SERVER_O_FILES = ./obj/server_obj/*
 create_all: obj server_exe clean
 
 server_exe: $(SERVER_CPP_FILES) $(SERVER_H_FILES)
-	$(CC) $(VERSION) -c $(SERVER_CPP_FILES)
+	$(CC) $(VERSION) -pthread -c $(SERVER_CPP_FILES)
 	mv *.o obj/server_obj
 	$(CC) $(VERSION) $(SERVER_O_FILES) -o ../../exe/server_exe
 

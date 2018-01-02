@@ -87,7 +87,7 @@ void menu() {
 
     //threadCheck();
 
-    string path = "clientConfig.txt";
+    string path = "../exe/clientConfig.txt";
     int playerSelection;
     char buff[DATALEN];
     memset(&buff, 0, sizeof(buff));
@@ -138,7 +138,8 @@ void menu() {
             Game game = Game(&p1, &p2);
             GameFlow gameFlow = GameFlow(&game, &client);
             client.setID(1);
-            gameFlow.playOnline();
+            gameFlow.playOnlineSelection();
+            //gameFlow.playOnline();
         // the client get "2" from server
         } else if(player == 2) {
             HumanPlayer p1 = HumanPlayer('O', &board, &gameLogic);
@@ -146,7 +147,7 @@ void menu() {
             Game game = Game(&p1, &p2);
             GameFlow gameFlow = GameFlow(&game, &client);
             client.setID(2);
-            gameFlow.playOnline();
+            gameFlow.playOnlineSelection();
         }
     }
 }

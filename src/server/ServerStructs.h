@@ -25,7 +25,6 @@ typedef struct GameThread {
 
 } GameThread;
 
-
 typedef struct CmdArg {
     CommandManager *commandManager;
     ClientThread clientThread;

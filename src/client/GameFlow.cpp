@@ -169,3 +169,42 @@ void GameFlow::playOnline() {
     showScores();
 
 }
+
+void GameFlow::playOnlineSelection() {
+    cout << "Please choose one of the following options:\n"
+         << "1. Start a new online game.\n"
+         << "2. Join an ongoing game.\n"
+         << "3. Show list of ongoing games.\n";
+    int selection;
+    ClientSelection clientSelection = Choosing;
+    cin >> selection;
+    if (selection == StartGame) {
+        char command[DATALEN] = "";
+        string gameName;
+        system("CLS");
+        cout << "Please choose a name for your new game:\n";
+        cin >> gameName;
+        strcat(command, "start ");
+        strcat(command, gameName.c_str());
+        // now we send the chosen game name to the server
+        this->client->sendExercise(command);
+        // call playOnline() which waits for other player to join
+        this->playOnline();
+    } else if (selection == JoinGame) {
+        char command[DATALEN] = "";
+        string gameName;
+        system("CLS");
+        cout << "Please choose the game to join by name:\n";
+        cin >> gameName;
+        strcat(command, "join ");
+        strcat(command, gameName.c_str());
+        // now we send the chosen game name to the server
+        this->client->sendExercise(command);
+        this->playOnline();
+    } else if (selection == ShowListOfGames) {
+        char command[DATALEN] = "";
+        system("CLS");
+        strcat(command, "list_games");
+        this->client->sendExercise(command);
+    }
+}
