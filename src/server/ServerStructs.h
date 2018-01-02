@@ -7,25 +7,34 @@
 #define ADVANCED_PROGRAMMING_O_D_SERVERSTRUCTS_H
 
 #include <string>
-class GameManager;
-class Controller;
+class CommandManager;
+
 using namespace std;
 
-typedef struct CmdArg {
-    GameManager *gameManager;
-    Controller *controller;
-    int clientSocket;
-    string name;
-    string param;
-}CmdArg;
 
-enum gameStatus {ZeroConnected, FirstConnected, SecondConnected, PlayingGame};
+enum clientStatus {ClientChoice, StartPlaying, Playing, ClientEndGame};
+
+typedef struct ClientThread {
+    int clientSocket;
+    clientStatus status;
+} ClientThread;
 
 typedef struct GameThread {
-    int player1Socket;
-    int player2Socket;
-    gameStatus status;
+    ClientThread player1;
+    ClientThread player2;
+
 } GameThread;
+
+
+typedef struct CmdArg {
+    CommandManager *commandManager;
+    ClientThread clientThread;
+    string name;
+    string param;
+} CmdArg;
+
+
+
 
 
 #endif //ADVANCED_PROGRAMMING_O_D_SERVERSTRUCTS_H

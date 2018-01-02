@@ -9,70 +9,67 @@
 #define DATALEN 512
 
 
-void JoinCommand::execute(CmdArg *cArgs) {
+void JoinCommand::execute(ClientThread *clientT, string args) {
     char temp[DATALEN];
 
     // iterator
-    map<string, GameThread >::iterator it;
-    it = cArgs->gameManager->games.find(cArgs->param);
+    vector <string >::iterator it;
 
+    it = this->controller->getJoinableGames().begin(); // for loop
 
-    // look for game
-    if (it != cArgs->gameManager->games.end()) { // game found
-        // check if possible to join game
-        if (cArgs->gameManager->games[cArgs->param].status == PlayingGame) { // check if game NOT running
-            // insert 2nd player into the game
-            cArgs->gameManager->games[cArgs->param].player2Socket = cArgs->clientSocket;
+    // look for game- check if possible to join game
+    if (it != this->controller->getJoinableGames().end()) { // game found
 
-            cout << "Server completed connection with 2 players.." << endl;
-            cout << "----- The Game Begins -----" << endl;
-            memset(temp, 0, DATALEN);
+        // remove this game from joinable_games
+        this->controller->getJoinableGames().erase(it);
+        // insert 2nd player into the game
+        this->controller->getGames()[args].player2.clientSocket = clientT->clientSocket;
 
-            strcpy(temp, "wait");
-            // update second player he is connected
-            if (write(cArgs->gameManager->games[cArgs->param].player2Socket, temp, DATALEN) == -1) {
-                throw ("Error: sending to player 2");
-            }
+        cout << "Server completed connection with 2 players.." << endl;
+        cout << "----- The Game Begins -----" << endl;
+        memset(temp, 0, DATALEN);
 
-            int firstClient = CompleteBlackPlayer;
-            // send '1' (black) to first player
-            if (write(cArgs->gameManager->games[cArgs->param].player1Socket
-                    , &firstClient, sizeof(firstClient)) == -1) {
-                throw ("Error: sending to player 1");
-            }
-            int secondClient = CompleteWhitePlayer;
-            // send '2' (white) to second player
-            if (write(cArgs->gameManager->games[cArgs->param].player2Socket
-                    , &secondClient, sizeof(secondClient)) == -1) {
-                throw ("Error: sending to player 1");
-            }
-
-            // set game running to true
-            cArgs->gameManager->games[cArgs->param].status = SecondConnected;
-
-            try {
-                // run game
-                cArgs->gameManager->runOneGame(cArgs->controller
-                        , cArgs->gameManager->games[cArgs->param].player1Socket
-                        , cArgs->gameManager->games[cArgs->param].player2Socket);
-            } catch (const char *exception) {
-                throw exception;
-            }
-        } else { // game is running, cannot join this game
-            int error = CannotJoinGame;
-            if (write(cArgs->gameManager->games[cArgs->param].player1Socket
-                    , &error, sizeof(error)) == -1) {
-                throw ("Error: sending to player 1");
-            }
+        strcpy(temp, "join");
+        // update second player he is connected
+        if (write(this->controller->getGames()[args].player2.clientSocket, temp, DATALEN) == -1) {
+            throw ("Error: sending to player 2");
         }
+
+        int firstClient = CompleteBlackPlayer;
+        // send '1' (black) to first player
+        if (write(this->controller->getGames()[args].player1.clientSocket
+                , &firstClient, sizeof(firstClient)) == -1) {
+            throw ("Error: sending to player 1");
+        }
+        int secondClient = CompleteWhitePlayer;
+        // send '2' (white) to second player
+        if (write(this->controller->getGames()[args].player2.clientSocket
+                , &secondClient, sizeof(secondClient)) == -1) {
+            throw ("Error: sending to player 2");
+        }
+
+        // the players will now start playing with each other
+        this->controller->getGames()[args].player1.status = Playing;
+        this->controller->getGames()[args].player2.status = Playing;
+
+        try {
+            // run game
+            this->controller->runOneGame(args);
+        } catch (const char *exception) {
+            throw exception;
+        }
+
     } else { // game not found, cannot execute join
         // return error value
         int error = GameNotFound;
-        if (write(cArgs->gameManager->games[cArgs->param].player1Socket
-                , &error, sizeof(error)) == -1) {
+        if (write(this->controller->getGames()[args].player1.clientSocket, &error, sizeof(error)) == -1) {
             throw ("Error: sending to player 1");
         }
     }
 
+}
+
+JoinCommand::JoinCommand(Controller *controller) {
+    this->controller = controller;
 }
 

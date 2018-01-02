@@ -13,8 +13,11 @@ using namespace std;
 
 
 class StartCommand : public Command {
+private:
+    Controller *controller;
 public:
-    void execute(CmdArg *commandArgument);
+    StartCommand(Controller *controller);
+    void execute(ClientThread* clientT, string args);
 };
 
 

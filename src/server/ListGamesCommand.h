@@ -5,16 +5,21 @@
 #ifndef ADVANCED_PROGRAMMING_O_D_LISTGAMESCOMMAND_H
 
 #define ADVANCED_PROGRAMMING_O_D_LISTGAMESCOMMAND_H
+
 #include <map>
 #include "Command.h"
+
+
 using namespace std;
 
 
 
 class ListGamesCommand : public Command {
+private:
+    Controller *controller;
 public:
-
-    void execute(CmdArg *commandArgument);
+    ListGamesCommand(Controller *controller);
+    void execute(ClientThread *clientT, string args);
 
 };
 

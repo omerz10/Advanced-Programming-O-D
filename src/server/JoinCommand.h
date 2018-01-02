@@ -7,13 +7,15 @@
 #define ADVANCED_PROGRAMMING_O_D_JOINCOMMAND_H
 
 #include "Command.h"
+
 #include <map>
-#include "GameManager.h"
 
 class JoinCommand : public Command {
+private:
+    Controller *controller;
 public:
-
-    void execute(CmdArg *commandArgument);
+    JoinCommand(Controller *controller);
+    void execute(ClientThread *clientT, string args);
 };
 
 #endif //ADVANCED_PROGRAMMING_O_D_JOINCOMMAND_H
