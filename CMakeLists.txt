@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(Advanced_Programming_O_D)
 
 set(CMAKE_CXX_STANDARD 98)
-#set(CMAKE_CXX_FLAGS -pthread)
+set(CMAKE_CXX_FLAGS -pthread)
 
 add_subdirectory(tests/lib/googletest-master)
 include_directories(tests/lib/googletest-master/googletest/include)
