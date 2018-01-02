@@ -9,10 +9,12 @@
 #include "Command.h"
 
 
-
 class PlayCommand : public Command {
+private:
+    Controller *controller;
 public:
-    void execute(CmdArg *commandArgument);
+    PlayCommand(Controller *controller);
+    void execute(ClientThread *clientT, string args);
 
 };
 

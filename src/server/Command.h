@@ -6,13 +6,20 @@
 #define ADVANCED_PROGRAMMING_O_D_COMMAND_H
 #include <vector>
 #include "ServerStructs.h"
+#include "Controller.h"
+
+
 using namespace std;
 
-enum Errors {CompleteBlackPlayer = 1, CompleteWhitePlayer = 2, CannotJoinGame = -1, GameNotFound = -2};
+enum Errors {CompleteBlackPlayer = 1, CompleteWhitePlayer = 2, GameNotFound = -1};
 
 class Command {
+
 public:
-    virtual void execute(CmdArg *commandArgument) = 0;
+
+    //virtual Command(Controller *controller) = 0;
+
+    virtual void execute(ClientThread *clientT, string args) = 0;
 };
 
 #endif //ADVANCED_PROGRAMMING_O_D_COMMAND_H

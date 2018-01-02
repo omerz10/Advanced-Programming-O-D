@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstdlib>
 #include "Server.h"
+#include "Controller.h"
 
 
 using namespace std;
@@ -32,21 +33,18 @@ int getServerPort(string *fileName) {
 int main() {
     string path = "serverConfig.txt";
     int serverPort = getServerPort(&path);
-    GameManager gameManager = GameManager();
-
     Controller controller = Controller();
-    controller.init();
-
-    Server server(serverPort, &gameManager, &controller);
+    Server server(serverPort, &controller);
     server.initialize();
     while (true) {
         try {
-            server.runServer();
+            //server.start();
             cout << endl << "Restarting server.." << endl;
         } catch (const char *exception) {
             cout << exception << endl;
             break;
         }
     }
-    server.closeClientsConnectios();
+    //server.closeClientsConnectios();
+
 }

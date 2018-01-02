@@ -32,7 +32,7 @@ set(SERVER_FILES src/server/Server.cpp src/server/Server.h)
 set(TEST_FILES tests/test_main.cpp tests/test_board.cpp tests/test_cell.cpp tests/test_game.cpp
         tests/test_genericLogic.cpp tests/test_AIPlayer.cpp tests/test_humanPlayer.cpp)
 
-add_executable(Advanced_Programming_O_D ${SOURCE_FILES} src/client/main.cpp src/client/Client.cpp src/client/Client.h src/server/Command.h src/server/StartCommand.cpp src/server/StartCommand.h src/server/Controller.cpp src/server/Controller.h src/server/ListGamesCommand.cpp src/server/ListGamesCommand.h src/server/JoinCommand.cpp src/server/JoinCommand.h src/server/PlayCommand.cpp src/server/PlayCommand.h src/client/Game.cpp src/server/GameManager.cpp src/server/GameManager.h src/server/ServerStructs.h src/server/NoMoveCommand.cpp src/server/NoMoveCommand.h src/server/EndCommand.cpp src/server/EndCommand.h)
+add_executable(Advanced_Programming_O_D ${SOURCE_FILES} src/client/main.cpp src/client/Client.cpp src/client/Client.h src/server/Command.h src/server/StartCommand.cpp src/server/StartCommand.h src/server/CommandManager.cpp src/server/CommandManager.h src/server/ListGamesCommand.cpp src/server/ListGamesCommand.h src/server/JoinCommand.cpp src/server/JoinCommand.h src/server/PlayCommand.cpp src/server/PlayCommand.h src/client/Game.cpp src/server/ServerStructs.h src/server/NoMoveCommand.cpp src/server/NoMoveCommand.h src/server/EndCommand.cpp src/server/EndCommand.h src/server/Controller.cpp src/server/Controller.h)
 add_executable(SERVER ${SERVER_FILES} src/server/main.cpp)
 add_executable(RunTests ${TEST_FILES} ${SOURCE_FILES} tests/test_main.cpp)
 

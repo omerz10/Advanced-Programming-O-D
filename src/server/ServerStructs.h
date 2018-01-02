@@ -7,8 +7,8 @@
 #define ADVANCED_PROGRAMMING_O_D_SERVERSTRUCTS_H
 
 #include <string>
-class GameManager;
-class Controller;
+class CommandManager;
+
 using namespace std;
 
 
@@ -27,8 +27,7 @@ typedef struct GameThread {
 
 
 typedef struct CmdArg {
-    GameManager *gameManager;
-    Controller *controller;
+    CommandManager *commandManager;
     ClientThread clientThread;
     string name;
     string param;

@@ -8,13 +8,16 @@
 
 #include "ServerStructs.h"
 #include "Command.h"
+
 #include <map>
-#include "GameManager.h"
 
 class EndCommand : public Command {
+private:
+    Controller *controller;
+public:
 
-
-    void EndCommand::execute(CmdArg *cmdArgs);
+    EndCommand(Controller *controller);
+    void execute(ClientThread *clientT, string args);
 
 };
 

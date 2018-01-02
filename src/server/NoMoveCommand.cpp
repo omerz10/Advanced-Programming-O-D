@@ -5,6 +5,11 @@
 #include <zconf.h>
 #include "NoMoveCommand.h"
 
-void NoMoveCommand::execute(CmdArg *cmdArgs) {
-    write(cmdArgs->clientThread.clientSocket, cmdArgs->name.c_str(), sizeof(cmdArgs->param.c_str()));
+void NoMoveCommand::execute(ClientThread *clientT, string args) {
+    string temp = "NoMove";
+    write(clientT->clientSocket, temp.c_str(), sizeof(temp.c_str()));
+}
+
+NoMoveCommand::NoMoveCommand(Controller *controller) {
+    this->controller = controller;
 }

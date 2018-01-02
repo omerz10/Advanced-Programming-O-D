@@ -8,7 +8,6 @@
 
 #include <map>
 #include "Command.h"
-#include "GameManager.h"
 
 
 using namespace std;
@@ -16,9 +15,11 @@ using namespace std;
 
 
 class ListGamesCommand : public Command {
+private:
+    Controller *controller;
 public:
-
-    void execute(CmdArg *commandArgument);
+    ListGamesCommand(Controller *controller);
+    void execute(ClientThread *clientT, string args);
 
 };
 

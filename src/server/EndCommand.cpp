@@ -6,10 +6,15 @@
 #include "EndCommand.h"
 
 
-void EndCommand::execute(CmdArg *cmdArgs) {
-    write(cmdArgs->clientThread.clientSocket, cmdArgs->param.c_str(), sizeof(cmdArgs->param.c_str()));
+void EndCommand::execute(ClientThread *clientT, string args) {
+    string temp = "End";
+    write(clientT->clientSocket, temp.c_str(), sizeof(temp.c_str()));
     // delete game from games list of server
-    cmdArgs->gameManager->deleteGame(cmdArgs->param);
+    this->controller->deleteGame(args);
+}
+
+EndCommand::EndCommand(Controller *controller) {
+    this->controller = controller;
 }
 
 

@@ -9,12 +9,13 @@
 #include "ServerStructs.h"
 #include "Command.h"
 #include <map>
-#include "GameManager.h"
 
 class NoMoveCommand : public Command {
-
-
-    void NoMoveCommand::execute(CmdArg *cmdArgs);
+private:
+    Controller *controller;
+public:
+    NoMoveCommand(Controller *controller);
+    void execute(ClientThread *clientT, string args);
 
 };
 

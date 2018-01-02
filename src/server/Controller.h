@@ -1,28 +1,64 @@
 //
-// Created by David Nakash on 24/12/2017.
+// Created by omerz on 02/01/18.
 //
 
 #ifndef ADVANCED_PROGRAMMING_O_D_CONTROLLER_H
 #define ADVANCED_PROGRAMMING_O_D_CONTROLLER_H
+
+#include <zconf.h>
+#include <vector>
+#include <iostream>
+#include <string.h>
+#include <sys/socket.h>
+#include <cstdlib>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <map>
-#include "StartCommand.h"
-#include "ListGamesCommand.h"
-#include "JoinCommand.h"
-#include "PlayCommand.h"
-using namespace std;
+#include "ServerStructs.h"
+
 
 class Controller {
 
 private:
-    map < string, Command* > commands; // map of commands according to name
+    vector<pthread_t> clientsThreads;
+    vector <ClientThread> socketsStatus;
+    map < string, GameThread > games;
+    vector <string> joinable_games;
 
 public:
+    void mainThreadListener(int serverSocket);
 
-    map < string, Command* > getCommands();
-    void executeCommand(GameManager *gm, ClientThread clientT, string str);
-    void init();
+    vector<pthread_t> getClientsThreads();
+
+    void addThread(pthread_t thread);
+
+    void removeSockets(vector <ClientThread> v);
+
+    void runServer();
+
+    int getServerSocket();
+
+    vector <ClientThread> getSocketsStatus();
+
+    void closeClientsConnectios();
+
+    map < string, GameThread > getGames();
+
+    void runOneGame(string gameName);
+
+    bool isClientClosed(int clientNumber);
+
+    bool pollClient(int currentClient, int otherClient);
+
+    CmdArg parseMessage(string msg, int clientSocket);
+
+    void deleteGame(string gameName);
+
+    void addNewGame(string gameName, ClientThread *clientThread);
+
+    vector <string> getJoinableGames();
+
 };
-
 
 
 #endif //ADVANCED_PROGRAMMING_O_D_CONTROLLER_H

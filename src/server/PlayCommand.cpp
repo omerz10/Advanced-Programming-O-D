@@ -10,7 +10,11 @@
 #define DATALEN 512
 
 
-void PlayCommand::execute(CmdArg *cmdArgs) {
+void PlayCommand::execute(ClientThread *clientT, string args) {
 
-    write(cmdArgs->clientThread.clientSocket, cmdArgs->param.c_str(), sizeof(cmdArgs->param.c_str()));
+    write(clientT->clientSocket, args.c_str(), sizeof(args.c_str()));
+}
+
+PlayCommand::PlayCommand(Controller *controller) {
+    this->controller = controller;
 }

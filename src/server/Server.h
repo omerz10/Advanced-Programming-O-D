@@ -8,20 +8,9 @@
 #ifndef ADVANCED_PROGRAMMING_O_D_SERVER_H
 
 #define ADVANCED_PROGRAMMING_O_D_SERVER_H
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <iostream>
-#include <poll.h>
-#include <map>
-#include <sstream>
-#include <arpa/inet.h>
-#include <pthread.h>
+
+
 #include "Controller.h"
-
-
-#include "GameManager.h"
-#include "ServerStructs.h"
 
 using namespace std;
 
@@ -33,34 +22,12 @@ private:
     int port;
     int serverSock;
     Controller *controller;
-    GameManager *gameManager;
-    vector<pthread_t> clientsThreads;
-    vector <ClientThread> socketsStatus;
 
 public:
 
-    /*
- * construct a server
- */
-    Server(int port, GameManager *gameManager, Controller *controller);
+    Server(int port, Controller *controller);
 
-    vector<pthread_t> getClientsThreads();
-
-    void addThread(pthread_t thread);
-
-    void removeSockets(vector <ClientThread> v);
-    /*
-     * initialize server
-     */
     void initialize();
-
-    void runServer();
-
-    int getServerSocket();
-
-    vector <ClientThread> getSocketsStatus();
-
-    void closeClientsConnectios();
 
 };
 
